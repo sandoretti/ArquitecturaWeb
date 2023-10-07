@@ -1,0 +1,166 @@
+/* Estilos generales */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  margin: 0;
+}
+
+table {
+  width: 80%;
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 10px;
+  vertical-align: top;
+}
+
+h3 {
+  margin: 0;
+  padding: 10px 0;
+}
+
+h3 a {
+  text-decoration: none;
+  color: #333;
+  transition: color 0.3s;
+}
+
+h3 a:hover {
+  color: #007BFF;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px 0;
+}
+
+td[colspan="1"] {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+}
+
+/* Estilos para formularios */
+form {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+input[type="submit"] {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+ul {
+    list-style-type: none; /* Elimina los puntos de la lista */
+    padding: 0;
+    margin: 0 0 20px 0; /* Añade un margen inferior para separar de otros elementos */
+}
+
+li {
+    padding: 5px 0; /* Espaciado entre elementos de la lista */
+    border-bottom: 1px solid #ddd; /* Línea divisoria entre elementos */
+}
+
+li:last-child {
+    border-bottom: none; /* Elimina la línea del último elemento */
+}
+
+/* Estilo de los artículos del blog */
+article {
+  border-bottom: 1px solid #ccc;
+  padding: 20px 0;
+  margin: 20px 0;
+}
+
+article h4 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+article p {
+  margin-bottom: 10px;
+}
+
+article a {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+article a:hover {
+  background-color: #2980b9;
+}
+
+/* Estilo de la paginación */
+p a {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+p a:hover {
+  background-color: #2980b9;
+}
