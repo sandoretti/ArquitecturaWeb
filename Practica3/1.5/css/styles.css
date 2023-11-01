@@ -1,0 +1,38 @@
+.draggable {
+    width: 150px;
+    height: 150px;
+    color: #fff;
+    text-align: center;
+    line-height: 150px;
+    margin-right: 20px;
+
+}
+
+.droppable {
+    width: 200px;
+    height: 200px;
+    background-color: #e74c3c;
+    color: #fff;
+    text-align: center;
+    line-height: 200px;
+}
+
+h1 {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+p {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+button {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}

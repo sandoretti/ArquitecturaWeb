@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Geolocalización</title>
+        <link rel="stylesheet" href="css/styles.css">
+    </head>
+    <body>
+        <h1>Geolocalización</h1>
+        
+        <div style="display: flex; justify-content: center;">
+            <p id="posicion"></p>
+        </div>
+        
+        <div style="display: flex; justify-content: center;">
+            
+            <button onclick="obtenerPosicion()">Obtener posición</button>
+        </div>
+        
+        <script>
+            function obtenerPosicion() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(mostrarPosicion);
+                } else {
+                    alert("Tu navegador no soporta geolocalización.");
+                }
+            }
+
+            function mostrarPosicion(posicion) {
+                var latitud = posicion.coords.latitude;
+                var longitud = posicion.coords.longitude;
+                var precision = posicion.coords.accuracy;
+                var mensaje = "Tu posición actual es: " + latitud + ", " + longitud + " (con una precisión de " + precision + " metros).";
+                document.getElementById("posicion").innerHTML = mensaje;
+            }
+        </script>
+    </body>
+</html>
+</html>

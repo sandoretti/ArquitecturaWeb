@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drag&Drop</title>
+    <link rel="stylesheet" href="css/drag_drop.css">
+    <script src="js/styles.js"></script>
+</head>
+<body>
+    <h1>Prueba para Drag&Drop</h1>
+    <p>Arrastra el elemento a la caja para cambiar su color y su contenido</p>
+
+    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <div class="draggable" draggable="true" ondragstart="drag(event)" style="background-color: rosybrown;">Arrástrame 1</div>
+        <div class="draggable" draggable="true" ondragstart="drag(event)" style="background-color: green;">Arrástrame 2</div>
+        <div class="draggable" draggable="true" ondragstart="drag(event)" style="background-color: coral;">Arrástrame 3</div>
+    </div>
+
+    <div style="display: flex; justify-content: center;">
+        <div class="droppable" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    </div>
+</body>
+</html>
+
