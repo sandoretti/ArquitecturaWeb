@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Restaurante JQuery</title>
+    <style>
+        .platos-container {
+            display: flex;
+        }
+
+        .platos-container > div {
+            padding: 10px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h3>Mesa seleccionada</h3>
+        <div>
+            <input type="radio" id="primeros-platos" name="plato" value="primeros-platos" checked>
+            <label for="primeros-platos">Primeros Platos</label>
+            <br/>
+            <input type="radio" id="segundos-platos" name="plato" value="segundos-platos">
+            <label for="segundos-platos">Segundos Platos</label>
+            <select id="mesa-select">
+                <option value="mesa1" selected>Mesa 1</option>
+                <option value="mesa2">Mesa 2</option>
+                <option value="mesa3">Mesa 3</option>
+                <option value="mesa4">Mesa 4</option>
+                <option value="mesa5">Mesa 5</option>
+            </select>
+            </br>
+            <input type="radio" id="postres" name="plato" value="postres">
+            <label for="postres">Postres</label>
+        </div>
+        <div class="platos-container">
+            <div>
+                <h3>Platos disponibles</h3>
+                <select id="platos-disponibles" size="10" style="height: 170px; width: 255px;"></select>
+            </div>
+            <div>
+                <h3>Platos seleccionados</h3>
+                <select id="platos-seleccionados" size="10" style="height: 170px; width: 255px;"></select>
+                <br/>
+                <label for="cafe">¿Café?</label>
+                <input type="checkbox" id="checkbox-cafe">
+                <br/>
+                <label for "copa">¿Copa?</label>
+                <input type="checkbox" id="checkbox-copa">
+                <p>Total a pagar: <span id="total-pagar">0</span> euros</p>
+                <button type="button" id="boton-restaurar-mesa">Pagar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Platos de ejemplo con precios aleatorios
+            const platosPrimeros = [
+                { nombre: "Ensalada César", precio: 9 },
+                { nombre: "Sopa de Tomate", precio: 6 },
+                { nombre: "Bruschetta", precio: 5 },
+                { nombre: "Carpaccio de Res", precio: 12 },
+                { nombre: "Calamares a la Romana", precio: 11 }
+            ];
+
+            const platosSegundos = [
+                { nombre: "Filete de Ternera", precio: 17 },
+                { nombre: "Salmón a la Parrilla", precio: 12 },
+                { nombre: "Pasta Alfredo", precio: 11 },
+                { nombre: "Pollo a la Parmesana", precio: 14 },
+                { nombre: "Lomo de Cerdo con Salsa de Manzana", precio: 19 }
+            ];
+
+            const platosPostres = [
+                { nombre: "Tiramisú", precio: 6 },
+                { nombre: "Cheesecake de Fresa", precio: 7 },
+                { nombre: "Brownie de Chocolate", precio: 3 },
+                { nombre: "Crepes de Manzana", precio: 8 },
+                { nombre: "Helado de Vainilla", precio: 4 }
+            ];
+
+            // Almacén para platos seleccionados por mesa
+            const platosSeleccionadosPorMesa = {};
+
+            // Almacén para valores de café y copa por mesa
+            const cafeCopaPorMesa = {};
+
+            // Almacén para valores iniciales de café y copa
+            const valoresInicialesCafeCopa = {};
+
+            // Función para calcular y actualizar el total a pagar
+            function actualizarTotalAPagar() {
+                var mesaSeleccionada = $('#mesa-select').val();
+                var total = 0;
+
+                if (platosSeleccionadosPorMesa[mesaSeleccionada]) {
+                    platosSeleccionadosPorMesa[mesaSeleccionada].forEach(function (plato) {
+                        total += plato.precio;
+                    });
+                }
+
+                if (cafeCopaPorMesa[mesaSeleccionada]) {
+                    if (cafeCopaPorMesa[mesaSeleccionada].cafe) {
+                        total += 1; // Precio del café
+                    }
+                    if (cafeCopaPorMesa[mesaSeleccionada].copa) {
+                        total += 5; // Precio de la copa
+                    }
+                }
+
+                $('#total-pagar').text(total + ' euros');
+            }
+
+            // Función para cargar platos disponibles
+            function cargarPlatosDisponibles() {
+                var selectedOption = $('input[type="radio"]:checked').val();
+                var mesaSeleccionada = $('#mesa-select').val();
+                var $platosDisponibles = $('#platos-disponibles');
+                var $platosSeleccionados = $('#platos-seleccionados');
+                var $checkboxCafe = $('#checkbox-cafe');
+                var $checkboxCopa = $('#checkbox-copa');
+
+                $platosDisponibles.empty();
+
+                var platos = [];
+
+                if (selectedOption === 'primeros-platos') {
+                    platos = platosPrimeros;
+                } else if (selectedOption === 'segundos-platos') {
+                    platos = platosSegundos;
+                } else if (selectedOption === 'postres') {
+                    platos = platosPostres;
+                }
+
+                platos.forEach(function (plato, index) {
+                    $platosDisponibles.append('<option value="plato' + index + '">' + plato.nombre + '</option>');
+                });
+
+                // Limpiar platos seleccionados
+                $platosSeleccionados.empty();
+
+                // Cargar los platos seleccionados de la mesa actual
+                if (platosSeleccionadosPorMesa[mesaSeleccionada]) {
+                    platosSeleccionadosPorMesa[mesaSeleccionada].forEach(function (plato) {
+                        $platosSeleccionados.append('<option value="' + plato.nombre + '">' + plato.nombre + '</option>');
+                    });
+                }
+
+                // Cargar los valores de café y copa para la mesa actual
+                if (cafeCopaPorMesa[mesaSeleccionada]) {
+                    $checkboxCafe.prop('checked', cafeCopaPorMesa[mesaSeleccionada].cafe);
+                    $checkboxCopa.prop('checked', cafeCopaPorMesa[mesaSeleccionada].copa);
+                } else {
+                    // Si no hay valores previos para café y copa, desmarcarlos
+                    $checkboxCafe.prop('checked', false);
+                    $checkboxCopa.prop('checked', false);
+                }
+
+                // Actualizar el total a pagar
+                actualizarTotalAPagar();
+            }
+
+            // Cargar platos disponibles al cargar la página
+            cargarPlatosDisponibles();
+
+            // Manejar cambios en los botones de radio
+            $('input[type="radio"]').change(cargarPlatosDisponibles);
+
+            // Manejar cambios en la selección de mesa
+            $('#mesa-select').change(function () {
+                var mesaSeleccionada = $('#mesa-select').val();
+                cargarPlatosDisponibles();
+            });
+
+            // Manejar clic en el botón "Restaurar Mesa"
+            $('#boton-restaurar-mesa').click(function () {
+                var mesaSeleccionada = $('#mesa-select').val();
+                // Restaurar los valores iniciales de la mesa
+                platosSeleccionadosPorMesa[mesaSeleccionada] = [];
+                cafeCopaPorMesa[mesaSeleccionada] = valoresInicialesCafeCopa[mesaSeleccionada];
+                cargarPlatosDisponibles();
+            });
+
+            // Manejar doble clic en los platos disponibles
+            $('#platos-disponibles').on('dblclick', 'option', function () {
+                var platoIndex = $(this).index();
+                var plato = platosPrimeros.find(function (p, index) {
+                    return index === platoIndex;
+                });
+
+                if (!plato) {
+                    plato = platosSegundos.find(function (p, index) {
+                        return index === platoIndex;
+                    });
+                }
+
+                if (!plato) {
+                    plato = platosPostres.find(function (p, index) {
+                        return index === platoIndex;
+                    });
+                }
+
+                if (plato) {
+                    var $platoSeleccionado = $(this).clone();
+                    $('#platos-seleccionados').append($platoSeleccionado);
+
+                    var mesaSeleccionada = $('#mesa-select').val();
+
+                    if (!platosSeleccionadosPorMesa[mesaSeleccionada]) {
+                        platosSeleccionadosPorMesa[mesaSeleccionada] = [];
+                    }
+
+                    platosSeleccionadosPorMesa[mesaSeleccionada].push({
+                        nombre: plato.nombre,
+                        precio: plato.precio
+                    });
+
+                    // Actualizar el total a pagar
+                    actualizarTotalAPagar();
+                }
+            });
+
+            // Manejar cambios en los botones de café y copa
+            $('#checkbox-cafe').change(function () {
+                var mesaSeleccionada = $('#mesa-select').val();
+                cafeCopaPorMesa[mesaSeleccionada] = cafeCopaPorMesa[mesaSeleccionada] || {};
+                cafeCopaPorMesa[mesaSeleccionada].cafe = $(this).is(':checked');
+
+                // Actualizar el total a pagar
+                actualizarTotalAPagar();
+            });
+
+            $('#checkbox-copa').change(function () {
+                var mesaSeleccionada = $('#mesa-select').val();
+                cafeCopaPorMesa[mesaSeleccionada] = cafeCopaPorMesa[mesaSeleccionada] || {};
+                cafeCopaPorMesa[mesaSeleccionada].copa = $(this).is(':checked');
+
+                // Actualizar el total a pagar
+                actualizarTotalAPagar();
+            });
+
+            // Almacenar los valores iniciales de café y copa
+            $('#mesa-select option').each(function () {
+                valoresInicialesCafeCopa[$(this).val()] = {
+                    cafe: false,
+                    copa: false
+                };
+            });
+        });
+    </script>
+</body>
+</html>
