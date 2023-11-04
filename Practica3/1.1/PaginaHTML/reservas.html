@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>plantilla</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>Agencia de viajes</h1>
+<br>
+<table>
+  <tbody>
+    <tr>
+      <td style="width: 150px;">
+        <h3><a href="#"></a></h3>
+      </td>
+      <td colspan="1" rowspan="10">
+        <!-- Título y Descripción de Reservas -->
+        <h2>Realiza tu Reserva</h2>
+        <p>¡Estás a un paso de vivir una experiencia inolvidable! Completa el formulario y uno de nuestros agentes se pondrá en contacto contigo para confirmar los detalles de tu reserva.</p>
+
+        <!-- Formulario de Reservas -->
+        <form action="confirmacion.php" method="post">
+          <label for="nombre">Nombre completo:</label>
+          <input type="text" id="nombre" name="nombre" required>
+          <br>
+          
+          <label for="email">Correo electrónico:</label>
+          <input type="email" id="email" name="email" required>
+          <br>
+          
+          <label for="telefono">Teléfono:</label>
+          <input type="tel" id="telefono" name="telefono" required>
+          <br>
+          
+          <label for="destino">Destino o paquete de interés:</label>
+          <select id="destino" name="destino">
+            <option value="roma">Roma y Florencia</option>
+            <option value="caribe">Crucero por el Caribe</option>
+            <option value="islandia">Escapada a Islandia</option>
+            <option value="paris">Fin de semana en París</option>
+            <option value="costarica">Aventura en Costa Rica</option>
+            <!-- ... otros destinos ... -->
+          </select>
+          <br>
+          
+          <label for="fecha">Fecha deseada:</label>
+          <input type="date" id="fecha" name="fecha" required>
+          <br>
+          
+          <label for="comentarios">Comentarios o requerimientos especiales:</label>
+          <textarea id="comentarios" name="comentarios" rows="4"></textarea>
+          <br>
+          
+          <input type="submit" value="Enviar Reserva">
+        </form>
+
+        <!-- Información Adicional -->
+        <p>Tras enviar tu solicitud, uno de nuestros agentes se pondrá en contacto contigo en un plazo máximo de 24 horas para confirmar la disponibilidad y los detalles de tu reserva.</p>
+        <p>Si tienes alguna duda o consulta, no dudes en <a href="contacto.html">contactarnos</a>. ¡Estamos aquí para ayudarte!</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="width: 50px;">
+        <h3><a href="entrada.html">Entrada</h3>
+      </td>
+    </tr>
+    <tr>
+      <td style="width: 50px;">
+        <h3><a href="vuelos.html">Vuelos</a></h3>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="width: 50px;">
+        <h3><a href="hoteles.html">Hoteles</a></h3>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="width: 50px;">
+        <h3><a href="vacaciones.html">Vacaciones</a></h3>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="width: 50px;">
+        <h3><a href="ofertas.html">Ofertas</a></h3>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="width: 50px;">
+        <h3><a href="reservas.html">Reservas</a></h3>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="width: 50px;">
+        <h3><a href="nosotros.html">Acerca de Nosotros</a></h3>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="width: 50px;">
+        <h3><a href="contacto.html">Contáctanos</a></h3>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="width: 50px;">
+        <h3><a href="blog.html">Blog</a></h3>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td style="width: 50px;">
+        <h3><a href="clientes.html">Nuestros clientes</a></h3>
+      </td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+</body>
+</html>
