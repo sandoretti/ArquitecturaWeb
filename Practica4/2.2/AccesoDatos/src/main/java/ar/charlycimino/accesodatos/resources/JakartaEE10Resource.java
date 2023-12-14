@@ -1,4 +1,4 @@
-package ar.charlycimino.web.resources;
+package ar.charlycimino.accesodatos.resources;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

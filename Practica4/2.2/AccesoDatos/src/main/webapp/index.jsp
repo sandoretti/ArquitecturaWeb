@@ -8,7 +8,7 @@
 
     <h2>Consulta de Alumnos por Profesor</h2>
 
-    <form action="ConsultaAlumnos.jsp" method="post">
+    <form action="index.jsp" method="post">
         <label>Nombre del Profesor:</label>
         <input type="text" name="nombreProfesor" required>
         <input type="submit" value="Consultar">
@@ -21,7 +21,7 @@
 
             try {
                 Class.forName("org.apache.derby.jdbc.ClientDriver");
-                Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/clase");
+                Connection connection = DriverManager.getConnection("jdbc:derby://localhost:1527/sample");
 
                 // Consulta SQL para obtener los alumnos que reciben clases del profesor
                 String sql = "SELECT DISTINCT A.Nombre, A.Apellido " +
