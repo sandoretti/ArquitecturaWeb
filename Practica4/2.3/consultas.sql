@@ -1,0 +1,15 @@
+CREATE TABLE APP.CIRCUITOS (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    nombre VARCHAR(255),
+    ciudad VARCHAR(255),
+    pais VARCHAR(255),
+    numVueltas INT,
+    longitudVuelta INT,
+    numCurvas INT
+)
+
+CREATE TABLE APP.COCHES (
+    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    nombre VARCHAR(255),
+    gananciapotenciacurva INT
+)

@@ -1,0 +1,109 @@
+#b-index {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Altura total de la ventana de visualización */
+    color: #333;
+}
+
+h2 {
+    color: #444;
+    font-size: 24px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+form {
+    background: white;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Estilo para todos los botones */
+input[type="button"] {
+    background-color: #4CAF50; /* Color de fondo */
+    border: none; /* No borde */
+    color: white; /* Texto en color blanco */
+    padding: 10px 20px; /* Relleno alrededor del texto */
+    text-align: center; /* Texto centrado */
+    text-decoration: none; /* Ninguna decoración de texto */
+    display: inline-block; /* Establece el display como inline-block */
+    font-size: 16px; /* Tamaño de la fuente */
+    margin: 4px 2px; /* Margen alrededor del botón */
+    cursor: pointer; /* Cursor en forma de puntero para indicar que es clickeable */
+    border-radius: 5px; /* Bordes redondeados */
+    transition-duration: 0.4s; /* Duración de la transición para efectos de hover */
+}
+
+/* Estilo para el botón al pasar el mouse por encima */
+input[type="button"]:hover {
+    background-color: #45a049; /* Color de fondo más oscuro para efecto hover */
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19); /* Sombra para dar profundidad */
+}
+
+
+label {
+    margin-top: 10px;
+    display: block;
+    font-size: 16px;
+}
+
+/* Responsive layout - makes the form look good on any screen size */
+@media screen and (max-width: 600px) {
+    form {
+        width: 100%;
+        margin: 0;
+    }
+}
+h1 {
+    margin: 10px 0;
+    text-align: center;
+}
+
+h1 a {
+    color: #4CAF50; /* Color del enlace */
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    font-size: 24px; /* Tamaño de la fuente del enlace */
+    display: block;
+}
+
+h1 a:hover {
+    color: #45a049; /* Color del enlace al pasar el ratón por encima */
+}
+
+#resultadoPotencia {
+    text-align: center; /* Alinea el texto al centro */
+    margin-top: 20px; /* Agrega un margen en la parte superior */
+    padding: 10px; /* Añade algo de relleno alrededor del texto */
+    background-color: #f8f8f8; /* Un color de fondo suave */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil para dar profundidad */
+    font-size: 18px; /* Tamaño de letra más grande */
+    color: #333; /* Color del texto */
+    max-width: 400px; /* Ancho máximo */
+    margin-left: auto; /* Centrado horizontal */
+    margin-right: auto; /* Centrado horizontal */
+}
+
+/* Opcional: Estilo para cuando haya un resultado */
+#resultadoPotencia:not(:empty) {
+    border: 1px solid #ccc; /* Borde si hay contenido */
+}
