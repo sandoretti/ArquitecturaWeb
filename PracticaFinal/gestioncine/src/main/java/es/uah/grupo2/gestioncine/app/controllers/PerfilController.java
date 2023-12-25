@@ -1,5 +1,6 @@
 package es.uah.grupo2.gestioncine.app.controllers;
 
+import es.uah.grupo2.gestioncine.app.model.Cliente;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -7,13 +8,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author Italo Joel Sandoval Amoretti
+ * @author serchio
  */
-@WebServlet(name = "PrimerServlet", urlPatterns = {"/PrimerServlet"})
-public class PrimerServlet extends HttpServlet {
+@WebServlet(name = "PerfilController", urlPatterns = {"/perfil"})
+public class PerfilController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,10 +34,10 @@ public class PrimerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet PrimerServlet</title>");            
+            out.println("<title>Servlet PerfilController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet PrimerServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet PerfilController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -53,7 +55,24 @@ public class PrimerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession(false);
+        // Verificar si hay un atributo de usuario en la sesión
+        if (session != null && session.getAttribute("usuario") != null) {
+            Cliente cliente = (Cliente) session.getAttribute("usuario");
+            session.setAttribute("usuario", cliente);
+
+            // El usuario está logueado
+            if (cliente.isAdmin()) {
+                // Es admin
+                request.getRequestDispatcher(request.getContextPath() + "/operacionesAdmin.jsp").forward(request, response);
+            } else {
+                //No es admin
+                request.getRequestDispatcher(request.getContextPath() + "/perfil.jsp").forward(request, response);
+            }
+        } else {
+            // No hay usuario logueado, redirigir al login
+            response.sendRedirect(request.getContextPath() + "/login");
+        }
     }
 
     /**
