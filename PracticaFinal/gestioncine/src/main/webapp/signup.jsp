@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Crear cuenta</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
@@ -12,14 +12,14 @@
             if(error != null) {
                 out.println("<div>Error: ".concat(error).concat("</div>"));
             }
-            
-            String success = (String) session.getAttribute("success");
-            if(success != null) {
-                out.println("<div>Success: ".concat(success).concat("</div>"));
-            }
         %>
-        <form action="/login" method="POST">
-            email
+        
+        <form action="/signup" method="POST">
+            Nombre:
+            <input type="text" name="nombre">
+            Apellido:
+            <input type="text" name="apellido">
+            Email:
             <input type="email" name="email">
             Password:
             <input type="password" name="passwd">
