@@ -11,9 +11,10 @@
             String error = (String) session.getAttribute("error");
             if(error != null) {
                 out.println("<div>Error: ".concat(error).concat("</div>"));
+                session.removeAttribute("error");
             }
         %>
-        
+        <h1>Crear cuenta</h1>
         <form action="/signup" method="POST">
             Nombre:
             <input type="text" name="nombre">
@@ -23,7 +24,7 @@
             <input type="email" name="email">
             Password:
             <input type="password" name="passwd">
-            <button>Enviar</button>
+            <button>Crear cuenta</button>
         </form>
     </body>
 </html>
