@@ -11,9 +11,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-@WebServlet(name = "Login", urlPatterns = {"/login"})
-public class LoginController extends HttpServlet {
+@WebServlet(name = "CrearCuentaController", urlPatterns = {"/cuentaNueva"})
+public class CrearCuentaController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,10 +36,10 @@ public class LoginController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Login</title>");
+            out.println("<title>Servlet CrearCuentaController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CrearCuentaController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -56,8 +60,8 @@ public class LoginController extends HttpServlet {
         HttpSession session = request.getSession();
         if (null != (Cliente) session.getAttribute("usuario")) {
             response.sendRedirect(request.getContextPath() + "/perfil");
-        }else{
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("/crearCuenta.jsp").forward(request, response);
         }
     }
 
@@ -72,21 +76,29 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String nombre = request.getParameter("nombre").trim();
+        String apellido = request.getParameter("apellido").trim();
         String email = request.getParameter("email").trim();
         String passwd = request.getParameter("passwd").trim();
+        Timestamp ahora = new Timestamp(System.currentTimeMillis());
 
+        Cliente nuevoCliente = new Cliente(0, nombre, apellido, email, passwd, ahora, false);
         ClienteDAO dao = new ClienteDAO();
-        Connection conn = dao.getConnection();
-        Cliente clienteResultado = dao.validarUsuario(conn, email, passwd);
-        HttpSession session = request.getSession();
 
-        if (clienteResultado != null) {
-            session.setAttribute("usuario", clienteResultado);
-            session.setMaxInactiveInterval(30);
-            response.sendRedirect(request.getContextPath() + "/perfil");
-        } else {
-            session.setAttribute("error", "Usuario o password no coincide.");
-            response.sendRedirect(request.getContextPath() + "/login");
+        try (Connection conn = dao.getConnection()) {
+            boolean insertado = dao.IngresarUsuario(conn, nuevoCliente);
+            if (insertado) {
+                HttpSession session = request.getSession();
+                session.setAttribute("usuario", nuevoCliente);
+                response.sendRedirect(request.getContextPath() + "/perfil");
+            } else {
+                request.setAttribute("error", "No se pudo crear el usuario.");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
+        } catch (SQLException ex) {
+            request.setAttribute("error", "Error de base de datos: " + ex.getMessage());
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            Logger.getLogger(CrearCuentaController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -1,6 +1,10 @@
+<%-- 
+    Document   : error
+    Created on : 26 dic 2023, 20:46:15
+    Author     : serchio
+--%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="jakarta.servlet.http.HttpSession" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,8 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hola Usuario normal</h1>
-        <p>
-        </p>
+        <h1>Error en la BBDD!</h1>
     </body>
 </html>

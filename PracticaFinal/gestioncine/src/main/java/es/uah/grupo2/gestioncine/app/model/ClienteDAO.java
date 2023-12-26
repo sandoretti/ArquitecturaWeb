@@ -1,9 +1,6 @@
 package es.uah.grupo2.gestioncine.app.model;
 
-import static java.lang.Thread.sleep;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ClienteDAO {
 
@@ -43,7 +40,7 @@ public class ClienteDAO {
                         rs.getString("APELLIDO"),
                         rs.getString("EMAIL"),
                         rs.getString("CONTRASENA"),
-                        rs.getString("FECHA_REGISTRO"),
+                        rs.getTimestamp("FECHA_REGISTRO"),
                         rs.getBoolean("ES_ADMIN")
                 );
             }
@@ -68,4 +65,17 @@ public class ClienteDAO {
         return null;
     }
 
+    public boolean IngresarUsuario(Connection conn, Cliente cliente) throws SQLException {
+        String sql = "INSERT INTO Cliente (nombre, apellido, email, contrasena, fecha_registro, es_admin) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, cliente.getNombre());
+            ps.setString(2, cliente.getApellido());
+            ps.setString(3, cliente.getEmail());
+            ps.setString(4, cliente.getPasswd());
+            ps.setTimestamp(5, cliente.getFechaRegistro());
+            ps.setBoolean(6, cliente.isAdmin());
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
+        }
+    }
 }
