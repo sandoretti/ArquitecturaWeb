@@ -1,7 +1,7 @@
-Sun Dec 17 10:55:34 CET 2023 : Servidor de red Apache Derby: Se ha iniciado 10.16.1.1 - (1901046) y está listo para aceptar las conexiones en el puerto 1527
+Wed Dec 27 20:28:50 CET 2023 : Servidor de red Apache Derby: Se ha iniciado 10.16.1.1 - (1901046) y está listo para aceptar las conexiones en el puerto 1527
 ----------------------------------------------------------------
-Sun Dec 17 10:57:34 CET 2023:
- Iniciando instancia a816c00e-018c-7733-d1d9-ffff9d6998df de Derby, versión The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046): 
+Wed Dec 27 20:29:16 CET 2023:
+ Iniciando instancia a816c00e-018c-acc0-41a2-ffff9d6998df de Derby, versión The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046): 
 en el directorio de base de datos C:\Users\elfut\Desktop\Arquitectura web\ArquitecturaWeb\Practica4\2.3\shopmedb con el cargador de clases jdk.internal.loader.ClassLoaders$AppClassLoader@c387f44
 Cargado desde file:/C:/Program%20Files/Java/jdk-19/db-derby-10.16.1.1-bin/lib/derby.jar
 java.vendor=Oracle Corporation
@@ -12,3 +12,9 @@ os.arch=amd64
 os.version=10.0
 derby.system.home=C:\Users\elfut\Desktop\Arquitectura web\ArquitecturaWeb\Practica4\2.3
 Cargador de clases de base de datos iniciado - derby.database.classpath=''
+----------------------------------------------------------------
+Wed Dec 27 21:03:05 CET 2023: cerrando motor de Derby
+----------------------------------------------------------------
+Wed Dec 27 21:03:05 CET 2023:
+Cerrando la instancia a816c00e-018c-acc0-41a2-ffff9d6998df en el directorio de base de datos C:\Users\elfut\Desktop\Arquitectura web\ArquitecturaWeb\Practica4\2.3\shopmedb con cargador de clases jdk.internal.loader.ClassLoaders$AppClassLoader@c387f44
+----------------------------------------------------------------

@@ -20,7 +20,7 @@
                 session.removeAttribute("success");
             }
         %>
-        <<h1>Iniciar sesión</h1>
+        <h1>Iniciar sesión</h1>
         <form action="/login" method="POST">
             Email
             <input type="email" name="email">

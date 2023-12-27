@@ -32,7 +32,7 @@ public class SignupController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SignupController</title>");            
+            out.println("<title>Servlet SignupController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet SignupController at " + request.getContextPath() + "</h1>");
@@ -53,7 +53,18 @@ public class SignupController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/signup.jsp").forward(request, response);
+        HttpSession session = request.getSession(false);
+        // Verificar si hay un atributo de usuario en la sesión
+        if (session != null && session.getAttribute("usuario") != null) {
+            Cliente cliente = (Cliente) session.getAttribute("usuario");
+            session.setAttribute("usuario", cliente);
+            response.sendRedirect(request.getContextPath() + "/perfil");
+
+        } else {
+            // No hay usuario logueado, redirigir al login
+            response.sendRedirect(request.getContextPath() + "/signup.jsp");
+            //request.getRequestDispatcher("/signup.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -68,7 +79,7 @@ public class SignupController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        
+
         String nombre = request.getParameter("nombre").trim();
         String apellido = request.getParameter("apellido").trim();
         String email = request.getParameter("email").trim();
@@ -76,13 +87,13 @@ public class SignupController extends HttpServlet {
 
         ClienteDAO dao = new ClienteDAO();
         Connection conn = dao.getConnection();
-        
+
         Boolean existeEmail = dao.verificarEmail(conn, email);
 
         if (existeEmail) {
             conn = dao.getConnection();
             Boolean insertarCliente = dao.insertarCliente(conn, nombre, apellido, email, passwd);
-            
+
             if (insertarCliente) {
                 session.setAttribute("success", "Se ha creado la cuenta correctamente");
                 response.sendRedirect(request.getContextPath() + "/login");

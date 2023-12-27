@@ -53,7 +53,16 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/login.jsp").forward(request, response);
+        HttpSession session = request.getSession(false);
+        // Verificar si hay un atributo de usuario en la sesión
+        if (session != null && session.getAttribute("usuario") != null) {
+            Cliente cliente = (Cliente) session.getAttribute("usuario");
+            session.setAttribute("usuario", cliente);
+            response.sendRedirect(request.getContextPath() + "/perfil");
+        } else {
+            // No hay usuario logueado, redirigir al login
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        }
     }
 
     /**
@@ -77,7 +86,6 @@ public class LoginController extends HttpServlet {
 
         if (clienteResultado != null) {
             session.setAttribute("usuario", clienteResultado);
-            session.setMaxInactiveInterval(30);
             response.sendRedirect(request.getContextPath() + "/perfil");
         } else {
             session.setAttribute("error", "Usuario o password no coincide.");
