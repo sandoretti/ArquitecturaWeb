@@ -10,5 +10,6 @@
         <h1>Hello!</h1>
         <% Cliente cliente = (Cliente) session.getAttribute("usuario"); %>
         <p>Hola <%=  cliente.getNombre() %>, ¿Cómo estas? </p>
+        <a href="/gest-peliculas">Gestionar peliculas</a>
     </body>
 </html>

@@ -5,3 +5,6 @@
 shopmedb
 /PracticaFinal/gestioncine/target/
 derby.log
+
+# ignorar las carpetas llamadas .idea
+.idea/

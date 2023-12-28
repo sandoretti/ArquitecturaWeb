@@ -1,232 +1,163 @@
 package es.uah.grupo2.gestioncine.app.model;
 
+import java.util.List;
+
 public class Pelicula {
 
     private int id;
-    private String nombrePelicula;
+    private String nombre;
     private String sipnosis;
-    private String paginaOficial;
-    private String tituloOficial;
+    private String pagina;
+    private String titulo;
     private String genero;
     private String nacionalidad;
     private int duracion;
     private int ano;
     private String distribuidora;
     private String director;
-    private String actor;
-    private String clasificacionEdad;
     private String otrosDatos;
+    private String clasificacionEdad;
+    private String portad;
+    private List<Actor> actores;
 
-    public Pelicula(int id, String nombrePelicula, String sipnosis, String paginaOficial, String tituloOficial, String genero, String nacionalidad, int duracion, int ano, String distribuidora, String director, String actor, String clasificacionEdad, String otrosDatos) {
+    public Pelicula(int id, String nombre, String sipnosis, String pagina, String titulo, String genero,
+                    String nacionalidad, int duracion, int ano, String distribuidora, String director,
+                    String otrosDatos, String clasificacionEdad, String portad, List<Actor> actores
+    ) {
         this.id = id;
-        this.nombrePelicula = nombrePelicula;
+        this.nombre = nombre;
         this.sipnosis = sipnosis;
-        this.paginaOficial = paginaOficial;
-        this.tituloOficial = tituloOficial;
+        this.pagina = pagina;
+        this.titulo = titulo;
         this.genero = genero;
         this.nacionalidad = nacionalidad;
         this.duracion = duracion;
         this.ano = ano;
         this.distribuidora = distribuidora;
         this.director = director;
-        this.actor = actor;
-        this.clasificacionEdad = clasificacionEdad;
         this.otrosDatos = otrosDatos;
+        this.clasificacionEdad = clasificacionEdad;
+        this.portad = portad;
+        this.actores = actores;
     }
 
-    /**
-     * @return the id
-     */
     public int getId() {
         return id;
     }
 
-    /**
-     * @return the nombrePelicula
-     */
-    public String getNombrePelicula() {
-        return nombrePelicula;
-    }
-
-    /**
-     * @return the sipnosis
-     */
-    public String getSipnosis() {
-        return sipnosis;
-    }
-
-    /**
-     * @return the paginaOficial
-     */
-    public String getPaginaOficial() {
-        return paginaOficial;
-    }
-
-    /**
-     * @return the tituloOficial
-     */
-    public String getTituloOficial() {
-        return tituloOficial;
-    }
-
-    /**
-     * @return the genero
-     */
-    public String getGenero() {
-        return genero;
-    }
-
-    /**
-     * @return the nacionalidad
-     */
-    public String getNacionalidad() {
-        return nacionalidad;
-    }
-
-    /**
-     * @return the duracion
-     */
-    public int getDuracion() {
-        return duracion;
-    }
-
-    /**
-     * @return the ano
-     */
-    public int getAno() {
-        return ano;
-    }
-
-    /**
-     * @return the distribuidora
-     */
-    public String getDistribuidora() {
-        return distribuidora;
-    }
-
-    /**
-     * @return the director
-     */
-    public String getDirector() {
-        return director;
-    }
-
-    /**
-     * @return the actor
-     */
-    public String getActor() {
-        return actor;
-    }
-
-    /**
-     * @return the clasificacionEdad
-     */
-    public String getClasificacionEdad() {
-        return clasificacionEdad;
-    }
-
-    /**
-     * @return the otrosDatos
-     */
-    public String getOtrosDatos() {
-        return otrosDatos;
-    }
-
-    /**
-     * @param id the id to set
-     */
     public void setId(int id) {
         this.id = id;
     }
 
-    /**
-     * @param nombrePelicula the nombrePelicula to set
-     */
-    public void setNombrePelicula(String nombrePelicula) {
-        this.nombrePelicula = nombrePelicula;
+    public String getNombre() {
+        return nombre;
     }
 
-    /**
-     * @param sipnosis the sipnosis to set
-     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getSipnosis() {
+        return sipnosis;
+    }
+
     public void setSipnosis(String sipnosis) {
         this.sipnosis = sipnosis;
     }
 
-    /**
-     * @param paginaOficial the paginaOficial to set
-     */
-    public void setPaginaOficial(String paginaOficial) {
-        this.paginaOficial = paginaOficial;
+    public String getPagina() {
+        return pagina;
     }
 
-    /**
-     * @param tituloOficial the tituloOficial to set
-     */
-    public void setTituloOficial(String tituloOficial) {
-        this.tituloOficial = tituloOficial;
+    public void setPagina(String pagina) {
+        this.pagina = pagina;
     }
 
-    /**
-     * @param genero the genero to set
-     */
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
     public void setGenero(String genero) {
         this.genero = genero;
     }
 
-    /**
-     * @param nacionalidad the nacionalidad to set
-     */
+    public String getNacionalidad() {
+        return nacionalidad;
+    }
+
     public void setNacionalidad(String nacionalidad) {
         this.nacionalidad = nacionalidad;
     }
 
-    /**
-     * @param duracion the duracion to set
-     */
+    public int getDuracion() {
+        return duracion;
+    }
+
     public void setDuracion(int duracion) {
         this.duracion = duracion;
     }
 
-    /**
-     * @param ano the ano to set
-     */
+    public int getAno() {
+        return ano;
+    }
+
     public void setAno(int ano) {
         this.ano = ano;
     }
 
-    /**
-     * @param distribuidora the distribuidora to set
-     */
+    public String getDistribuidora() {
+        return distribuidora;
+    }
+
     public void setDistribuidora(String distribuidora) {
         this.distribuidora = distribuidora;
     }
 
-    /**
-     * @param director the director to set
-     */
+    public String getDirector() {
+        return director;
+    }
+
     public void setDirector(String director) {
         this.director = director;
     }
 
-    /**
-     * @param actor the actor to set
-     */
-    public void setActor(String actor) {
-        this.actor = actor;
+    public String getOtrosDatos() {
+        return otrosDatos;
     }
 
-    /**
-     * @param clasificacionEdad the clasificacionEdad to set
-     */
+    public void setOtrosDatos(String otrosDatos) {
+        this.otrosDatos = otrosDatos;
+    }
+
+    public String getClasificacionEdad() {
+        return clasificacionEdad;
+    }
+
     public void setClasificacionEdad(String clasificacionEdad) {
         this.clasificacionEdad = clasificacionEdad;
     }
 
-    /**
-     * @param otrosDatos the otrosDatos to set
-     */
-    public void setOtrosDatos(String otrosDatos) {
-        this.otrosDatos = otrosDatos;
+    public String getPortad() {
+        return portad;
+    }
+
+    public void setPortad(String portad) {
+        this.portad = portad;
+    }
+
+    public List<Actor> getActores() {
+        return actores;
+    }
+
+    public void setActores(List<Actor> actores) {
+        this.actores = actores;
     }
 }
