@@ -1,5 +1,7 @@
 package es.uah.grupo2.gestioncine.app.model;
 
+import java.sql.Timestamp;
+
 public class Cliente {
 
     private int id;
@@ -7,10 +9,10 @@ public class Cliente {
     private String apellido;
     private String email;
     private String passwd;
-    private String fechaRegistro;
+    private Timestamp fechaRegistro;
     private boolean admin;
 
-    public Cliente(int id, String nombre, String apellido, String email, String passwd, String fechaRegistro, boolean admin) {
+    public Cliente(int id, String nombre, String apellido, String email, String passwd, Timestamp fechaRegistro, boolean admin) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -58,7 +60,7 @@ public class Cliente {
     /**
      * @return the fechaRegistro
      */
-    public String getFechaRegistro() {
+    public Timestamp getFechaRegistro() {
         return fechaRegistro;
     }
 
@@ -100,7 +102,7 @@ public class Cliente {
     /**
      * @param fechaRegistro the fechaRegistro to set
      */
-    public void setFechaRegistro(String fechaRegistro) {
+    public void setFechaRegistro(Timestamp fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 

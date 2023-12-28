@@ -54,14 +54,10 @@ public class LoginController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        // Verificar si hay un atributo de usuario en la sesión
-        if (session != null && session.getAttribute("usuario") != null) {
-            Cliente cliente = (Cliente) session.getAttribute("usuario");
-            session.setAttribute("usuario", cliente);
+        if (null != (Cliente) session.getAttribute("usuario")) {
             response.sendRedirect(request.getContextPath() + "/perfil");
         } else {
-            // No hay usuario logueado, redirigir al login
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
     }
 

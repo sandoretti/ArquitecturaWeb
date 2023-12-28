@@ -40,7 +40,7 @@ public class ClienteDAO {
                         rs.getString("APELLIDO"),
                         rs.getString("EMAIL"),
                         rs.getString("CONTRASENA"),
-                        rs.getString("FECHA_REGISTRO"),
+                        rs.getTimestamp("FECHA_REGISTRO"),
                         rs.getBoolean("ES_ADMIN")
                 );
             }
@@ -66,14 +66,15 @@ public class ClienteDAO {
     }
 
     /**
-     * Inserta un cliente en la base de datos dada por la conexion. 
-     * 
-     * @param conn 
+     * Inserta un cliente en la base de datos dada por la conexion.
+     *
+     * @param conn
      * @param nombre
      * @param apellido
      * @param email
      * @param passwd
-     * @return Si se ha insertado correctamente, este devuelve true, pero sino , devolvemos false
+     * @return Si se ha insertado correctamente, este devuelve true, pero sino ,
+     * devolvemos false
      */
     public boolean insertarCliente(
             Connection conn,
@@ -83,22 +84,22 @@ public class ClienteDAO {
             String passwd
     ) {
         PreparedStatement ps = null;
-        
+
         try {
             String sql = "INSERT INTO Cliente (nombre, apellido, email, contrasena, fecha_registro, es_admin) "
-                       + "VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, FALSE)";
-            
+                    + "VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, FALSE)";
+
             ps = conn.prepareStatement(sql);
-            
+
             ps.setString(1, nombre);
             ps.setString(2, apellido);
             ps.setString(3, email);
             ps.setString(4, passwd);
-            
+
             ps.executeUpdate();
-            
+
             return true;
-            
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -113,17 +114,17 @@ public class ClienteDAO {
                 e.printStackTrace();
             }
         }
-        
+
         return false;
 
     }
 
     /**
      * Verifica si el email dado se encuentra dentro de la base de datos
-     * 
+     *
      * @param conn
      * @param email
-     * @return 
+     * @return
      */
     public boolean verificarEmail(Connection conn, String email) {
         PreparedStatement ps = null;
@@ -131,16 +132,16 @@ public class ClienteDAO {
 
         try {
             String sql = "SELECT EMAIL FROM APP.CLIENTE WHERE EMAIL = ?";
-            
+
             ps = conn.prepareStatement(sql);
-            
+
             ps.setString(1, email);
-            
-            rs =  ps.executeQuery();
-            
+
+            rs = ps.executeQuery();
+
             // Comprobamos si existe el email en la BBDD
-            return !rs.next(); 
-            
+            return !rs.next();
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -158,8 +159,7 @@ public class ClienteDAO {
                 e.printStackTrace();
             }
         }
-        
+
         return false;
     }
-
 }
