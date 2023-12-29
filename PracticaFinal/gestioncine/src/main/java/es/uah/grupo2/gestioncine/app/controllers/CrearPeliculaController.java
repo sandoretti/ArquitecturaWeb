@@ -14,6 +14,7 @@ import jakarta.servlet.http.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.logging.Logger;
 
 @WebServlet(name = "CrearPelicula", urlPatterns = {"/crearPelicula"})
 @MultipartConfig(
@@ -22,7 +23,7 @@ import java.nio.file.Paths;
         maxRequestSize = 1024 * 1024 * 100   // 100 MB
 )
 public class CrearPeliculaController extends HttpServlet {
-    final String RUTA_UPLOAD = "C://uploads//";
+    final Logger logger = Logger.getLogger(getClass().getName());
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -121,8 +122,10 @@ public class CrearPeliculaController extends HttpServlet {
 
         // Si se ha insertado
         if (insertarPelicula) {
+            String rutaUpload = Paths.get("../applications/gestioncine-1.0/imagenes/uploads/").toRealPath().toString();
+
             // Establecemos la ruta del archivo
-            Path rootPath = Paths.get( RUTA_UPLOAD + portada);
+            Path rootPath = Paths.get( rutaUpload + File.separator + portada);
 
             // Insertamos la imagen en RuTA_UPLOAD
             Files.copy(portadaPart.getInputStream(), rootPath);

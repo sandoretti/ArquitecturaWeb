@@ -17,7 +17,7 @@
             session.removeAttribute("error");
         }
     %>
-    <h1>Crear cuenta</h1>
+    <h1>Crear pelicula</h1>
     <form action="/crearPelicula" method="POST" enctype="multipart/form-data">
         Nombre:
         <input type="text" name="nombre"><br>
