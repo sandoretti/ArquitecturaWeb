@@ -16,9 +16,15 @@
             out.println("<div>Error: ".concat(error).concat("</div>"));
             session.removeAttribute("error");
         }
+
+        String success = (String) session.getAttribute("success");
+        if(success != null) {
+            out.println("<div>Success: ".concat(success).concat("</div>"));
+            session.removeAttribute("success");
+        }
     %>
     <h1>Gestionar peliculas</h1>
-    <a href="/crear-pelicula">Crear pelicula</a>
+    <a href="/crearPelicula">Crear pelicula</a>
 
     <table>
         <thead>
@@ -45,7 +51,7 @@
                     <td><%=pelicula.getAno()%></td>
                     <td><%=pelicula.getClasificacionEdad()%></td>
                     <td><a href="">Editar</a></td>
-                    <td><a href="">Eliminar</a></td>
+                    <td><a href="/eliminarPelicula/<%=pelicula.getId()%>" onclick="return confirm('¿Estas seguro que quieres eliminar?')">Eliminar</a></td>
                 </tr>
     <%
             }

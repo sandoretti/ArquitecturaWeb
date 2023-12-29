@@ -18,7 +18,7 @@
         }
     %>
     <h1>Crear cuenta</h1>
-    <form action="/crear-pelicula" method="POST" enctype="multipart/form-data">
+    <form action="/crearPelicula" method="POST" enctype="multipart/form-data">
         Nombre:
         <input type="text" name="nombre"><br>
         Sinopsis:

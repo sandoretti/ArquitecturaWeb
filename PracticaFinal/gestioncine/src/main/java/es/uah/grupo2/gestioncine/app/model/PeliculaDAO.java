@@ -184,4 +184,86 @@ public class PeliculaDAO {
 
         return null;
     }
+
+    public static boolean validarId(int id){
+        Connection conn = getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT ID FROM PELICULA WHERE ID = ?";
+            ps = conn.prepareStatement(sql);
+
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean eliminarPeliculaId(int id){
+        Connection conn = getConnection();
+        PreparedStatement psPelicula = null;
+        PreparedStatement psActores = null;
+
+        try {
+            // Eliminamos las relaciones de la pelicula con actores
+            String SQL_Actores = "DELETE FROM PELICULA_ACTOR WHERE PELICULA_ID = ?";
+
+            psActores = conn.prepareStatement(SQL_Actores);
+
+            psActores.setInt(1, id);
+
+            psActores.executeUpdate();
+
+            // Eliminamos las peliculas
+            String SQL_Peliculas = "DELETE FROM PELICULA WHERE ID = ?";
+
+            psPelicula = conn.prepareStatement(SQL_Peliculas);
+
+            psPelicula.setInt(1, id);
+
+            psPelicula.executeUpdate();
+
+            return true;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (psPelicula != null) {
+                    psPelicula.close();
+                }
+                if (psActores != null) {
+                    psActores.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
+    }
 }

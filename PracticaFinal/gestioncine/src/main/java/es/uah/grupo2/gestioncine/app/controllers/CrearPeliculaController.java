@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@WebServlet(name = "CrearPelicula", urlPatterns = {"/crear-pelicula"})
+@WebServlet(name = "CrearPelicula", urlPatterns = {"/crearPelicula"})
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024, // 1 MB
         maxFileSize = 1024 * 1024 * 10,      // 10 MB
@@ -69,7 +69,7 @@ public class CrearPeliculaController extends HttpServlet {
 
             // Si existe cliente y el cliente es administrador
             if (cliente != null && cliente.isAdmin()) {
-                response.sendRedirect(request.getContextPath() + "/crear-pelicula.jsp");
+                request.getRequestDispatcher(request.getContextPath() + "/crear-pelicula.jsp").forward(request, response);
             } else {
                 response.sendRedirect(request.getContextPath() + "/index.jsp");
             }
@@ -138,19 +138,19 @@ public class CrearPeliculaController extends HttpServlet {
                 // Si se han insertado correctamente
                 if (actoresAnnadidos) {
                     session.setAttribute("success", "Se ha creado correctamente la pelicula");
-                    response.sendRedirect(request.getContextPath() + "/gest-peliculas");
+                    response.sendRedirect(request.getContextPath() + "/gestionPeliculas");
                 } else {
                     session.setAttribute("error", "Se ha producido un error al anadir los actores");
-                    response.sendRedirect(request.getContextPath() + "/crear-pelicula");
+                    response.sendRedirect(request.getContextPath() + "/crearPelicula");
                 }
 
             } else {
                 session.setAttribute("error", "Se ha producido un error al obtener la pelicula");
-                response.sendRedirect(request.getContextPath() + "/crear-pelicula");
+                response.sendRedirect(request.getContextPath() + "/crearPelicula");
             }
         } else {
             session.setAttribute("error", "Se ha producido un error al insertar la pelicula");
-            response.sendRedirect(request.getContextPath() + "/crear-pelicula");
+            response.sendRedirect(request.getContextPath() + "/crearPelicula");
         }
     }
 
