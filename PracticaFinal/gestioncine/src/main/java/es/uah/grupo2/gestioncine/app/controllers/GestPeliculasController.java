@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet(name = "GestPeliculas", urlPatterns = {"/gest-peliculas"})
+@WebServlet(name = "GestPeliculas", urlPatterns = {"/gestionPeliculas"})
 public class GestPeliculasController extends HttpServlet {
 
     /**
@@ -58,7 +58,7 @@ public class GestPeliculasController extends HttpServlet {
 
             // Si existe cliente y el cliente es administrador
             if (cliente != null && cliente.isAdmin()) {
-                response.sendRedirect(request.getContextPath() + "/gest-peliculas.jsp");
+                request.getRequestDispatcher(request.getContextPath() + "/gest-peliculas.jsp").forward(request, response);
             } else {
                 response.sendRedirect(request.getContextPath() + "/index.jsp");
             }

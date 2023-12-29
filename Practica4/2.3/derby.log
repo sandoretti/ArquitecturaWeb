@@ -1,7 +1,7 @@
-Thu Dec 28 11:20:35 CET 2023 : Servidor de red Apache Derby: Se ha iniciado 10.16.1.1 - (1901046) y está listo para aceptar las conexiones en el puerto 1527
+Fri Dec 29 09:38:03 CET 2023 : Servidor de red Apache Derby: Se ha iniciado 10.16.1.1 - (1901046) y está listo para aceptar las conexiones en el puerto 1527
 ----------------------------------------------------------------
-Thu Dec 28 11:22:38 CET 2023:
- Iniciando instancia a816c00e-018c-aff0-ae87-ffff9d6998df de Derby, versión The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046): 
+Fri Dec 29 09:39:33 CET 2023:
+ Iniciando instancia a816c00e-018c-b4b9-299d-ffff9d6998df de Derby, versión The Apache Software Foundation - Apache Derby - 10.16.1.1 - (1901046): 
 en el directorio de base de datos C:\Users\elfut\Desktop\Arquitectura web\ArquitecturaWeb\Practica4\2.3\shopmedb con el cargador de clases jdk.internal.loader.ClassLoaders$AppClassLoader@c387f44
 Cargado desde file:/C:/Program%20Files/Java/jdk-19/db-derby-10.16.1.1-bin/lib/derby.jar
 java.vendor=Oracle Corporation
