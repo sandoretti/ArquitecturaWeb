@@ -60,10 +60,10 @@ public class GestPeliculasController extends HttpServlet {
             if (cliente != null && cliente.isAdmin()) {
                 response.sendRedirect(request.getContextPath() + "/gest-peliculas.jsp");
             } else {
-                response.sendRedirect(request.getContextPath() + "/index");
+                response.sendRedirect(request.getContextPath() + "/index.jsp");
             }
         } else {
-            response.sendRedirect(request.getContextPath() + "/index");
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
         }
 
     }
