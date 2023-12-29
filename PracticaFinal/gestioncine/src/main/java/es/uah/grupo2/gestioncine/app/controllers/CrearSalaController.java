@@ -1,7 +1,7 @@
 package es.uah.grupo2.gestioncine.app.controllers;
 
 import es.uah.grupo2.gestioncine.app.model.Cliente;
-import es.uah.grupo2.gestioncine.app.model.ClienteDAO;
+import es.uah.grupo2.gestioncine.app.model.SalaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,8 +12,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.Connection;
 
-@WebServlet(name = "Login", urlPatterns = {"/login"})
-public class LoginController extends HttpServlet {
+/**
+ *
+ * @author serchio
+ */
+@WebServlet(name = "CrearSalaController", urlPatterns = {"/crearSala"})
+public class CrearSalaController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,16 +36,15 @@ public class LoginController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Login</title>");
+            out.println("<title>Servlet CrearSalaController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CrearSalaController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -54,10 +57,19 @@ public class LoginController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session != null && null != (Cliente) session.getAttribute("usuario")) {
-            response.sendRedirect(request.getContextPath() + "/perfil");
+
+        // Verificamos si existe session
+        if (session != null) {
+            Cliente cliente = (Cliente) session.getAttribute("usuario");    // Obtenemos el atributo cliente
+
+            // Si existe cliente y el cliente es administrador
+            if (cliente != null && cliente.isAdmin()) {
+                request.getRequestDispatcher(request.getContextPath() + "/crearSala.jsp").forward(request, response);
+            } else {
+                request.getRequestDispatcher(request.getContextPath() + "/login").forward(request, response);
+            }
         } else {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            request.getRequestDispatcher(request.getContextPath() + "/login").forward(request, response);
         }
     }
 
@@ -72,21 +84,24 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("email").trim();
-        String passwd = request.getParameter("passwd").trim();
+        // Obtener los parámetros del formulario
+        String nombreSala = request.getParameter("nombre_sala");
+        int filas = Integer.parseInt(request.getParameter("filas"));
+        int columnas = Integer.parseInt(request.getParameter("columnas"));
 
-        ClienteDAO dao = new ClienteDAO();
-        Connection conn = dao.getConnection();
-        Cliente clienteResultado = dao.validarUsuario(conn, email, passwd);
-        HttpSession session = request.getSession();
+        // Obtenemos la sesion
+        HttpSession session = request.getSession(false);
 
-        if (clienteResultado != null) {
-            session.setAttribute("usuario", clienteResultado);
-            response.sendRedirect(request.getContextPath() + "/perfil");
+        SalaDAO salita = new SalaDAO();
+        Connection conn = salita.getConnection();
+
+        boolean insertado = salita.insertarSala(conn, nombreSala, filas, columnas);
+        if (insertado) {
+            session.setAttribute("success", "Se ha creado correctamente la sala");
         } else {
-            session.setAttribute("error", "Usuario o password no coincide.");
-            response.sendRedirect(request.getContextPath() + "/login");
+            session.setAttribute("error", "Se ha producido un error al insertar la sala");
         }
+        response.sendRedirect(request.getContextPath() + "/gestionSalas");
     }
 
     /**
