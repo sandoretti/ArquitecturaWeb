@@ -56,7 +56,7 @@ public class CerrarSesion extends HttpServlet {
         if (session != null && session.getAttribute("usuario") != null) {
             session.removeAttribute("usuario");
         }
-        response.sendRedirect(request.getContextPath() + "/login");
+        response.sendRedirect(request.getContextPath() + "./");
     }
 
     /**

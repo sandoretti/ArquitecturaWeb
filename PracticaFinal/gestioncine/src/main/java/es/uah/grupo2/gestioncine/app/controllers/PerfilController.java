@@ -67,7 +67,7 @@ public class PerfilController extends HttpServlet {
                 request.getRequestDispatcher(request.getContextPath() + "/operacionesAdmin.jsp").forward(request, response);
             } else {
                 //No es admin
-                request.getRequestDispatcher(request.getContextPath() + "/perfil.jsp").forward(request, response);
+                request.getRequestDispatcher(request.getContextPath() + "./").forward(request, response);
             }
         } else {
             // No hay usuario logueado, redirigir al login
