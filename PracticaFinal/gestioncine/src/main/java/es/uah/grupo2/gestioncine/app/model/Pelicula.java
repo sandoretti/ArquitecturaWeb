@@ -41,6 +41,14 @@ public class Pelicula {
         this.actores = actores;
     }
 
+    public Pelicula(int id, String nombre, String genero, int ano, String clasificacionEdad) {
+        this.id = id;
+        this.nombre = nombre;
+        this.genero = genero;
+        this.ano = ano;
+        this.clasificacionEdad = clasificacionEdad;
+    }
+
     public int getId() {
         return id;
     }

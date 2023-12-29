@@ -14,7 +14,6 @@ import jakarta.servlet.http.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.logging.Logger;
 
 @WebServlet(name = "CrearPelicula", urlPatterns = {"/crear-pelicula"})
 @MultipartConfig(
@@ -24,8 +23,6 @@ import java.util.logging.Logger;
 )
 public class CrearPeliculaController extends HttpServlet {
     final String RUTA_UPLOAD = "C://uploads//";
-
-    Logger logger = Logger.getLogger(getClass().getName());
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

@@ -1,6 +1,8 @@
 package es.uah.grupo2.gestioncine.app.model;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PeliculaDAO {
     public static Connection getConnection() {
@@ -131,5 +133,55 @@ public class PeliculaDAO {
         }
 
         return -1;
+    }
+
+    public static List<Pelicula> selectPeliculasIdNombGenAnoClas(){
+        Connection conn = getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT ID, NOMBRE_PELICULA, GENERO, ANO, CLASS_EDAD FROM PELICULA ";
+
+            ps = conn.prepareStatement(sql);
+
+            rs = ps.executeQuery();
+
+            String nombre, genero, clasificacionEdad;
+            int id, ano;
+
+            List<Pelicula> peliculasList = new ArrayList<>();
+
+            while(rs.next()){
+                id = rs.getInt(1);
+                nombre = rs.getString(2);
+                genero = rs.getString(3);
+                ano = rs.getInt(4);
+                clasificacionEdad = rs.getString(5);
+
+                peliculasList.add(new Pelicula(id, nombre, genero, ano, clasificacionEdad));
+            }
+
+            return peliculasList;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
     }
 }
