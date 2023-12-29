@@ -51,10 +51,10 @@
             List<Actor> actores = ActorDAO.obtenerActores();
             if (actores != null){
                 for(Actor actor: actores){
-                    out.println("<input type=\"checkbox\" name=\"actores\" value=\""
-                            + actor.getId() + "\">" + actor.getNombre() + " "
-                            + actor.getApellido() + "<br>"
-                    );
+        %>
+            <input type="checkbox" name="actores"
+                   value="<%=actor.getId()%>"><%=actor.getNombre()%> <%=actor.getApellido()%><br>
+        <%
                 }
             }
         %>
