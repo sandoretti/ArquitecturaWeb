@@ -42,14 +42,15 @@ CREATE TABLE pelicula (
     PRIMARY KEY (id)
 );
 
+
 CREATE TABLE comentario (
     id               INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     id_cliente       INTEGER NOT NULL,
     id_pelicula      INTEGER NOT NULL,
     texto            VARCHAR(32672) NOT NULL,
     fecha_comentario TIMESTAMP NOT NULL,
-    FOREIGN KEY ( id_cliente ) REFERENCES cliente ( id ),
-    FOREIGN KEY ( id_pelicula ) REFERENCES pelicula ( id ),
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_pelicula) REFERENCES pelicula(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -59,8 +60,8 @@ CREATE TABLE proyeccion (
     id_sala     INTEGER NOT NULL,
     fecha       DATE NOT NULL,
     hora        TIME NOT NULL,
-    FOREIGN KEY ( id_pelicula ) REFERENCES pelicula ( id ),
-    FOREIGN KEY ( id_sala ) REFERENCES sala ( id ),
+    FOREIGN KEY (id_pelicula) REFERENCES pelicula(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_sala) REFERENCES sala(id),
     PRIMARY KEY (id)
 );
 
@@ -69,7 +70,7 @@ CREATE TABLE entrada (
     id_proyeccion INTEGER NOT NULL,
     fila          INTEGER NOT NULL,
     columna       INTEGER NOT NULL,
-    FOREIGN KEY ( id_proyeccion ) REFERENCES proyeccion ( id ),
+    FOREIGN KEY (id_proyeccion) REFERENCES proyeccion(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -77,8 +78,8 @@ CREATE TABLE pelicula_actor (
     id          INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     pelicula_id INTEGER NOT NULL,
     actor_id    INTEGER NOT NULL,
-    FOREIGN KEY ( actor_id ) REFERENCES actor ( id ),
-    FOREIGN KEY ( pelicula_id ) REFERENCES pelicula ( id ),
+    FOREIGN KEY (pelicula_id) REFERENCES pelicula(id) ON DELETE CASCADE,
+    FOREIGN KEY (actor_id) REFERENCES actor(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -89,7 +90,7 @@ CREATE TABLE reserva (
     numero_tarjeta     CHAR(16) NOT NULL,
     referencia_reserva CHAR(8) NOT NULL,
     precio             REAL NOT NULL,
-    FOREIGN KEY ( id_cliente ) REFERENCES cliente ( id ),
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -97,7 +98,7 @@ CREATE TABLE reserva_entrada (
     id         INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     reserva_id INTEGER NOT NULL,
     entrada_id INTEGER NOT NULL,
-    FOREIGN KEY ( entrada_id ) REFERENCES entrada ( id ),
-    FOREIGN KEY ( reserva_id ) REFERENCES reserva ( id ),
+    FOREIGN KEY (reserva_id) REFERENCES reserva(id) ON DELETE CASCADE,
+    FOREIGN KEY (entrada_id) REFERENCES entrada(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
