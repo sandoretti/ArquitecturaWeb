@@ -1,4 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.Cliente" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +19,10 @@
                 <a class="link-style nav-item-style" href="/signup">Registro</a>
                 <a class="link-style nav-item-style" href="/login">Inicio Sesión</a>
             <% } else { %>
+                <% Cliente cliente = (Cliente) session.getAttribute("usuario"); 
+                        if (cliente.isAdmin())
+                        request.getRequestDispatcher(request.getContextPath() + "./perfil").forward(request, response);
+                %>
                 <a class="link-style nav-item-style" href="/logout">Cerrar Sesión</a>
             <% } %>
         </div>
