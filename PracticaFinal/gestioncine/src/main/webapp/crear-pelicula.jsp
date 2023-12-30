@@ -8,8 +8,9 @@
     <title>Crear pelicula</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./css/styles.css"> <!-- Añade esta línea -->
 </head>
-    <body>
+    <body class="body-style">
     <%
         String error = (String) session.getAttribute("error");
         if(error != null) {
@@ -17,8 +18,10 @@
             session.removeAttribute("error");
         }
     %>
-    <h1>Crear pelicula</h1>
-    <form action="/crearPelicula" method="POST" enctype="multipart/form-data">
+    <div style="max-width:18%; margin:5px auto;" class="navbar-style">
+        <h1 style="margin:auto;">Añadir película</h1>
+    </div>
+   <form action="/crear-pelicula" method="POST" enctype="multipart/form-data" class="form-container">
         Nombre:
         <input type="text" name="nombre"><br>
         Sinopsis:
@@ -51,10 +54,10 @@
             List<Actor> actores = ActorDAO.obtenerActores();
             if (actores != null){
                 for(Actor actor: actores){
-        %>
-            <input type="checkbox" name="actores"
-                   value="<%=actor.getId()%>"><%=actor.getNombre()%> <%=actor.getApellido()%><br>
-        <%
+                    out.println("<input style='position:relative; top:27px;' type=\"checkbox\" name=\"actores\" value=\""
+                            + actor.getId() + "\">" + actor.getNombre() + " "
+                            + actor.getApellido() + "<br>"
+                    );
                 }
             }
         %>
