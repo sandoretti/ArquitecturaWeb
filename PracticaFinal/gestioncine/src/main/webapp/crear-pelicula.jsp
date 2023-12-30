@@ -21,7 +21,7 @@
     <div style="max-width:18%; margin:5px auto;" class="navbar-style">
         <h1 style="margin:auto;">Añadir película</h1>
     </div>
-   <form action="/crear-pelicula" method="POST" enctype="multipart/form-data" class="form-container">
+   <form action="/crearPelicula" method="POST" enctype="multipart/form-data" class="form-container">
         Nombre:
         <input type="text" name="nombre"><br>
         Sinopsis:

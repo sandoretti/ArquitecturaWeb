@@ -11,6 +11,20 @@ public class Actor {
         this.apellido = apellido;
     }
 
+    public Actor(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Actor){
+            Actor actor = (Actor) obj;
+            return id == actor.getId();
+        } else {
+            return false;
+        }
+    }
+
     public int getId() {
         return id;
     }

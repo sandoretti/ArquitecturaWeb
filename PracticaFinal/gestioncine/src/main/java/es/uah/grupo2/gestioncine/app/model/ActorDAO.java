@@ -5,23 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActorDAO {
-    public static Connection getConnection() {
-        Connection c = null;
-        try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            c = DriverManager.getConnection("jdbc:derby://localhost:1527/shopmedb");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        return c;
-    }
+    static Connection conn = DatabaseConnection.getConnection();
 
     public static List<Actor> obtenerActores(){
         String sql = "SELECT id, nombre, apellido FROM APP.ACTOR";
 
-        Connection conn = getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
@@ -45,65 +33,68 @@ public class ActorDAO {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
+
         return null;
     }
 
-    public static boolean annadirActoresPelicula(String[] actores, int idPelicula){
-        Connection conn = getConnection();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
+    public static void annadirActoresPelicula(List<Actor> actores, int idPelicula)
+        throws SQLException
+    {
         String sql = "INSERT INTO PELICULA_ACTOR(PELICULA_ID, ACTOR_ID) VALUES (?, ?)";
 
-        try{
+        PreparedStatement ps = conn.prepareStatement(sql);
+
+        for (Actor actor: actores){
+            int idActor = actor.getId();
+
+            ps.setInt(1, idPelicula);
+            ps.setInt(2, idActor);
+
+            ps.addBatch();
+        }
+
+        ps.executeBatch();
+    }
+
+    public static List<Actor> obtenerActoresPelicula(int id_pelicula){
+        String sql = "SELECT ACTOR_ID FROM PELICULA_ACTOR WHERE PELICULA_ID = ?";
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
             ps = conn.prepareStatement(sql);
 
-            for (String s: actores){
-                int idActor = Integer.parseInt(s);
+            ps.setInt(1, id_pelicula);
 
-                ps.setInt(1, idPelicula);
-                ps.setInt(2, idActor);
+            rs = ps.executeQuery();
 
-                ps.addBatch();
+            List<Actor> actores = new ArrayList<>();
+
+            int id;
+
+            while (rs.next()){
+                id = rs.getInt(1);
+
+                actores.add(new Actor(id));
             }
 
-            ps.executeBatch();
-
-            return true;
-
+            return actores;
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
-        return false;
+
+        return null;
+    }
+
+    public static void eliminarActoresPelicula(int idPelicula) throws SQLException{
+        String SQL = "DELETE FROM PELICULA_ACTOR WHERE PELICULA_ID = ?";
+
+        PreparedStatement ps = conn.prepareStatement(SQL);
+
+        ps.setInt(1, idPelicula);
+
+        ps.executeUpdate();
     }
 }

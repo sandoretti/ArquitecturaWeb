@@ -5,87 +5,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PeliculaDAO {
-    public static Connection getConnection() {
-        Connection c = null;
-        try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            c = DriverManager.getConnection("jdbc:derby://localhost:1527/shopmedb");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        return c;
-    }
+
+    static Connection conn = DatabaseConnection.getConnection();
 
     /**
-     * Inserta una pelicula en la base de datos y si se hace correctamente, este devuelve true. Si no, este devuelve
-     * false.
-     *
-     * @param nombre
-     * @param sinopsis
-     * @param pagina
-     * @param titulo
-     * @param genero
-     * @param nacionalidad
-     * @param duracion
-     * @param ano
-     * @param distribuidora
-     * @param director
-     * @param otros
-     * @param clasificacion
-     * @param portada
-     * @return
+     * Inserta una pelicula en la base de datos
      */
-    public static boolean insertarPelicula(
-            String nombre, String sinopsis, String pagina, String titulo, String genero,
-            String nacionalidad, int duracion, int ano, String distribuidora,
-            String director, String otros, String clasificacion, String portada
-    ) {
-        Connection conn = getConnection();
-        PreparedStatement ps = null;
+    public static void insertarPelicula(Pelicula pelicula) throws SQLException{
+        String SQL = "INSERT INTO Pelicula (nombre_pelicula, sinopsis, pagina_oficial, titulo_oficial," +
+                "genero, nacionalidad, duracion, ano, distribuidora, director, otros_datos, class_edad, " +
+                "portada) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try {
-            String sql = "INSERT INTO Pelicula (nombre_pelicula, sinopsis, pagina_oficial, titulo_oficial," +
-                    "genero, nacionalidad, duracion, ano, distribuidora, director, otros_datos, class_edad, " +
-                    "portada) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement ps = conn.prepareStatement(SQL);
 
-            ps = conn.prepareStatement(sql);
+        ps.setString(1, pelicula.getNombre());
+        ps.setString(2, pelicula.getSipnosis());
+        ps.setString(3, pelicula.getPagina());
+        ps.setString(4, pelicula.getTitulo());
+        ps.setString(5, pelicula.getGenero());
+        ps.setString(6, pelicula.getNacionalidad());
+        ps.setInt(7, pelicula.getDuracion());
+        ps.setInt(8, pelicula.getAno());
+        ps.setString(9, pelicula.getDistribuidora());
+        ps.setString(10, pelicula.getDirector());
+        ps.setString(11, pelicula.getOtrosDatos());
+        ps.setString(12, pelicula.getClasificacionEdad());
+        ps.setString(13, pelicula.getPortad());
 
-            ps.setString(1, nombre);
-            ps.setString(2, sinopsis);
-            ps.setString(3, pagina);
-            ps.setString(4, titulo);
-            ps.setString(5, genero);
-            ps.setString(6, nacionalidad);
-            ps.setInt(7, duracion);
-            ps.setInt(8, ano);
-            ps.setString(9, distribuidora);
-            ps.setString(10, director);
-            ps.setString(11, otros);
-            ps.setString(12, clasificacion);
-            ps.setString(13, portada);
+        ps.executeUpdate();
 
-            ps.executeUpdate();
+        if (pelicula.getActores() != null) {
+            int idPelicula = PeliculaDAO.obtenerId(pelicula.getNombre());
 
-            return true;
+            if (idPelicula > 0) {
+                pelicula.setId(idPelicula);
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+                // Metemos los nuevos actores asociados a la pelicula
+                ActorDAO.annadirActoresPelicula(pelicula.getActores(), pelicula.getId());
             }
+
         }
 
-        return false;
     }
 
     /**
@@ -95,7 +55,6 @@ public class PeliculaDAO {
      * @return
      */
     public static int obtenerId(String nombre){
-        Connection conn = getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -116,27 +75,12 @@ public class PeliculaDAO {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
 
         return -1;
     }
 
     public static List<Pelicula> selectPeliculasIdNombGenAnoClas(){
-        Connection conn = getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -166,27 +110,12 @@ public class PeliculaDAO {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
 
         return null;
     }
 
     public static boolean validarId(int id){
-        Connection conn = getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -202,26 +131,12 @@ public class PeliculaDAO {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
+
         return false;
     }
 
     public static boolean eliminarPeliculaId(int id){
-        Connection conn = getConnection();
         PreparedStatement psPelicula = null;
         PreparedStatement psActores = null;
 
@@ -248,22 +163,89 @@ public class PeliculaDAO {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            try {
-                if (psPelicula != null) {
-                    psPelicula.close();
-                }
-                if (psActores != null) {
-                    psActores.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
 
         return false;
+    }
+
+    public static Pelicula obtenerPelicula(int id){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            List<Actor> actores = ActorDAO.obtenerActoresPelicula(id);
+
+            String SQL_Pelicula = "SELECT ID, NOMBRE_PELICULA, SINOPSIS, PAGINA_OFICIAL, TITULO_OFICIAL, GENERO," +
+                    "NACIONALIDAD, DURACION, ANO, DISTRIBUIDORA, DIRECTOR, OTROS_DATOS, CLASS_EDAD, " +
+                    "PORTADA FROM PELICULA WHERE ID = ?";
+
+            ps = conn.prepareStatement(SQL_Pelicula);
+
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+
+            Pelicula pelicula = null;
+
+            if(rs.next()){
+                pelicula = new Pelicula(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getInt(8),
+                        rs.getInt(9),
+                        rs.getString(10),
+                        rs.getString(11),
+                        rs.getString(12),
+                        rs.getString(13),
+                        rs.getString(14),
+                        actores
+                );
+            }
+
+            return pelicula;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static void update(Pelicula pelicula) throws SQLException{
+        String SQL = "UPDATE PELICULA SET NOMBRE_PELICULA = ?, SINOPSIS = ?, PAGINA_OFICIAL = ?," +
+                " TITULO_OFICIAL = ?, GENERO = ?, NACIONALIDAD = ?, DURACION = ?, ANO = ?, " +
+                "DISTRIBUIDORA = ?, DIRECTOR = ?, OTROS_DATOS = ?, CLASS_EDAD = ? WHERE ID = ?";
+
+        PreparedStatement ps = conn.prepareStatement(SQL);
+
+        ps.setString(1, pelicula.getNombre());
+        ps.setString(2, pelicula.getSipnosis());
+        ps.setString(3, pelicula.getPagina());
+        ps.setString(4, pelicula.getTitulo());
+        ps.setString(5, pelicula.getGenero());
+        ps.setString(6, pelicula.getNacionalidad());
+        ps.setInt(7, pelicula.getDuracion());
+        ps.setInt(8, pelicula.getAno());
+        ps.setString(9, pelicula.getDistribuidora());
+        ps.setString(10, pelicula.getDirector());
+        ps.setString(11, pelicula.getOtrosDatos());
+        ps.setString(12, pelicula.getClasificacionEdad());
+        ps.setInt(13, pelicula.getId());
+
+        ps.executeUpdate();
+
+        if (pelicula.getActores() != null) {
+            // Quitamos los actores de la pelicula
+            ActorDAO.eliminarActoresPelicula(pelicula.getId());
+
+            // Metemos los nuevos actores asociados a la pelicula
+            ActorDAO.annadirActoresPelicula(pelicula.getActores(), pelicula.getId());
+        }
+
     }
 }

@@ -50,7 +50,7 @@
                     <td><%=pelicula.getGenero()%></td>
                     <td><%=pelicula.getAno()%></td>
                     <td><%=pelicula.getClasificacionEdad()%></td>
-                    <td><a href="">Editar</a></td>
+                    <td><a href="/editarPelicula/<%=pelicula.getId()%>">Editar</a></td>
                     <td><a href="/eliminarPelicula/<%=pelicula.getId()%>" onclick="return confirm('¿Estas seguro que quieres eliminar?')">Eliminar</a></td>
                 </tr>
     <%

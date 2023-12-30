@@ -1,37 +1,27 @@
 package es.uah.grupo2.gestioncine.app.controllers;
 
 import es.uah.grupo2.gestioncine.app.model.*;
-
-import java.io.*;
-
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "CrearPelicula", urlPatterns = {"/crearPelicula"})
-@MultipartConfig(
-        fileSizeThreshold = 1024 * 1024, // 1 MB
-        maxFileSize = 1024 * 1024 * 10,      // 10 MB
-        maxRequestSize = 1024 * 1024 * 100   // 100 MB
-)
-public class CrearPeliculaController extends HttpServlet {
+@WebServlet(name = "EditarPelicula", urlPatterns = {"/editarPelicula/*"})
+public class EditarPeliculaController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -41,10 +31,10 @@ public class CrearPeliculaController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CrearPelicula</title>");
+            out.println("<title>Servlet EliminarPelicula</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CrearPelicula at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet EliminarPelicula at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -53,10 +43,10 @@ public class CrearPeliculaController extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -65,12 +55,29 @@ public class CrearPeliculaController extends HttpServlet {
 
         // Verificamos si existe session
         if (session != null) {
-            Cliente cliente = (Cliente) session.getAttribute("usuario");    // Obtenemos el atributo cliente
+            Cliente cliente = (Cliente) session.getAttribute("usuario"); // Obtenemos el atributo cliente
 
             // Si existe cliente y el cliente es administrador
             if (cliente != null && cliente.isAdmin()) {
-                request.getRequestDispatcher(request.getContextPath() + "/crear-pelicula.jsp").forward(request, response);
+                String rutaCompleta = request.getPathInfo();
+                String[] partesRuta = rutaCompleta.split("/");
+                String value = partesRuta[1]; // nos quedamos con el valor obtenido
+
+                int idPelicula = Integer.parseInt(value);
+
+                if (PeliculaDAO.validarId(idPelicula)) {
+                    Pelicula pelicula = PeliculaDAO.obtenerPelicula(idPelicula);
+
+                    request.setAttribute("pelicula", pelicula);
+                    request.getRequestDispatcher(request.getContextPath() + "/editar-pelicula.jsp").forward(request, response);
+                } else {
+                    session.setAttribute("error", "No se ha podido acceder a la pelicula");
+                    response.sendRedirect(request.getContextPath() + "/gestionPeliculas");
+                }
+
+
             } else {
+                session.setAttribute("error", "No puede acceder a esta pagina");
                 response.sendRedirect(request.getContextPath() + "/index.jsp");
             }
         } else {
@@ -82,23 +89,22 @@ public class CrearPeliculaController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Obtenemos la sesion
         HttpSession session = request.getSession(false);
 
         if (session != null) {
             Cliente cliente = (Cliente) session.getAttribute("usuario");
 
             if (cliente != null && cliente.isAdmin()) {
-
-                // Obtenemos todos los parametros del formulario
+                // Obtener los datos del formulario
+                int id = Integer.parseInt(request.getParameter("id"));
                 String nombre = request.getParameter("nombre").trim();
                 String sinopsis = request.getParameter("sinopsis").trim();
                 String pagina = request.getParameter("pagina").trim();
@@ -111,48 +117,34 @@ public class CrearPeliculaController extends HttpServlet {
                 String director = request.getParameter("director").trim();
                 String otros = request.getParameter("otros").trim();
                 String clasificacion = request.getParameter("clasificacion").trim();
-                Part portadaPart = request.getPart("portada");
                 String[] actores = request.getParameterValues("actores");
-
-                // De la imagen obtenemos el nombre del archivo
-                String portada = portadaPart.getSubmittedFileName();
 
                 List<Actor> actoresList = new ArrayList<>();
 
-                for (String s : actores) {
+                for (String s: actores){
                     actoresList.add(new Actor(Integer.parseInt(s)));
                 }
 
                 Pelicula pelicula = new Pelicula(
-                        -1, nombre, sinopsis, pagina, titulo, genero, nacionalidad, duracion,
-                        ano, distribuidora, director, otros, clasificacion, portada, actoresList
+                        id, nombre, sinopsis, pagina, titulo, genero, nacionalidad, duracion,
+                        ano, distribuidora, director, otros, clasificacion, "", actoresList
                 );
 
-
                 try {
-                    // Establecemos la ruta donde se guardara la imagen
-                    String rutaUpload = Paths.get("../applications/gestioncine-1.0/imagenes/uploads/").toRealPath().toString();
+                    // Actualizamos la pelicula
+                    PeliculaDAO.update(pelicula);
 
-                    // Establecemos la ruta del archivo
-                    Path rootPath = Paths.get(rutaUpload + File.separator + portada);
-
-                    // Insertamos la imagen en RuTA_UPLOAD
-                    Files.copy(portadaPart.getInputStream(), rootPath);
-
-                    // insertamos la pelicula y obtenemos si se ha hecho correctamente
-                    PeliculaDAO.insertarPelicula(pelicula);
-
-
-                    session.setAttribute("success", "Se ha creado correctamente la pelicula");
-
-                    // Redireccionar de vuelta a la lista de salas
+                    // Redireccionamos a la pagina de gestion de peliculas con un mensaje de exito
+                    session.setAttribute("success", "Se ha editado correctamente la pelicula");
                     response.sendRedirect(request.getContextPath() + "/gestionPeliculas");
+                } catch (SQLException e) {
+                    session.setAttribute("error", "Se ha producido un error actualizar la pelicula");
+                    response.sendRedirect(request.getContextPath() + "/editarPelicula/" + id);
 
-                } catch (SQLException | FileNotFoundException e) {
-                    session.setAttribute("error", "Se ha producido un error al insertar la pelicula");
-                    response.sendRedirect(request.getContextPath() + "/crearPelicula");
                     e.printStackTrace();
                 }
+
+
             } else {
                 response.sendRedirect(request.getContextPath() + "/login");
             }
@@ -170,5 +162,4 @@ public class CrearPeliculaController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }
-
 }
