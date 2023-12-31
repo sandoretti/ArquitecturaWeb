@@ -1,4 +1,4 @@
-package es.uah.grupo2.gestioncine.app.model;
+package es.uah.grupo2.gestioncine.app.model.entity;
 
 public class Actor {
     private int id;

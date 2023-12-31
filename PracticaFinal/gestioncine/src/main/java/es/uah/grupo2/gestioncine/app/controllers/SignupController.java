@@ -1,7 +1,7 @@
 package es.uah.grupo2.gestioncine.app.controllers;
 
-import es.uah.grupo2.gestioncine.app.model.Cliente;
-import es.uah.grupo2.gestioncine.app.model.ClienteDAO;
+import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
+import es.uah.grupo2.gestioncine.app.model.dao.ClienteDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;

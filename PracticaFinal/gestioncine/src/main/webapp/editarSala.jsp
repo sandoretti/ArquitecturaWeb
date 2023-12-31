@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="es.uah.grupo2.gestioncine.app.model.Sala" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Sala" %>
 <!DOCTYPE html>
 <html>
     <head>

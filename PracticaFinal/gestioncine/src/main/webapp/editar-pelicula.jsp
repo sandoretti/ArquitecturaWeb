@@ -1,8 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="es.uah.grupo2.gestioncine.app.model.ActorDAO" %>
-<%@ page import="es.uah.grupo2.gestioncine.app.model.Actor" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.dao.ActorDAO" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Actor" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.uah.grupo2.gestioncine.app.model.Pelicula" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Pelicula" %>
+<%@ page import="java.sql.SQLException" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -58,9 +59,16 @@
                 Actores:
                 <div>
                     <%
-                        List<Actor> actores = ActorDAO.obtenerActores();
                         List<Actor> actoresPelicula = pelicula.getActores();
-                        if (actores != null){
+                        List<Actor> actores = null;
+
+                        try {
+                            actores = ActorDAO.obtenerActores();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+
+                        if (actores != null && actoresPelicula != null){
                             for(Actor actor: actores){
                     %>
                     <input type="checkbox" name="actores" <%if (actoresPelicula.contains(actor)) out.println("checked");%>

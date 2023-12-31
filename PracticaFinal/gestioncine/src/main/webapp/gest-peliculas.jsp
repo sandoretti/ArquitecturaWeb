@@ -1,6 +1,7 @@
-<%@ page import="es.uah.grupo2.gestioncine.app.model.Pelicula" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Pelicula" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.uah.grupo2.gestioncine.app.model.PeliculaDAO" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO" %>
+<%@ page import="java.sql.SQLException" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -52,7 +53,14 @@
             </thead>
             <tbody>
         <%
-            List<Pelicula> peliculasList = PeliculaDAO.selectPeliculasIdNombGenAnoClas();
+            List<Pelicula> peliculasList = null;
+
+            try {
+                peliculasList = PeliculaDAO.selectPeliculasIdNombGenAnoClas();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
             if (peliculasList != null && !peliculasList.isEmpty()) {
                 for (Pelicula pelicula: peliculasList){
         %>

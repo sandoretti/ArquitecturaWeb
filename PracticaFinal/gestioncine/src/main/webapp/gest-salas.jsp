@@ -1,6 +1,6 @@
-<%@ page import="es.uah.grupo2.gestioncine.app.model.Sala" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Sala" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.uah.grupo2.gestioncine.app.model.SalaDAO" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.dao.SalaDAO" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

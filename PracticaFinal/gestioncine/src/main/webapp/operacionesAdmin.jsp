@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="es.uah.grupo2.gestioncine.app.model.Cliente" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Cliente" %>
 <% Cliente cliente = (Cliente) session.getAttribute("usuario");
     if(!cliente.isAdmin())
                     request.getRequestDispatcher(request.getContextPath() + "./").forward(request, response);

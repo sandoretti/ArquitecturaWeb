@@ -1,9 +1,11 @@
 package es.uah.grupo2.gestioncine.app.controllers;
 
-import es.uah.grupo2.gestioncine.app.model.*;
-
 import java.io.*;
 
+import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
+import es.uah.grupo2.gestioncine.app.model.entity.Actor;
+import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
+import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;

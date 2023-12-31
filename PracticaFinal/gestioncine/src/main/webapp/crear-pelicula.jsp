@@ -1,7 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="es.uah.grupo2.gestioncine.app.model.ActorDAO" %>
-<%@ page import="es.uah.grupo2.gestioncine.app.model.Actor" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.dao.ActorDAO" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Actor" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.sql.SQLException" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,7 +55,14 @@
         Actores:
         <div>
         <%
-            List<Actor> actores = ActorDAO.obtenerActores();
+            List<Actor> actores = null;
+
+            try {
+                actores = ActorDAO.obtenerActores();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
             if (actores != null){
                 for(Actor actor: actores){
                     out.println("<input style='position:relative; top:27px;' type=\"checkbox\" name=\"actores\" value=\""

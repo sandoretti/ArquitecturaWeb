@@ -1,8 +1,9 @@
 package es.uah.grupo2.gestioncine.app.controllers;
 
-import es.uah.grupo2.gestioncine.app.model.Cliente;
+import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

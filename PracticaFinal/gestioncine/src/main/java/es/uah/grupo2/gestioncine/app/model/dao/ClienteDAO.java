@@ -1,4 +1,6 @@
-package es.uah.grupo2.gestioncine.app.model;
+package es.uah.grupo2.gestioncine.app.model.dao;
+
+import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
 
 import java.sql.*;
 

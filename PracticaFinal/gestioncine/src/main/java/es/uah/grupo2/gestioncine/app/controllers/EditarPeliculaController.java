@@ -1,6 +1,9 @@
 package es.uah.grupo2.gestioncine.app.controllers;
 
-import es.uah.grupo2.gestioncine.app.model.*;
+import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
+import es.uah.grupo2.gestioncine.app.model.entity.Actor;
+import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
+import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -65,17 +68,21 @@ public class EditarPeliculaController extends HttpServlet {
 
                 int idPelicula = Integer.parseInt(value);
 
-                if (PeliculaDAO.validarId(idPelicula)) {
-                    Pelicula pelicula = PeliculaDAO.obtenerPelicula(idPelicula);
+                try {
+                    if (PeliculaDAO.validarId(idPelicula)) {
+                        Pelicula pelicula = PeliculaDAO.obtenerPelicula(idPelicula);
 
-                    request.setAttribute("pelicula", pelicula);
-                    request.getRequestDispatcher(request.getContextPath() + "/editar-pelicula.jsp").forward(request, response);
-                } else {
-                    session.setAttribute("error", "No se ha podido acceder a la pelicula");
+                        request.setAttribute("pelicula", pelicula);
+                        request.getRequestDispatcher(request.getContextPath() + "/editar-pelicula.jsp").forward(request, response);
+                    } else {
+                        session.setAttribute("error", "No se ha podido acceder a la pelicula");
+                        response.sendRedirect(request.getContextPath() + "/gestionPeliculas");
+                    }
+                } catch (SQLException e) {
+                    session.setAttribute("error", "Hubo un error al validar el id");
                     response.sendRedirect(request.getContextPath() + "/gestionPeliculas");
+                    e.printStackTrace();
                 }
-
-
             } else {
                 session.setAttribute("error", "No puede acceder a esta pagina");
                 response.sendRedirect(request.getContextPath() + "/index.jsp");
