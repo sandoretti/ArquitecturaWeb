@@ -68,7 +68,7 @@
                             e.printStackTrace();
                         }
 
-                        if (actores != null && actoresPelicula != null){
+                        if (actores != null){
                             for(Actor actor: actores){
                     %>
                     <input type="checkbox" name="actores" <%if (actoresPelicula.contains(actor)) out.println("checked");%>
