@@ -18,8 +18,11 @@
             session.removeAttribute("error");
         }
     %>
-    <div style="max-width:18%; margin:5px auto;" class="navbar-style">
-        <h1 style="margin:auto;">Añadir película</h1>
+    <div style="max-width:40%; margin:5px auto;" class="navbar-style">
+        <h1 style="margin: 5px 5px 5px 5px;">Añadir película</h1>
+        <div>
+            <a href="/gestionPeliculas" class="button-link" style="margin: 5px 5px 5px 5px;">Volver a gestion películas</a>
+        </div>
     </div>
    <form action="/crearPelicula" method="POST" enctype="multipart/form-data" class="form-container">
         Nombre:
