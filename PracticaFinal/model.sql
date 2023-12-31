@@ -58,8 +58,7 @@ CREATE TABLE proyeccion (
     id          INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     id_pelicula INTEGER NOT NULL,
     id_sala     INTEGER NOT NULL,
-    fecha       DATE NOT NULL,
-    hora        TIME NOT NULL,
+    fecha_hora  TIMESTAMP NOT NULL,
     FOREIGN KEY (id_pelicula) REFERENCES pelicula(id) ON DELETE CASCADE,
     FOREIGN KEY (id_sala) REFERENCES sala(id),
     PRIMARY KEY (id)
