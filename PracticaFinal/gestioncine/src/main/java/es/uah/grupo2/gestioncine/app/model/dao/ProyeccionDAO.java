@@ -2,10 +2,7 @@ package es.uah.grupo2.gestioncine.app.model.dao;
 
 import es.uah.grupo2.gestioncine.app.model.entity.Proyeccion;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,5 +29,17 @@ public class ProyeccionDAO {
         }
 
         return proyecciones;
+    }
+
+    public static void crearProyeccion(Proyeccion proyeccion) throws SQLException {
+        String SQL = "INSERT INTO PROYECCION(id_pelicula, id_sala, fecha_hora) VALUES (?, ?, ?)";
+
+        PreparedStatement ps = conn.prepareStatement(SQL);
+
+        ps.setInt(1, proyeccion.getIdPelicula());
+        ps.setInt(2, proyeccion.getIdSala());
+        ps.setTimestamp(3, new Timestamp(proyeccion.getFechaHora().getTime()));
+
+        ps.executeUpdate();
     }
 }

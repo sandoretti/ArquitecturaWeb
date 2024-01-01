@@ -28,6 +28,12 @@ public class Proyeccion {
         this.fechaHora = fechaHora;
     }
 
+    public Proyeccion(int idPelicula, int idSala, Date fechaHora) {
+        this.idPelicula = idPelicula;
+        this.idSala = idSala;
+        this.fechaHora = fechaHora;
+    }
+
     public int getId() {
         return id;
     }
