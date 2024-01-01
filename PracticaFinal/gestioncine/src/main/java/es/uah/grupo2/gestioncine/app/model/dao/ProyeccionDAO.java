@@ -42,4 +42,26 @@ public class ProyeccionDAO {
 
         ps.executeUpdate();
     }
+
+    public static void eliminarProyeccion(int id) throws SQLException {
+        String SQL = "DELETE FROM PROYECCION WHERE ID = ?";
+
+        PreparedStatement ps = conn.prepareStatement(SQL);
+
+        ps.setInt(1, id);
+
+        ps.executeUpdate();
+    }
+
+    public static boolean validarIdProyeccion(int id) throws SQLException {
+        String SQL = "SELECT ID FROM PROYECCION WHERE ID = ?";
+
+        PreparedStatement ps = conn.prepareStatement(SQL);
+
+        ps.setInt(1, id);
+
+        ResultSet rs = ps.executeQuery();
+
+        return rs.next();
+    }
 }

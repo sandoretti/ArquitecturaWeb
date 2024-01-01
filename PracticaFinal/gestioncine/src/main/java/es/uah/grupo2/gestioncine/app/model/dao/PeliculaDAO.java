@@ -105,9 +105,6 @@ public class PeliculaDAO {
     public static void eliminarPeliculaId(int id) throws SQLException{
         String SQL = "DELETE FROM PELICULA WHERE ID = ?";
 
-        // Eliminamos los actores de la pelicula
-        ActorDAO.eliminarActoresPelicula(id);
-
         PreparedStatement ps = conn.prepareStatement(SQL);
 
         ps.setInt(1, id);
