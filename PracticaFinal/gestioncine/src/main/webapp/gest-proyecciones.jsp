@@ -66,6 +66,7 @@
         <td><%=proyeccion.getNombrePelicula()%></td>
         <td><%=proyeccion.getNombreSala()%></td>
         <td><%=proyeccion.getFechaHora()%></td>
+        <td style="border: none;"><a class="link-style" href="/editarProyeccion/<%=proyeccion.getId()%>">Editar</a></td>
         <td style="border: none;"><a class="link-style" href="/eliminarProyeccion/<%=proyeccion.getId()%>" onclick="return confirm('¿Estas seguro que quieres eliminar?')">Eliminar</a></td>
     </tr>
     <%

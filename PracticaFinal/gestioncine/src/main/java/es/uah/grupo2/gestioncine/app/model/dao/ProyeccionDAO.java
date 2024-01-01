@@ -64,4 +64,38 @@ public class ProyeccionDAO {
 
         return rs.next();
     }
+
+    public static Proyeccion obtenerProyeccion(int id) throws SQLException {
+        String SQL = "SELECT ID, ID_PELICULA, ID_SALA, FECHA_HORA FROM PROYECCION WHERE ID = ?";
+
+        PreparedStatement ps = conn.prepareStatement(SQL);
+        ps.setInt(1, id);
+
+        ResultSet rs = ps.executeQuery();
+
+        Proyeccion proyeccion = null;
+
+        if (rs.next()) {
+            proyeccion = new Proyeccion(
+                    rs.getInt(1),
+                    rs.getInt(2),
+                    rs.getInt(3),
+                    rs.getTimestamp(4)
+            );
+        }
+
+        return proyeccion;
+    }
+
+    public static void editarProyeccion(Proyeccion proyeccion) throws SQLException {
+        String SQL = "UPDATE PROYECCION SET ID_PELICULA = ?, ID_SALA = ?, FECHA_HORA = ? WHERE ID = ?";
+
+        PreparedStatement ps = conn.prepareStatement(SQL);
+        ps.setInt(1, proyeccion.getIdPelicula());
+        ps.setInt(2, proyeccion.getIdSala());
+        ps.setTimestamp(3, new Timestamp(proyeccion.getFechaHora().getTime()));
+        ps.setInt(4, proyeccion.getId());
+
+        ps.executeUpdate();
+    }
 }
