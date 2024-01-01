@@ -14,7 +14,7 @@
         <div class="navbar-style"> <!-- Insertar enlaces a ventanas -->
             <div class="logo-style">50CINES</div>
             <a class="link-style nav-item-style" href="./">Inicio</a>
-            <a class="link-style nav-item-style" href="">Proyecciones</a>
+            <a class="link-style nav-item-style" href="/peliculas">Peliculas</a>
             <% if(session.getAttribute("usuario") == null) { %>
                 <a class="link-style nav-item-style" href="/signup">Registro</a>
                 <a class="link-style nav-item-style" href="/login">Inicio Sesión</a>

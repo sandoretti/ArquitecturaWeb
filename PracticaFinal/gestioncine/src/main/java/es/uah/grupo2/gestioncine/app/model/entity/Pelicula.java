@@ -49,6 +49,12 @@ public class Pelicula {
         this.clasificacionEdad = clasificacionEdad;
     }
 
+    public Pelicula(int id, String nombre, String portad) {
+        this.id = id;
+        this.nombre = nombre;
+        this.portad = portad;
+    }
+
     public int getId() {
         return id;
     }

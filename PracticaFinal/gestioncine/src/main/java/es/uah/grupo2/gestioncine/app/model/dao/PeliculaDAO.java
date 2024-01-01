@@ -5,6 +5,7 @@ import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PeliculaDAO {
@@ -180,5 +181,24 @@ public class PeliculaDAO {
             ActorDAO.annadirActoresPelicula(pelicula.getActores(), pelicula.getId());
         }
 
+    }
+
+    public static List<Pelicula> selectPeliculasIdNombrePortada() throws SQLException{
+        String SQL = "SELECT ID, NOMBRE_PELICULA, PORTADA FROM PELICULA";
+
+        PreparedStatement ps = conn.prepareStatement(SQL);
+        ResultSet rs = ps.executeQuery();
+
+        List<Pelicula> peliculas = new ArrayList<>();
+
+        while (rs.next()) {
+            peliculas.add(new Pelicula(
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3)
+            ));
+        }
+
+        return peliculas;
     }
 }
