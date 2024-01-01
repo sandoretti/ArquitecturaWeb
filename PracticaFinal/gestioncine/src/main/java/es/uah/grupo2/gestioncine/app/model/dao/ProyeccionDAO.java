@@ -15,7 +15,7 @@ public class ProyeccionDAO {
     public static List<Proyeccion> obtenerProyecciones() throws SQLException {
         String sql = "select PROYECCION.ID, NOMBRE_PELICULA, NOMBRE_SALA, FECHA_HORA from " +
                 "(PROYECCION INNER JOIN PELICULA on PELICULA.ID = PROYECCION.ID_PELICULA) INNER JOIN " +
-                "SALA on PROYECCION.ID_SALA = SALA.ID";
+                "SALA on PROYECCION.ID_SALA = SALA.ID ORDER BY PROYECCION.ID";
 
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -27,7 +27,7 @@ public class ProyeccionDAO {
                     rs.getInt(1),
                     rs.getString(2),
                     rs.getString(3),
-                    rs.getDate(4)
+                    rs.getTimestamp(4)
             ));
         }
 
