@@ -64,17 +64,6 @@ CREATE TABLE proyeccion (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE entrada (
-    id            INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    id_proyeccion INTEGER NOT NULL,
-    fila          INTEGER NOT NULL,
-    columna       INTEGER NOT NULL,
-    reserva_id INTEGER,
-    FOREIGN KEY (id_proyeccion) REFERENCES proyeccion(id) ON DELETE CASCADE,
-    FOREIGN KEY (reserva_id) REFERENCES reserva(id) ON DELETE CASCADE,
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE pelicula_actor (
     id          INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     pelicula_id INTEGER NOT NULL,
@@ -92,5 +81,16 @@ CREATE TABLE reserva (
     referencia_reserva CHAR(8) NOT NULL,
     precio             REAL NOT NULL,
     FOREIGN KEY (id_cliente) REFERENCES cliente(id) ON DELETE CASCADE,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE entrada (
+    id            INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    id_proyeccion INTEGER NOT NULL,
+    fila          INTEGER NOT NULL,
+    columna       INTEGER NOT NULL,
+    reserva_id    INTEGER,
+    FOREIGN KEY (id_proyeccion) REFERENCES proyeccion(id) ON DELETE CASCADE,
+    FOREIGN KEY (reserva_id) REFERENCES reserva(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
