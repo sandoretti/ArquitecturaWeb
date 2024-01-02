@@ -79,7 +79,7 @@
                                                         </div>
                                                         <div class="col-md-6 text-center">
                                                             <div class="cate">
-                                                                <span class="blue"><a href="asientos" class="btn-ver-asientos">Ver asientos</a></span>
+                                                                <span class="blue"><a href="asientos.jsp" class="btn-ver-asientos">Ver asientos</a></span>
                                                             </div>
                                                         </div>
                                                     </div>

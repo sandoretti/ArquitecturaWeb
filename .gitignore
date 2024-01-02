@@ -8,3 +8,4 @@ derby.log
 
 # ignorar las carpetas llamadas .idea
 .idea/
+/PracticaFinal/Cine/target/
