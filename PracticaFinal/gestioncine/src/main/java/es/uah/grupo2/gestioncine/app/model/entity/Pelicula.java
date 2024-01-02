@@ -19,6 +19,10 @@ public class Pelicula {
     private String clasificacionEdad;
     private String portad;
     private List<Actor> actores;
+    private List<Comentario> comentarios;
+    private String trailer;
+    private List<Proyeccion> proyecciones;
+    
 
     public Pelicula(int id, String nombre, String sipnosis, String pagina, String titulo, String genero,
                     String nacionalidad, int duracion, int ano, String distribuidora, String director,
@@ -39,6 +43,9 @@ public class Pelicula {
         this.clasificacionEdad = clasificacionEdad;
         this.portad = portad;
         this.actores = actores;
+    }
+
+    public Pelicula() {
     }
 
     public Pelicula(int id, String nombre, String genero, int ano, String clasificacionEdad) {
@@ -173,5 +180,29 @@ public class Pelicula {
 
     public void setActores(List<Actor> actores) {
         this.actores = actores;
+    }
+    
+     public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
+
+    public String getTrailer() {
+        return "https://www.youtube.com/embed/o-0hcF97wy0";
+    }
+
+    public void setTrailer(String trailer) {
+        this.trailer = trailer;
+    }
+
+    public List<Proyeccion> getProyecciones() {
+        return proyecciones;
+    }
+
+    public void setProyecciones(List<Proyeccion> proyecciones) {
+        this.proyecciones = proyecciones;
     }
 }

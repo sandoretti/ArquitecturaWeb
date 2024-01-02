@@ -5,6 +5,11 @@ public class Actor {
     private String nombre;
     private String apellido;
 
+    public Actor() {
+    }
+    
+    
+
     public Actor(int id, String nombre, String apellido) {
         this.id = id;
         this.nombre = nombre;

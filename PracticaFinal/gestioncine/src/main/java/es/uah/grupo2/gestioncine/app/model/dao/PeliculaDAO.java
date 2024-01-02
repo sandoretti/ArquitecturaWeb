@@ -1,16 +1,25 @@
 package es.uah.grupo2.gestioncine.app.model.dao;
 
 import es.uah.grupo2.gestioncine.app.model.entity.Actor;
+import es.uah.grupo2.gestioncine.app.model.entity.Comentario;
 import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
+import es.uah.grupo2.gestioncine.app.model.entity.Proyeccion;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PeliculaDAO {
 
     static Connection conn = DatabaseConnection.getConnection();
+    private static final Logger logger = Logger.getLogger(PeliculaDAO.class.getName());
+    
+    public PeliculaDAO(Connection conn) {
+        this.conn = conn;
+    }
 
     /**
      * Inserta una pelicula en la base de datos
@@ -200,5 +209,153 @@ public class PeliculaDAO {
         }
 
         return peliculas;
+    }
+    
+    public static List<Pelicula> obtenerTodasLasPeliculas() {
+        List<Pelicula> peliculas = new ArrayList<>();
+        String sql = "SELECT * FROM pelicula";
+
+        try (Statement statement = conn.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                Pelicula pelicula = construirPeliculaDesdeResultSet(resultSet);
+                peliculas.add(pelicula);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error SQL al obtener todas las películas. Mensaje: " + e.getMessage(), e);
+        }
+
+        return peliculas;
+    }
+    
+    public Pelicula obtenerPeliculaPorId(int idPelicula) {
+        Pelicula pelicula = null;
+        String sql = "SELECT * FROM pelicula WHERE id = ?";
+
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, idPelicula);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    pelicula = construirPeliculaDesdeResultSet(resultSet);
+
+                    // Obtener y asignar la lista de actores para esta película
+                    List<Actor> actores = obtenerActoresPorPelicula(idPelicula);
+                    pelicula.setActores(actores);
+                    
+                    // Obtener y asignar la lista de comentarios para esta película
+                    List<Comentario> comentarios = obtenerComentariosPorPelicula(idPelicula);
+                    pelicula.setComentarios(comentarios);
+                    
+                    // Obtener y asignar la lista de comentarios para esta película
+                    List<Proyeccion> proyecciones = obtenerProyeccionesPorPelicula(idPelicula);
+                    pelicula.setProyecciones(proyecciones);
+                }
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error SQL al obtener película por ID. Mensaje: " + e.getMessage(), e);
+        }
+
+        return pelicula;
+    }
+    
+    private static Pelicula construirPeliculaDesdeResultSet(ResultSet resultSet) throws SQLException {
+        Pelicula pelicula = new Pelicula();
+        pelicula.setId(resultSet.getInt("id"));
+        pelicula.setNombre(resultSet.getString("nombre_pelicula"));
+        pelicula.setSipnosis(resultSet.getString("sinopsis"));
+        pelicula.setPagina(resultSet.getString("pagina_oficial"));
+        pelicula.setTitulo(resultSet.getString("titulo_oficial"));
+        pelicula.setGenero(resultSet.getString("genero"));
+        pelicula.setNacionalidad(resultSet.getString("nacionalidad"));
+        pelicula.setDuracion(resultSet.getInt("duracion"));
+        pelicula.setAno(resultSet.getInt("ano"));
+        pelicula.setDistribuidora(resultSet.getString("distribuidora"));
+        pelicula.setDirector(resultSet.getString("director"));
+        pelicula.setOtrosDatos(resultSet.getString("otros_datos"));
+        pelicula.setClasificacionEdad(resultSet.getString("class_edad"));
+        pelicula.setPortad(resultSet.getString("portada"));
+
+        return pelicula;
+    }
+    
+    // Método privado para obtener la lista de actores por película
+    private List<Actor> obtenerActoresPorPelicula(int idPelicula) {
+        List<Actor> actores = new ArrayList<>();
+        String sql = "SELECT a.* FROM actor a "
+                + "JOIN pelicula_actor pa ON a.ID = pa.actor_id "
+                + "WHERE pa.pelicula_id = ?";
+
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, idPelicula);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Actor actor = new Actor();
+                    actor.setNombre(resultSet.getString("nombre"));
+                    actor.setApellido(resultSet.getString("apellido"));
+
+                    actores.add(actor);
+                }
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error SQL al obtener actores por película. Mensaje: " + e.getMessage(), e);
+        }
+
+        return actores;
+    }
+    private List<Comentario> obtenerComentariosPorPelicula(int idPelicula) {
+        List<Comentario> comentarios = new ArrayList<>();
+         String sql = "SELECT c.*, u.nombre, u.apellido " +
+                 "FROM comentario c " +
+                 "JOIN cliente u ON c.id_cliente = u.id " +
+                 "WHERE c.id_pelicula = ?";
+
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, idPelicula);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Comentario comentario = new Comentario();
+                    comentario.setId(resultSet.getInt("id"));
+                    comentario.setIdCliente(resultSet.getInt("id_cliente"));
+                    comentario.setIdPelicula(resultSet.getInt("id_pelicula"));
+                    comentario.setTexto(resultSet.getString("texto"));
+                    comentario.setFechaComentario(resultSet.getTimestamp("fecha_comentario"));
+                    comentario.setUsuario(resultSet.getString("nombre") + " " + resultSet.getString("apellido"));
+
+                    comentarios.add(comentario);
+                }
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error SQL al obtener comentarios por película. Mensaje: " + e.getMessage(), e);
+        }
+
+        return comentarios;
+    }
+    
+    public List<Proyeccion> obtenerProyeccionesPorPelicula(int idPelicula) {
+        List<Proyeccion> proyecciones = new ArrayList<>();
+        String sql = "SELECT p.id, p.id_pelicula, p.fecha_hora, s.nombre_sala AS nombre_sala "
+                + "FROM proyeccion p "
+                + "JOIN sala s ON p.id_sala = s.id "
+                + "WHERE p.id_pelicula = ?";
+
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, idPelicula);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Proyeccion proyeccion = new Proyeccion();
+                    proyeccion.setId(resultSet.getInt("id"));
+                    proyeccion.setIdPelicula(resultSet.getInt("id_pelicula"));
+                    proyeccion.setFechaHora(resultSet.getDate("fecha_hora"));
+                    proyeccion.setNombreSala(resultSet.getString("nombre_sala"));
+                    proyecciones.add(proyeccion);
+                }
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error SQL al obtener proyeccion por pelicula. Mensaje: " + e.getMessage(), e);
+        }
+
+        return proyecciones;
     }
 }

@@ -21,7 +21,7 @@ public class MostrarPeliculasController extends HttpServlet {
             Cliente cliente = (Cliente) session.getAttribute("usuario");
 
             if (cliente != null) {
-                request.getRequestDispatcher(request.getContextPath() + "/ver-peliculas.jsp").forward(request, response);
+                request.getRequestDispatcher(request.getContextPath() + "/peliculas.jsp").forward(request, response);
             } else {
                 response.sendRedirect(request.getContextPath() + "/login");
             }

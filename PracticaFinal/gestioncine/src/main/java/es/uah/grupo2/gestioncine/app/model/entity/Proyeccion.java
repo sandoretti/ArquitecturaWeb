@@ -14,6 +14,11 @@ public class Proyeccion {
     private String nombreSala;
     private Date fechaHora;
 
+    public Proyeccion() {
+    }
+    
+    
+
     public Proyeccion(int id, String nombrePelicula, String nombreSala, Date fechaHora) {
         this.id = id;
         this.nombrePelicula = nombrePelicula;

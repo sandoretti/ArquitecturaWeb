@@ -22,7 +22,7 @@
             for (Pelicula pelicula: peliculaList) {
     %>
     <div>
-        <img height="400" width="270" src="/imagenes/uploads/<%=pelicula.getPortad()%>" alt="<%=pelicula.getNombre()%>">
+        <img height="400" width="270" src="<%=pelicula.getPortad()%>" alt="<%=pelicula.getNombre()%>">
         <a href="/pelicula/<%=pelicula.getId()%>"><%=pelicula.getNombre()%></a>
     </div>
     <%

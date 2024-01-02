@@ -10,6 +10,12 @@ public class Comentario {
     private int idPelicula;
     private String texto;
     private LocalDateTime fechaComentario;
+    private String usuario;
+
+    public Comentario() {
+    }
+    
+    
 
     public Comentario(int id, int id_cliente, int id_pelicula, String texto, LocalDateTime fechaComentario) {
         this.id = id;
@@ -88,4 +94,13 @@ public class Comentario {
     public void setFechaComentario(Timestamp timestamp) {
         this.fechaComentario = timestamp.toLocalDateTime();
     }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+    
 }
