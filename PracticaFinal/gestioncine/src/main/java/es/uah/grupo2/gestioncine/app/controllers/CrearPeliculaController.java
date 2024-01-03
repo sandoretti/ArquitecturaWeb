@@ -113,11 +113,8 @@ public class CrearPeliculaController extends HttpServlet {
                 String director = request.getParameter("director").trim();
                 String otros = request.getParameter("otros").trim();
                 String clasificacion = request.getParameter("clasificacion").trim();
-                Part portadaPart = request.getPart("portada");
+                String portada = request.getParameter("portada");
                 String[] actores = request.getParameterValues("actores");
-
-                // De la imagen obtenemos el nombre del archivo
-                String portada = portadaPart.getSubmittedFileName();
 
                 List<Actor> actoresList = new ArrayList<>();
 
@@ -130,20 +127,9 @@ public class CrearPeliculaController extends HttpServlet {
                         ano, distribuidora, director, otros, clasificacion, portada, actoresList
                 );
 
-
                 try {
-                    // Establecemos la ruta donde se guardara la imagen
-                    String rutaUpload = Paths.get("../applications/gestioncine-1.0/imagenes/uploads/").toRealPath().toString();
-
-                    // Establecemos la ruta del archivo
-                    Path rootPath = Paths.get(rutaUpload + File.separator + portada);
-
-                    // Insertamos la imagen en RuTA_UPLOAD
-                    Files.copy(portadaPart.getInputStream(), rootPath);
-
                     // insertamos la pelicula y obtenemos si se ha hecho correctamente
                     PeliculaDAO.insertarPelicula(pelicula);
-
 
                     session.setAttribute("success", "Se ha creado correctamente la pelicula");
 

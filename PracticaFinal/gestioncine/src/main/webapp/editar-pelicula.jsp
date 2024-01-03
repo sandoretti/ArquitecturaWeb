@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="container-style">
-            <img src="/imagenes/uploads/<%=pelicula.getPortad()%>" alt="<%=pelicula.getNombre()%>">
+            <img src="<%=pelicula.getPortad()%>" alt="<%=pelicula.getNombre()%>">
             <form style="margin-top:10px" class="form-container" action="/editarPelicula/<%=pelicula.getId()%>" method="POST">
                 Nombre:
                 <input type="text" name="nombre" value="<%=pelicula.getNombre()%>"><br>
@@ -56,6 +56,8 @@
                 <input type="text" name="otros" value="<%=pelicula.getOtrosDatos()%>"><br>
                 Clasificación de edad:
                 <input type="text" name="clasificacion" value="<%=pelicula.getClasificacionEdad()%>"><br>
+                Portada:
+                <input type="text" name="portada" value="<%=pelicula.getPortad()%>"><br>
                 Actores:
                 <div>
                     <%
