@@ -163,7 +163,8 @@ public class PeliculaDAO {
     public static void update(Pelicula pelicula) throws SQLException {
         String SQL = "UPDATE PELICULA SET NOMBRE_PELICULA = ?, SINOPSIS = ?, PAGINA_OFICIAL = ?,"
                 + " TITULO_OFICIAL = ?, GENERO = ?, NACIONALIDAD = ?, DURACION = ?, ANO = ?, "
-                + "DISTRIBUIDORA = ?, DIRECTOR = ?, OTROS_DATOS = ?, CLASS_EDAD = ? WHERE ID = ?";
+                + "DISTRIBUIDORA = ?, DIRECTOR = ?, OTROS_DATOS = ?, CLASS_EDAD = ?, PORTADA = ? " +
+                "WHERE ID = ?";
 
         PreparedStatement ps = conn.prepareStatement(SQL);
 
@@ -179,7 +180,8 @@ public class PeliculaDAO {
         ps.setString(10, pelicula.getDirector());
         ps.setString(11, pelicula.getOtrosDatos());
         ps.setString(12, pelicula.getClasificacionEdad());
-        ps.setInt(13, pelicula.getId());
+        ps.setString(13, pelicula.getPortad());
+        ps.setInt(14, pelicula.getId());
 
         ps.executeUpdate();
 

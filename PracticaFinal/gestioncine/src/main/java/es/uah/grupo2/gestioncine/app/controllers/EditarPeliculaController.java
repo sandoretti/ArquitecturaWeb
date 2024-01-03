@@ -124,6 +124,7 @@ public class EditarPeliculaController extends HttpServlet {
                 String director = request.getParameter("director").trim();
                 String otros = request.getParameter("otros").trim();
                 String clasificacion = request.getParameter("clasificacion").trim();
+                String portada = request.getParameter("portada").trim();
                 String[] actores = request.getParameterValues("actores");
 
                 List<Actor> actoresList = new ArrayList<>();
@@ -134,7 +135,7 @@ public class EditarPeliculaController extends HttpServlet {
 
                 Pelicula pelicula = new Pelicula(
                         id, nombre, sinopsis, pagina, titulo, genero, nacionalidad, duracion,
-                        ano, distribuidora, director, otros, clasificacion, "", actoresList
+                        ano, distribuidora, director, otros, clasificacion, portada, actoresList
                 );
 
                 try {

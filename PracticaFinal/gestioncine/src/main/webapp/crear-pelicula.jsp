@@ -51,7 +51,7 @@
         Clasificación de edad:
         <input type="text" name="clasificacion"><br>
         Portada:
-        <input type="file" name="portada"><br>
+        <input type="text" name="portada"><br>
         Actores:
         <div>
         <%

@@ -1,107 +1,64 @@
 package es.uah.grupo2.gestioncine.app.model.entity;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Reserva {
 
     private int id;
     private int idCliente;
-    private int idProyeccion;
-    private LocalDateTime fechaReserva;
+    private Date fechaReserva;
     private String numeroTarjeta;
     private String referenciaReserva;
+    private Float precio;
 
-    public Reserva(int id, int idCliente, int idProyeccion, LocalDateTime fechaReserva, String numeroTarjeta, String referenciaReserva) {
-        this.id = id;
-        this.idCliente = idCliente;
-        this.idProyeccion = idProyeccion;
-        this.fechaReserva = fechaReserva;
-        this.numeroTarjeta = numeroTarjeta;
-        this.referenciaReserva = referenciaReserva;
+    public Reserva() {
     }
 
-    /**
-     * @return the id
-     */
     public int getId() {
         return id;
     }
 
-    /**
-     * @return the idCliente
-     */
-    public int getIdCliente() {
-        return idCliente;
-    }
-
-    /**
-     * @return the idProyeccion
-     */
-    public int getIdProyeccion() {
-        return idProyeccion;
-    }
-
-    /**
-     * @return the fechaReserva
-     */
-    public Timestamp getFechaReserva() {
-        return Timestamp.valueOf(fechaReserva);
-    }
-
-    /**
-     * @return the numeroTarjeta
-     */
-    public String getNumeroTarjeta() {
-        return numeroTarjeta;
-    }
-
-    /**
-     * @return the referenciaReserva
-     */
-    public String getReferenciaReserva() {
-        return referenciaReserva;
-    }
-
-    /**
-     * @param id the id to set
-     */
     public void setId(int id) {
         this.id = id;
     }
 
-    /**
-     * @param idCliente the idCliente to set
-     */
+    public int getIdCliente() {
+        return idCliente;
+    }
+
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
     }
 
-    /**
-     * @param idProyeccion the idProyeccion to set
-     */
-    public void setIdProyeccion(int idProyeccion) {
-        this.idProyeccion = idProyeccion;
+    public Date getFechaReserva() {
+        return fechaReserva;
     }
 
-    /**
-     * @param fechaReserva the fechaReserva to set
-     */
-    public void setFechaReserva(Timestamp timestamp) {
-        this.fechaReserva = timestamp.toLocalDateTime();
+    public void setFechaReserva(Date fechaReserva) {
+        this.fechaReserva = fechaReserva;
     }
 
-    /**
-     * @param numeroTarjeta the numeroTarjeta to set
-     */
+    public String getNumeroTarjeta() {
+        return numeroTarjeta;
+    }
+
     public void setNumeroTarjeta(String numeroTarjeta) {
         this.numeroTarjeta = numeroTarjeta;
     }
 
-    /**
-     * @param referenciaReserva the referenciaReserva to set
-     */
+    public String getReferenciaReserva() {
+        return referenciaReserva;
+    }
+
     public void setReferenciaReserva(String referenciaReserva) {
         this.referenciaReserva = referenciaReserva;
+    }
+
+    public Float getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(Float precio) {
+        this.precio = precio;
     }
 }
