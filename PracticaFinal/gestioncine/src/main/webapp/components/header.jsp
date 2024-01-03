@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Cliente" %>
 <!-- BEGIN | Header -->
 <header class="ht-header">
     <div class="container">
@@ -29,20 +30,21 @@
                     </li>
                     <li class="dropdown first">
                         <a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown">
-                            principal <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            Inicio <i class="fa fa-angle-down" aria-hidden="true"></i>
                         </a>
                         <ul class="dropdown-menu level1">
                             <li class="it-last"><a href="index.jsp">Home</a></li>
                         </ul>
                     </li>
                     <li class="dropdown first">
-                        <a href="peliculas.jsp" class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
+                        <a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
                             películas<i class="fa fa-angle-down" aria-hidden="true"></i>
                         </a>
                         <ul class="dropdown-menu level1">
                             <li class="it-last"><a href="peliculas">Lista de Películas</a></li>
                         </ul>
                     </li>
+                    <!--
                     <li class="dropdown first">
                         <a href="actores.jsp" class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
                             actores <i class="fa fa-angle-down" aria-hidden="true"></i>
@@ -51,6 +53,7 @@
                             <li class="it-last"><a href="actores.jsp">Lista de Actores</a></li>
                         </ul>
                     </li>
+                    
                     <li class="dropdown first">
                         <a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
                             community <i class="fa fa-angle-down" aria-hidden="true"></i>
@@ -62,11 +65,20 @@
                             <li class="it-last"><a href="#">user rate</a></li>
                         </ul>
                     </li>
+                    -->
                 </ul>
                 <ul class="nav navbar-nav flex-child-menu menu-right">               
                     <li><a href="#">Ayuda</a></li>
-                    <li class="loginLink"><a href="#">iniciar Sesión</a></li>
-                    <li class="btn signupLink"><a href="#">Registrarse</a></li>
+                        <% if(session.getAttribute("usuario") == null) { %>
+                    <li class=""><a href="login">iniciar Sesión</a></li>
+                    <li class="btn "><a href="signup">Registrarse</a></li>
+                        <% } else { %>
+                        <% Cliente cliente = (Cliente) session.getAttribute("usuario");
+                                if (cliente.isAdmin())
+                                request.getRequestDispatcher(request.getContextPath() + "./perfil").forward(request, response);
+                        %>
+                    <li class="btn"><a href="/logout">Cerrar Sesión</a></li>
+                    <% } %>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

@@ -6,9 +6,9 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
-<%@ page import="grupo2.modelo.Pelicula" %>
-<%@ page import="grupo2.modelo.Proyeccion" %>
-<%@ page import="grupo2.modelo.Sala" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Pelicula" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Proyeccion" %>
+<%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Sala" %>
 
 <html lang="es" class="no-js">
     <%@include file="components/head.jsp"%>
@@ -39,7 +39,7 @@
                 <div class="row ipad-width2">
                     <div class="col-md-4 col-sm-12 col-xs-12">
                         <div class="movie-img sticky-sb">
-                            <img src="<%= pelicula.getPortada() %>" alt="<%= pelicula.getNombre() %>">
+                            <img src="<%= pelicula.getPortad() %>" alt="<%= pelicula.getNombre() %>">
                             <div class="movie-btn">
                                 <div class="btn-transform transform-vertical red">
                                     <div><a href="#" class="item item-1 redbtn"> <i class="ion-play"></i> Ver Trailer</a></div>
@@ -73,8 +73,7 @@
                                                             <div class="movie-item-style-2" style="margin-left: 50px;">
                                                                 <div class="mv-item-infor">
                                                                     <h6><a><%= proyeccion.getNombreSala() %> </a></h6>
-                                                                    <p class="run-time"> Día: <%= proyeccion.getFecha() %> </p>
-                                                                    <p>Hora: <%= proyeccion.getHora() %></p>
+                                                                    <p class="run-time"> Fecha: <%= proyeccion.getFechaHora() %> </p>
                                                                 </div>
                                                             </div>
                                                         </div>

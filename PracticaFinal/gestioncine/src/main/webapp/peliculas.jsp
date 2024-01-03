@@ -22,15 +22,8 @@
             <div class="container">
                 <div class="row ipad-width2">
                     <% 
-                    List<Pelicula> peliculas = null;
-
-                    try {
-                        peliculas = PeliculaDAO.obtenerTodasLasPeliculas();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                        List<Pelicula> peliculas = (List<Pelicula>) request.getAttribute("peliculas");
                     %>
-
 
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="topbar-filter">

@@ -15,19 +15,20 @@ import java.util.logging.Logger;
 public class PeliculaDAO {
 
     static Connection conn = DatabaseConnection.getConnection();
+    private Connection conexion;
     private static final Logger logger = Logger.getLogger(PeliculaDAO.class.getName());
-    
-    public PeliculaDAO(Connection conn) {
-        this.conn = conn;
+
+    public PeliculaDAO(Connection conexion) {
+        this.conexion = conexion;
     }
 
     /**
      * Inserta una pelicula en la base de datos
      */
-    public static void insertarPelicula(Pelicula pelicula) throws SQLException{
-        String SQL = "INSERT INTO Pelicula (nombre_pelicula, sinopsis, pagina_oficial, titulo_oficial," +
-                "genero, nacionalidad, duracion, ano, distribuidora, director, otros_datos, class_edad, " +
-                "portada) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static void insertarPelicula(Pelicula pelicula) throws SQLException {
+        String SQL = "INSERT INTO Pelicula (nombre_pelicula, sinopsis, pagina_oficial, titulo_oficial,"
+                + "genero, nacionalidad, duracion, ano, distribuidora, director, otros_datos, class_edad, "
+                + "portada) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = conn.prepareStatement(SQL);
 
@@ -61,7 +62,7 @@ public class PeliculaDAO {
 
     }
 
-    public static int obtenerId(String nombre) throws SQLException{
+    public static int obtenerId(String nombre) throws SQLException {
         String sql = "SELECT id FROM PELICULA WHERE nombre_pelicula = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
 
@@ -69,7 +70,7 @@ public class PeliculaDAO {
 
         ResultSet rs = ps.executeQuery();
 
-        if (rs.next()){
+        if (rs.next()) {
             return rs.getInt(1);
         } else {
             return -1;
@@ -77,7 +78,7 @@ public class PeliculaDAO {
 
     }
 
-    public static List<Pelicula> selectPeliculasIdNombGenAnoClas() throws SQLException{
+    public static List<Pelicula> selectPeliculasIdNombGenAnoClas() throws SQLException {
         String sql = "SELECT ID, NOMBRE_PELICULA, GENERO, ANO, CLASS_EDAD FROM PELICULA ";
 
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -88,7 +89,7 @@ public class PeliculaDAO {
 
         List<Pelicula> peliculasList = new ArrayList<>();
 
-        while(rs.next()){
+        while (rs.next()) {
             id = rs.getInt(1);
             nombre = rs.getString(2);
             genero = rs.getString(3);
@@ -101,7 +102,7 @@ public class PeliculaDAO {
         return peliculasList;
     }
 
-    public static boolean validarId(int id) throws SQLException{
+    public static boolean validarId(int id) throws SQLException {
         String sql = "SELECT ID FROM PELICULA WHERE ID = ?";
 
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -112,7 +113,7 @@ public class PeliculaDAO {
         return rs.next();
     }
 
-    public static void eliminarPeliculaId(int id) throws SQLException{
+    public static void eliminarPeliculaId(int id) throws SQLException {
         String SQL = "DELETE FROM PELICULA WHERE ID = ?";
 
         PreparedStatement ps = conn.prepareStatement(SQL);
@@ -121,10 +122,10 @@ public class PeliculaDAO {
         ps.executeUpdate();
     }
 
-    public static Pelicula obtenerPelicula(int id) throws SQLException{
-        String SQL_Pelicula = "SELECT ID, NOMBRE_PELICULA, SINOPSIS, PAGINA_OFICIAL, TITULO_OFICIAL, GENERO," +
-                "NACIONALIDAD, DURACION, ANO, DISTRIBUIDORA, DIRECTOR, OTROS_DATOS, CLASS_EDAD, " +
-                "PORTADA FROM PELICULA WHERE ID = ?";
+    public static Pelicula obtenerPelicula(int id) throws SQLException {
+        String SQL_Pelicula = "SELECT ID, NOMBRE_PELICULA, SINOPSIS, PAGINA_OFICIAL, TITULO_OFICIAL, GENERO,"
+                + "NACIONALIDAD, DURACION, ANO, DISTRIBUIDORA, DIRECTOR, OTROS_DATOS, CLASS_EDAD, "
+                + "PORTADA FROM PELICULA WHERE ID = ?";
 
         // Obtenemos los actores de la pelicula
         List<Actor> actores = ActorDAO.obtenerActoresPelicula(id);
@@ -136,7 +137,7 @@ public class PeliculaDAO {
 
         Pelicula pelicula = null;
 
-        if(rs.next()){
+        if (rs.next()) {
             pelicula = new Pelicula(
                     rs.getInt(1),
                     rs.getString(2),
@@ -159,10 +160,10 @@ public class PeliculaDAO {
         return pelicula;
     }
 
-    public static void update(Pelicula pelicula) throws SQLException{
-        String SQL = "UPDATE PELICULA SET NOMBRE_PELICULA = ?, SINOPSIS = ?, PAGINA_OFICIAL = ?," +
-                " TITULO_OFICIAL = ?, GENERO = ?, NACIONALIDAD = ?, DURACION = ?, ANO = ?, " +
-                "DISTRIBUIDORA = ?, DIRECTOR = ?, OTROS_DATOS = ?, CLASS_EDAD = ? WHERE ID = ?";
+    public static void update(Pelicula pelicula) throws SQLException {
+        String SQL = "UPDATE PELICULA SET NOMBRE_PELICULA = ?, SINOPSIS = ?, PAGINA_OFICIAL = ?,"
+                + " TITULO_OFICIAL = ?, GENERO = ?, NACIONALIDAD = ?, DURACION = ?, ANO = ?, "
+                + "DISTRIBUIDORA = ?, DIRECTOR = ?, OTROS_DATOS = ?, CLASS_EDAD = ? WHERE ID = ?";
 
         PreparedStatement ps = conn.prepareStatement(SQL);
 
@@ -192,7 +193,7 @@ public class PeliculaDAO {
 
     }
 
-    public static List<Pelicula> selectPeliculasIdNombrePortada() throws SQLException{
+    public static List<Pelicula> selectPeliculasIdNombrePortada() throws SQLException {
         String SQL = "SELECT ID, NOMBRE_PELICULA, PORTADA FROM PELICULA";
 
         PreparedStatement ps = conn.prepareStatement(SQL);
@@ -210,8 +211,8 @@ public class PeliculaDAO {
 
         return peliculas;
     }
-    
-    public static List<Pelicula> obtenerTodasLasPeliculas() {
+
+    public List<Pelicula> obtenerTodasLasPeliculas() {
         List<Pelicula> peliculas = new ArrayList<>();
         String sql = "SELECT * FROM pelicula";
 
@@ -226,12 +227,12 @@ public class PeliculaDAO {
 
         return peliculas;
     }
-    
+
     public Pelicula obtenerPeliculaPorId(int idPelicula) {
         Pelicula pelicula = null;
         String sql = "SELECT * FROM pelicula WHERE id = ?";
 
-        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
             statement.setInt(1, idPelicula);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -241,11 +242,11 @@ public class PeliculaDAO {
                     // Obtener y asignar la lista de actores para esta película
                     List<Actor> actores = obtenerActoresPorPelicula(idPelicula);
                     pelicula.setActores(actores);
-                    
+
                     // Obtener y asignar la lista de comentarios para esta película
                     List<Comentario> comentarios = obtenerComentariosPorPelicula(idPelicula);
                     pelicula.setComentarios(comentarios);
-                    
+
                     // Obtener y asignar la lista de comentarios para esta película
                     List<Proyeccion> proyecciones = obtenerProyeccionesPorPelicula(idPelicula);
                     pelicula.setProyecciones(proyecciones);
@@ -257,8 +258,8 @@ public class PeliculaDAO {
 
         return pelicula;
     }
-    
-    private static Pelicula construirPeliculaDesdeResultSet(ResultSet resultSet) throws SQLException {
+
+    private Pelicula construirPeliculaDesdeResultSet(ResultSet resultSet) throws SQLException {
         Pelicula pelicula = new Pelicula();
         pelicula.setId(resultSet.getInt("id"));
         pelicula.setNombre(resultSet.getString("nombre_pelicula"));
@@ -277,7 +278,7 @@ public class PeliculaDAO {
 
         return pelicula;
     }
-    
+
     // Método privado para obtener la lista de actores por película
     private List<Actor> obtenerActoresPorPelicula(int idPelicula) {
         List<Actor> actores = new ArrayList<>();
@@ -285,7 +286,7 @@ public class PeliculaDAO {
                 + "JOIN pelicula_actor pa ON a.ID = pa.actor_id "
                 + "WHERE pa.pelicula_id = ?";
 
-        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
             statement.setInt(1, idPelicula);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -303,14 +304,15 @@ public class PeliculaDAO {
 
         return actores;
     }
+
     private List<Comentario> obtenerComentariosPorPelicula(int idPelicula) {
         List<Comentario> comentarios = new ArrayList<>();
-         String sql = "SELECT c.*, u.nombre, u.apellido " +
-                 "FROM comentario c " +
-                 "JOIN cliente u ON c.id_cliente = u.id " +
-                 "WHERE c.id_pelicula = ?";
+        String sql = "SELECT c.*, u.nombre, u.apellido "
+                + "FROM comentario c "
+                + "JOIN cliente u ON c.id_cliente = u.id "
+                + "WHERE c.id_pelicula = ?";
 
-        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
             statement.setInt(1, idPelicula);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -332,7 +334,7 @@ public class PeliculaDAO {
 
         return comentarios;
     }
-    
+
     public List<Proyeccion> obtenerProyeccionesPorPelicula(int idPelicula) {
         List<Proyeccion> proyecciones = new ArrayList<>();
         String sql = "SELECT p.id, p.id_pelicula, p.fecha_hora, s.nombre_sala AS nombre_sala "
@@ -340,7 +342,7 @@ public class PeliculaDAO {
                 + "JOIN sala s ON p.id_sala = s.id "
                 + "WHERE p.id_pelicula = ?";
 
-        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
             statement.setInt(1, idPelicula);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {

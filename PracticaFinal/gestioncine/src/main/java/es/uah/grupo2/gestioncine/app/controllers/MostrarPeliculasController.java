@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet(name = "MostrarPeliculas", urlPatterns = "/peliculas")
+@WebServlet(name = "MostrarPeliculas", urlPatterns = "/mostrarPeliculas")
 public class MostrarPeliculasController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
