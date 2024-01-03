@@ -79,7 +79,7 @@
                                                         </div>
                                                         <div class="col-md-6 text-center">
                                                             <div class="cate">
-                                                                <span class="blue"><a href="#" class="btn btn-primary" onclick="verAsientos(<%= proyeccion.getIdSala() %>)" data-toggle="modal" data-target="#ventanaObjetos">Ver asientos</a></span>
+                                                                <span class="blue"><a href="#" class="btn btn-primary" onclick="verAsientos(<%= proyeccion.getIdSala() %>, <%= proyeccion.getId() %>)" data-toggle="modal" data-target="#ventanaObjetos">Ver asientos</a></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -138,84 +138,128 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <script>
-                                                function verAsientos(salaId) {
-                                                    // Limpia el contenido del contenedor de asientos
-                                                    var contenedor = document.getElementById("sala");
-                                                    contenedor.innerHTML = "";
-
-                                                    // Llama al servlet para obtener filas y columnas
-                                                    fetch("sala?id=" + salaId)
-                                                            .then(response => response.json())
-                                                            .then(data => {
-                                                                // Utiliza los datos para cargar los asientos
-                                                                cargarAsientos(data.salaFilas, data.salaColumnas);
-                                                            })
-                                                            .catch(error => console.error('Error:', error));
-                                                }
-
-
-                                                function cambiarEstadoAsiento(id) {
-                                                    var asiento = document.getElementById(id);
-
-                                                    if (asiento.src.endsWith("images/butaca-gris.png")) {
-                                                        asiento.src = "images/butaca-verde.png";
-                                                    } else if (asiento.src.endsWith("images/butaca-verde.png")) {
-                                                        asiento.src = "images/butaca-gris.png";
-                                                    }
-                                                }
-
-                                                function cargarAsientos(filas, columnas) {
-                                                    var contenedor = document.getElementById("sala");
-
-                                                    var tamañoAsiento = Math.min(400 / columnas, 400 / filas); // Ajusta el 400 según tus necesidades
-                                                    tamañoAsiento = Math.max(20, tamañoAsiento); // Tamaño mínimo para evitar que los asientos sean demasiado pequeños
-
-                                                    for (var fila = 1; fila <= filas; fila++) {
-                                                        for (var columna = 1; columna <= columnas; columna++) {
-                                                            var idAsiento = "asiento_" + fila + "_" + columna;
-                                                            var imgSrc = "images/butaca-gris.png";
-
-                                                            // Lógica para determinar la disponibilidad del asiento
-                                                            // Puedes personalizar esta lógica según tus necesidades
-
-                                                            var random = Math.random();
-                                                            if (random < 0.2) {
-                                                                imgSrc = "images/butaca-rojo.png";
-                                                            }
-
-                                                            var img = document.createElement("img");
-                                                            img.id = idAsiento;
-                                                            img.className = "seat";
-                                                            img.src = imgSrc;
-                                                            img.style.width = tamañoAsiento + "px";
-                                                            img.style.height = tamañoAsiento + "px";
-                                                            img.onclick = function () {
-                                                                cambiarEstadoAsiento(this.id);
-                                                            };
-
-                                                            contenedor.appendChild(img);
-                                                        }
-                                                        contenedor.appendChild(document.createElement("br"));
-                                                    }
-                                                }
-
-                                                // Llama a la función cargarAsientos al cargar la página
-                                                window.onload = function () {
-                                                    // Puedes establecer un tamaño predeterminado o dejar que se determine dinámicamente al cargar los asientos
-                                                    //cargarAsientos(5, 5);
-                                                };
-                                            </script>
-
+                                            <!-- Tu contenido de asientos aquí -->
                                             <div id="sala" style="text-align: center;"></div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            <!-- Llama a la función reservarAsientos al hacer clic en "Reservar" -->
                                             <button type="button" class="btn btn-primary" onclick="reservarAsientos()">Reservar</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+
+                            <script>
+                                function verAsientos(salaId, proyeccionId) {
+                                    // Limpia el contenido del contenedor de asientos
+                                    var contenedor = document.getElementById("sala");
+                                    contenedor.innerHTML = "";
+
+                                    // Llama al servlet para obtener filas y columnas
+                                    fetch("sala?id=" + salaId)
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                // Utiliza los datos para cargar los asientos
+                                                cargarAsientos(data.salaFilas, data.salaColumnas, proyeccionId);
+                                            })
+                                            .catch(error => console.error('Error:', error));
+                                }
+
+
+                                function cambiarEstadoAsiento(id) {
+                                    var asiento = document.getElementById(id);
+
+                                    if (asiento.src.endsWith("images/butaca-gris.png")) {
+                                        asiento.src = "images/butaca-verde.png";
+                                    } else if (asiento.src.endsWith("images/butaca-verde.png")) {
+                                        asiento.src = "images/butaca-gris.png";
+                                    }
+                                }
+
+                                function cargarAsientos(filas, columnas, proyeccionId) {
+                                    var contenedor = document.getElementById("sala");
+
+                                    var tamañoAsiento = Math.min(400 / columnas, 400 / filas);
+                                    tamañoAsiento = Math.max(20, tamañoAsiento);
+
+                                    // Limpia el contenido del contenedor de asientos
+                                    contenedor.innerHTML = "";
+
+                                    // Llama al servlet para obtener las entradas
+                                    fetch("entradas?proyeccionId=" + proyeccionId)
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                for (var fila = 1; fila <= filas; fila++) {
+                                                    for (var columna = 1; columna <= columnas; columna++) {
+                                                        var idFilaColumna = fila + "_" + columna;
+                                                        var imgSrc = "images/butaca-gris.png";
+
+                                                        // Busca la entrada correspondiente al asiento en las entradas obtenidas
+                                                        var entrada = data.find(e => e.fila === fila && e.columna === columna);
+
+                                                        if (entrada && entrada.idReserva !== 0) { // Parece que cuando es null en la base de datos aqui es 0
+                                                            imgSrc = "images/butaca-rojo.png";
+
+                                                            // Imprime el valor de idReserva
+                                                            console.log("idReserva para el asiento " + idFilaColumna + ": " + entrada.idReserva);
+                                                        }
+
+                                                        var img = document.createElement("img");
+                                                        img.id = "asiento_" + idFilaColumna;
+                                                        img.className = "seat";
+                                                        img.src = imgSrc;
+                                                        img.style.width = tamañoAsiento + "px";
+                                                        img.style.height = tamañoAsiento + "px";
+                                                        img.onclick = function () {
+                                                            cambiarEstadoAsiento(this.id);
+                                                        };
+
+                                                        contenedor.appendChild(img);
+                                                    }
+                                                    contenedor.appendChild(document.createElement("br"));
+                                                }
+                                            })
+                                            .catch(error => console.error('Error:', error));
+                                }
+
+                                function reservarAsientos() {
+                                    // Array para almacenar los asientos seleccionados
+                                    var asientosSeleccionados = [];
+
+                                    // Obtén todos los elementos con la clase 'seat' (asientos)
+                                    var asientos = document.getElementsByClassName('seat');
+
+                                    // Itera sobre los asientos para identificar los seleccionados
+                                    for (var i = 0; i < asientos.length; i++) {
+                                        var asiento = asientos[i];
+
+                                        // Verifica si el asiento está en verde (seleccionado)
+                                        if (asiento.src.endsWith('images/butaca-verde.png')) {
+                                            // Obtiene el ID del asiento a partir del ID de la imagen
+                                            var idAsiento = asiento.id.replace('asiento_', '');
+
+                                            // Agrega el asiento a la lista de seleccionados
+                                            asientosSeleccionados.push(idAsiento);
+                                        }
+                                    }
+
+                                    // Realiza la lógica de reserva con los asientos seleccionados
+                                    if (asientosSeleccionados.length > 0) {
+                                        // Puedes enviar la información al servidor para procesar la reserva
+                                        // Por ejemplo, puedes usar una solicitud fetch a un servlet de reserva
+                                        // Aquí solo imprimo los asientos seleccionados en la consola como ejemplo
+                                        console.log('Asientos seleccionados:', asientosSeleccionados);
+
+                                        // Aquí puedes agregar la lógica para enviar los datos al servidor y procesar la reserva
+                                        // Utiliza una solicitud fetch o AJAX para enviar los datos al backend
+                                    } else {
+                                        alert('Debes seleccionar al menos un asiento para realizar la reserva.');
+                                    }
+                                }
+
+                            </script>
                         </div>
                     </div>
                 </div>

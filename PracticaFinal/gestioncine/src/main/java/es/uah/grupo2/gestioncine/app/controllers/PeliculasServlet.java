@@ -39,7 +39,7 @@ public class PeliculasServlet extends HttpServlet {
             request.setAttribute("peliculas", peliculas);
 
             // Registro: Información sobre la obtención exitosa de películas
-            logger.log(Level.INFO, "Obtención exitosa de todas las películas.");
+            //logger.log(Level.INFO, "Obtención exitosa de todas las películas.");
 
             String paginaOrigen = request.getParameter("from");
             if ("index".equals(paginaOrigen)) {
