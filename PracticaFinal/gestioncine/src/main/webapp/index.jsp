@@ -61,7 +61,7 @@
                         <div class="videos">
                             <div class="slider-for-2 video-ft">
                                 <% 
-                                    int maxIterations = 4; // Definir el número máximo de iteraciones
+                                    int maxIterations = 4; // Definir el número de trailers 
                                     int i = 0; // Inicializar la variable de iteración
 
                                     for (Pelicula pelicula : peliculas) {

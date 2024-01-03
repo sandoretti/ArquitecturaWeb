@@ -125,7 +125,7 @@ public class PeliculaDAO {
         return comentarios;
     }
     
-    public List<Proyeccion> obtenerProyeccionesPorPelicula(int idPelicula) {
+    private List<Proyeccion> obtenerProyeccionesPorPelicula(int idPelicula) {
         List<Proyeccion> proyecciones = new ArrayList<>();
         String sql = "SELECT p.id, p.id_pelicula, p.fecha, p.hora, s.nombre AS nombre_sala "
                 + "FROM proyeccion p "
