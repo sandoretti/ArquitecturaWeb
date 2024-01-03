@@ -79,7 +79,7 @@
                                                         </div>
                                                         <div class="col-md-6 text-center">
                                                             <div class="cate">
-                                                                <span class="blue"><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#ventanaObjetos">Ver asientos</a></span>
+                                                                <span class="blue"><a href="#" class="btn btn-primary" onclick="verAsientos(<%= proyeccion.getIdSala() %>)" data-toggle="modal" data-target="#ventanaObjetos">Ver asientos</a></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -139,6 +139,22 @@
                                         </div>
                                         <div class="modal-body">
                                             <script>
+                                                function verAsientos(salaId) {
+                                                    // Limpia el contenido del contenedor de asientos
+                                                    var contenedor = document.getElementById("sala");
+                                                    contenedor.innerHTML = "";
+
+                                                    // Llama al servlet para obtener filas y columnas
+                                                    fetch("sala?id=" + salaId)
+                                                            .then(response => response.json())
+                                                            .then(data => {
+                                                                // Utiliza los datos para cargar los asientos
+                                                                cargarAsientos(data.salaFilas, data.salaColumnas);
+                                                            })
+                                                            .catch(error => console.error('Error:', error));
+                                                }
+
+
                                                 function cambiarEstadoAsiento(id) {
                                                     var asiento = document.getElementById(id);
 
@@ -186,7 +202,8 @@
 
                                                 // Llama a la función cargarAsientos al cargar la página
                                                 window.onload = function () {
-                                                    cargarAsientos(15, 15); // Ajusta la cantidad de filas y columnas según tus necesidades
+                                                    // Puedes establecer un tamaño predeterminado o dejar que se determine dinámicamente al cargar los asientos
+                                                    //cargarAsientos(5, 5);
                                                 };
                                             </script>
 

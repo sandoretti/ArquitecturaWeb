@@ -11,10 +11,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 @WebServlet(name = "EntradasServlet", urlPatterns = {"/entradas"})
 public class EntradasServlet extends HttpServlet {
@@ -31,35 +32,39 @@ public class EntradasServlet extends HttpServlet {
             // Obtiene una conexión de la clase de gestión de conexión
             conexion = DatabaseConnection.obtenerConexion();
 
-            // Recupera el parámetro de la solicitud que representa el ID de la proyeccion
-            String proyeccionIdParam = request.getParameter("id");
+            // Recupera el parámetro de la solicitud que representa el ID de la proyección
+            String proyeccionIdParam = request.getParameter("proyeccionId");
 
             if (proyeccionIdParam != null && !proyeccionIdParam.isEmpty()) {
-                // Convierte el ID de la proyecion a un entero
+                // Convierte el ID de la proyección a un entero
                 int proyeccionId = Integer.parseInt(proyeccionIdParam);
 
-                // Accede al DAO para obtener las entradas de la proyeccion por ID
-                EntradaDAO entradDAO = new EntradaDAO(conexion);
-                List<Entrada> entradas = entradDAO.obtenerEntradasPorProyeccion(proyeccionId);
+                // Accede al DAO para obtener la información de las entradas por ID de proyección
+                EntradaDAO entradaDAO = new EntradaDAO(conexion);
+                List<Entrada> entradas = entradaDAO.obtenerEntradasPorProyeccion(proyeccionId);
 
-                if (entradas != null) {
-                    // Coloca la película en el ámbito de solicitud para que la JSP pueda accederla
-                    request.setAttribute("entradas", entradas);
-                    
-                    // Redirige a la pagina de las entradas
-                    request.getRequestDispatcher(".jsp").forward(request, response);
+                // Crea un objeto JSON para enviar información al cliente
+                JSONArray jsonEntradas = new JSONArray();
+                for (Entrada entrada : entradas) {
+                    JSONObject jsonEntrada = new JSONObject();
+                    jsonEntrada.put("fila", entrada.getFila());
+                    jsonEntrada.put("columna", entrada.getColumna());
+                    jsonEntrada.put("idReserva", entrada.getIdReserva());
 
-                } else {
-                    // La proyeccion no fue encontrada
-                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "La proyeccion no fue encontrada");
+                    jsonEntradas.add(jsonEntrada);
                 }
+
+                // Establece el tipo de contenido de la respuesta
+                response.setContentType("application/json");
+                // Escribe la respuesta JSON en el flujo de salida de la respuesta
+                response.getWriter().write(jsonEntradas.toString());
             } else {
-                // ID de la proyeccion no proporcionado en la solicitud
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de proyeccion no proporcionado");
+                // ID de la proyección no proporcionado en la solicitud
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de proyección no proporcionado");
             }
         } catch (NumberFormatException e) {
-            // Error al convertir el ID de la proyeccion a un entero
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de proyeccion no válido");
+            // Error al convertir el ID de la proyección a un entero
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de proyección no válido");
         } catch (SQLException e) {
             // Error al obtener conexión o al acceder a la base de datos
             logger.log(Level.SEVERE, "Error al obtener conexión a la base de datos", e);
@@ -75,12 +80,5 @@ public class EntradasServlet extends HttpServlet {
                 }
             }
         }
-
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-    }
-
 }

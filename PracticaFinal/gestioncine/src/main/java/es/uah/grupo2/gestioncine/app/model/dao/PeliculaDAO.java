@@ -338,7 +338,7 @@ public class PeliculaDAO {
 
     public List<Proyeccion> obtenerProyeccionesPorPelicula(int idPelicula) {
         List<Proyeccion> proyecciones = new ArrayList<>();
-        String sql = "SELECT p.id, p.id_pelicula, p.fecha_hora, s.nombre_sala AS nombre_sala "
+        String sql = "SELECT p.id, p.id_pelicula, p.id_sala, p.fecha_hora, s.nombre_sala AS nombre_sala "
                 + "FROM proyeccion p "
                 + "JOIN sala s ON p.id_sala = s.id "
                 + "WHERE p.id_pelicula = ?";
@@ -350,6 +350,7 @@ public class PeliculaDAO {
                     Proyeccion proyeccion = new Proyeccion();
                     proyeccion.setId(resultSet.getInt("id"));
                     proyeccion.setIdPelicula(resultSet.getInt("id_pelicula"));
+                    proyeccion.setIdSala(resultSet.getInt("id_sala"));
                     proyeccion.setFechaHora(resultSet.getDate("fecha_hora"));
                     proyeccion.setNombreSala(resultSet.getString("nombre_sala"));
                     proyecciones.add(proyeccion);

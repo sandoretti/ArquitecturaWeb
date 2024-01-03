@@ -7,6 +7,9 @@ public class Sala {
     private int fila;
     private int columna;
 
+    public Sala() {
+    }
+
     public Sala(int id, String nombreSala, int fila, int columna) {
         this.id = id;
         this.nombreSala = nombreSala;
