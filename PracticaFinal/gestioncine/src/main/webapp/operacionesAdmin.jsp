@@ -20,6 +20,7 @@
                 <a class="button-link" href="/gestionPeliculas">Gestionar peliculas</a>
                 <a class="button-link" href="/gestionSalas">Gestionar salas</a>
                 <a class="button-link" href="/gestionProyecciones">Gestionar proyecciones</a>
+                <a class="button-link" href="/gestionReservas">Gestionar reservas</a>
                 <a class="button-link" href="/logout">Cerrar Sesión</a>
             </div>
         </div>
