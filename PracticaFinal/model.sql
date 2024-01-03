@@ -39,6 +39,7 @@ CREATE TABLE pelicula (
     otros_datos     VARCHAR(255) NOT NULL,
     class_edad      VARCHAR(255) NOT NULL,
     portada         VARCHAR(255),
+    trailer         VARCHAR(255),
     PRIMARY KEY (id)
 );
 

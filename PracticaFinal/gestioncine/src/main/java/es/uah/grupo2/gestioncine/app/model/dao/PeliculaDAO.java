@@ -275,6 +275,7 @@ public class PeliculaDAO {
         pelicula.setOtrosDatos(resultSet.getString("otros_datos"));
         pelicula.setClasificacionEdad(resultSet.getString("class_edad"));
         pelicula.setPortad(resultSet.getString("portada"));
+        pelicula.setTrailer(resultSet.getString("trailer"));
 
         return pelicula;
     }

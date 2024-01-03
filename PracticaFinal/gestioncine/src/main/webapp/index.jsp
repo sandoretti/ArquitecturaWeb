@@ -50,9 +50,6 @@
                 </div>
             </div>
         </div>
-        <%
-            }
-        %>
 
         <div class="trailers">
             <div class="container">
@@ -63,41 +60,56 @@
                         </div>
                         <div class="videos">
                             <div class="slider-for-2 video-ft">
+                                <% 
+                                    int maxIterations = 4; // Definir el número máximo de iteraciones
+                                    int i = 0; // Inicializar la variable de iteración
+
+                                    for (Pelicula pelicula : peliculas) {
+                                        if (i % 2 == 1 && i < maxIterations * 2) { // Mostrar cada dos películas
+                                %>
                                 <div>
-                                    <iframe class="item-video" src="#" data-src="https://www.youtube.com/embed/1Q8fG0TtVAY"></iframe>
+                                    <div class="item-video">
+                                        <iframe class="item-video" src="#" data-src="<%= pelicula.getTrailer() %>"></iframe>
+                                        <!-- Agregar cualquier otra información o elementos según sea necesario -->
+                                    </div>
                                 </div>
-                                <div>
-                                    <iframe class="item-video" src="#" data-src="https://www.youtube.com/embed/w0qQkSuWOS8"></iframe>
-                                </div>
+                                <%
+                                        }
+                                        i++;
+                                    }
+                                %>
                             </div>
 
                             <div class="slider-nav-2 thumb-ft">
+                                <%
+                                    i = 0;
+                                    for (Pelicula pelicula : peliculas) {
+                                        if (i % 2 == 1 && i < maxIterations * 2) { // Mostrar cada dos películas
+                                %>
                                 <div class="item">
                                     <div class="trailer-img">
-                                        <img src="images/uploads/trailer7.jpg"  alt="photo by Barn Images" width="4096" height="2737">
+                                        <img src="<%= pelicula.getPortad() %>" width="4096" height="2737">
                                     </div>
                                     <div class="trailer-infor">
-                                        <h4 class="desc">Wonder Woman</h4>
-                                        <p>2:30</p>
+                                        <h4 class="desc"><%= pelicula.getNombre() %></h4>
                                     </div>
                                 </div>
-                                <div class="item">
-                                    <div class="trailer-img">
-                                        <img src="images/uploads/trailer2.jpg"  alt="photo by Barn Images" width="350" height="200">
-                                    </div>
-                                    <div class="trailer-infor">
-                                        <h4 class="desc">Oblivion: Official Teaser Trailer</h4>
-                                        <p>2:37</p>
-                                    </div>
-                                </div>
-
+                                <%
+                                        }
+                                        i++;
+                                    }
+                                %>
                             </div>
-                        </div>   
+                        </div>
+
+
                     </div>
                 </div>
             </div>
         </div>
-
+        <%
+            }
+        %>
         <%@include file="components/footer.jsp"%>
     </body>
 

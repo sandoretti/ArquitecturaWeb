@@ -191,7 +191,7 @@ public class Pelicula {
     }
 
     public String getTrailer() {
-        return "https://www.youtube.com/embed/o-0hcF97wy0";
+        return trailer;
     }
 
     public void setTrailer(String trailer) {
