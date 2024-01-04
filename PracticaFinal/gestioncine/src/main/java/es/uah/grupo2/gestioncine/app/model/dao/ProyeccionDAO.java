@@ -31,7 +31,7 @@ public class ProyeccionDAO {
         return proyecciones;
     }
 
-    public static void crearProyeccion(Proyeccion proyeccion) throws SQLException {
+    public Proyeccion crearProyeccion(Proyeccion proyeccion) throws SQLException {
         String SQL = "INSERT INTO PROYECCION(id_pelicula, id_sala, fecha_hora) VALUES (?, ?, ?)";
 
         PreparedStatement ps = conn.prepareStatement(SQL);
@@ -41,6 +41,32 @@ public class ProyeccionDAO {
         ps.setTimestamp(3, new Timestamp(proyeccion.getFechaHora().getTime()));
 
         ps.executeUpdate();
+
+        int idProyeccion = obtenerIdProyeccion(proyeccion);
+
+        proyeccion.setId(idProyeccion);
+
+        return proyeccion;
+    }
+
+    public int obtenerIdProyeccion(Proyeccion proyeccion) throws SQLException {
+        String SQL = "SELECT ID FROM PROYECCION WHERE ID_PELICULA = ? AND ID_SALA = ? AND FECHA_HORA = ?";
+
+        PreparedStatement ps = conn.prepareStatement(SQL);
+
+        ps.setInt(1, proyeccion.getIdPelicula());
+        ps.setInt(2, proyeccion.getIdSala());
+        ps.setTimestamp(3, new Timestamp(proyeccion.getFechaHora().getTime()));
+
+        ResultSet rs = ps.executeQuery();
+
+        int id = -1;
+
+        if (rs.next()){
+            id = rs.getInt(1);
+        }
+
+        return id;
     }
 
     public static void eliminarProyeccion(int id) throws SQLException {

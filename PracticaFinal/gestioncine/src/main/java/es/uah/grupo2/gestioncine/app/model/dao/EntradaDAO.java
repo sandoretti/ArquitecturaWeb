@@ -1,6 +1,9 @@
 package es.uah.grupo2.gestioncine.app.model.dao;
 
 import es.uah.grupo2.gestioncine.app.model.entity.Entrada;
+import es.uah.grupo2.gestioncine.app.model.entity.Proyeccion;
+import es.uah.grupo2.gestioncine.app.model.entity.Sala;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -72,6 +75,27 @@ public class EntradaDAO {
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error al actualizar el atributo reserva_id para la entrada.", e);
         }
+    }
+
+    public void creaEntradasProyeccion(Proyeccion proyeccion, Sala sala) throws SQLException {
+        String SQL = "INSERT INTO ENTRADA (ID_PROYECCION, FILA, COLUMNA) VALUES (?, ?, ?)";
+        PreparedStatement ps = conexion.prepareStatement(SQL);
+
+        int numFilas = sala.getFila();
+        int numCols = sala.getColumna();
+        int idProyeccion = proyeccion.getId();
+
+        for (int i = 1; i <= numFilas; i++){
+            for (int j = 1; j <= numCols; j++) {
+                ps.setInt(1, idProyeccion);
+                ps.setInt(2, i);
+                ps.setInt(3, j);
+
+                ps.addBatch();
+            }
+        }
+
+        ps.executeBatch();
     }
 
     private Entrada construirEntradaDesdeResultSet(ResultSet resultSet) throws SQLException {
