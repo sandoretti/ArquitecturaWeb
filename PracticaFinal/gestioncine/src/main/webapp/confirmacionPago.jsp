@@ -17,7 +17,7 @@
                     <div class="middle-content">
                         <a href="./"><img class="md-logo" src="images/logo1.png" alt="" width="100"></a>
                         <h1>Reserva realizada con éxito, presenta este número de referencia en el cine para poder acceder:</h1>
-                        <h1>XXXXXXXXXX</h1>
+                        <h1><%= request.getParameter("referencia") %></h1>
                         <br><br><br><br><br>
                         <a href="./" class="redbtn">Volver al inicio</a>
                         

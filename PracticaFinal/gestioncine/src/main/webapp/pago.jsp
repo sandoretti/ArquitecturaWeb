@@ -53,15 +53,25 @@
                                         <div class="detalles-header">
                                             <h2>Detalles de la Reserva</h2><br><br>
                                         </div>
-                                        <% Random random = new Random(); %>
-                                        <% int precioUnitario = random.nextInt(8) + 3; // Rango entre 3 y 10 %>
-                                        <% int cantidadAsientos = asientosSeleccionados.length; %>
-                                        <% int precioTotal = precioUnitario * cantidadAsientos; %>
+                                        <%
+                                            Random random = new Random();
+                                            // Calcular el precio unitario con decimales en el rango de 3 a 10
+                                            double precioUnitario = 3 + (random.nextDouble() * 7);
+                                            // Formatear el precio unitario a dos decimales
+                                            String precioFormateado = String.format("%.2f", precioUnitario);
+                                           
+                                            int cantidadAsientos = asientosSeleccionados.length;
+                                            double precioTotal = precioUnitario * cantidadAsientos;
+                                            String precioTotalFormateado = String.format("%.2f", precioTotal);
+                                        %>
                                         <ul class="detalles-lista">
                                             <li class="detalles-item"><span>Número de Entradas:</span> <%= cantidadAsientos %></li>
-                                            <li class="detalles-item"><span>Precio por Entrada:</span> <%= precioUnitario %>.00 €</li>
-                                            <li class="detalles-item"><span>Precio Total:</span> <%= precioTotal %>.00 €</li>
+                                            <li class="detalles-item"><span>Precio por Entrada:</span> <%= precioFormateado %> €</li>
+                                            <li class="detalles-item"><span>Precio Total:</span> <%= precioTotalFormateado %> €</li>
                                         </ul>
+                                        <!-- Campo oculto para enviar el precio total al servlet -->
+                                        <input type="hidden" name="precioTotal" value="<%= precioTotalFormateado %>">
+
                                     </section>
                                     <!-- Botón de pago centrado -->
                                     <div style="text-align: center;">

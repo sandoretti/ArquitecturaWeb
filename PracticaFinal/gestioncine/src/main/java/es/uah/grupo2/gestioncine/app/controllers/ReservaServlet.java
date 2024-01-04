@@ -46,6 +46,13 @@ public class ReservaServlet extends HttpServlet {
             String cvv = request.getParameter("codigoSeguridad");
             int proyeccionId = Integer.parseInt(request.getParameter("proyeccionId"));
             String[] asientosSeleccionados = request.getParameter("asientos").split(",");
+            String strNumero = request.getParameter("precioTotal");
+            // Reemplaza la coma por un punto
+            strNumero = strNumero.replace(",", ".");
+            Float precio = Float.valueOf(strNumero);
+
+            // Genera un número de referencia aleatorio
+            String numeroReferencia = generarNumeroReferencia();
 
             // Crea la reserva
             Reserva nuevaReserva = new Reserva();
@@ -55,9 +62,8 @@ public class ReservaServlet extends HttpServlet {
             nuevaReserva.setIdCliente(cliente.getId());
             nuevaReserva.setFechaReserva(new Date());
             nuevaReserva.setNumeroTarjeta(nTarjeta);
-            String referencia = "XOXOXO";
-            nuevaReserva.setReferenciaReserva(referencia);
-            nuevaReserva.setPrecio((float) 10.2);
+            nuevaReserva.setReferenciaReserva(numeroReferencia);
+            nuevaReserva.setPrecio(precio);
 
             // Guarda la reserva en la base de datos y obtiene su ID
             ReservaDAO reservaDAO = new ReservaDAO(conexion);
@@ -74,10 +80,10 @@ public class ReservaServlet extends HttpServlet {
 
                     entradaDAO.actualizarReservaId(proyeccionId, fila, columna, idReserva);
                 }
-                logger.log(Level.INFO, "Nueva reserva registrado: {0}", referencia);
-                response.sendRedirect("confirmacionPago.jsp?referencia=" + referencia);
+                logger.log(Level.INFO, "Nueva reserva registrado: {0}", numeroReferencia);
+                response.sendRedirect("confirmacionPago.jsp?referencia=" + numeroReferencia);
             } else {
-                logger.log(Level.WARNING, "Error al registrar nueva reserva: {0}", referencia);
+                logger.log(Level.WARNING, "Error al registrar nueva reserva: {0}", numeroReferencia);
                 response.sendRedirect("404.jsp");
             }
 
@@ -94,5 +100,10 @@ public class ReservaServlet extends HttpServlet {
             }
         }
 
+    }
+
+    private String generarNumeroReferencia() {
+        // Genera un número de referencia aleatorio (puedes ajustar según tus necesidades)
+        return String.valueOf((int) (Math.random() * 1000000));
     }
 }

@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,11 +51,12 @@ public class ReservaDAO {
         return reservaList;
     }
 
+    // Método para crear una nueva reserva y obtener su ID
     public int crearReserva(Reserva reserva) {
         String sql = "INSERT INTO reserva (id_cliente, fecha_reserva, numero_tarjeta, referencia_reserva, precio) "
                 + "VALUES (?, ?, ?, ?, ?)";
 
-        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
+        try (PreparedStatement statement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, reserva.getIdCliente());
             statement.setTimestamp(2, new Timestamp(reserva.getFechaReserva().getTime()));
             statement.setString(3, reserva.getNumeroTarjeta());
@@ -66,7 +68,9 @@ public class ReservaDAO {
             if (filasAfectadas > 0) {
                 // Recupera el ID generado para la reserva
                 ResultSet generatedKeys = statement.getGeneratedKeys();
-                if (generatedKeys.next()) {
+
+                // Verifica si el conjunto de resultados no es nulo y contiene datos
+                if (generatedKeys != null && generatedKeys.next()) {
                     int idReserva = generatedKeys.getInt(1);
                     logger.log(Level.INFO, "Se creó una nueva reserva con ID: {0}", idReserva);
                     return idReserva;
