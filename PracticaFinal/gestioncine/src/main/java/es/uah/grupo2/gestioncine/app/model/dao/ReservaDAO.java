@@ -29,7 +29,7 @@ public class ReservaDAO {
 
     public List<Reserva> all() throws SQLException {
         String SQL = "SELECT ID, ID_CLIENTE, FECHA_RESERVA, NUMERO_TARJETA, REFERENCIA_RESERVA, PRECIO FROM RESERVA " +
-                "WHERE ID > -1";
+                "WHERE ID > 0";
 
         PreparedStatement ps = conn.prepareStatement(SQL);
         ResultSet rs = ps.executeQuery();
