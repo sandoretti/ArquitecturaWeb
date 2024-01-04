@@ -145,7 +145,6 @@
                                                     <div class="div">
                                                         <h2><%= pelicula.getTitulo() %></h2>
                                                     </div>
-                                                    <a href="comentario" class="redbtn" style="margin-right: 50px;" >Escribir comentario</a>
                                                 </div>
                                                 <div class="topbar-filter">
                                                     <p>Se han encontrado <span><%= comentarios.size() %> </span>comentarios en total</p>
@@ -158,13 +157,14 @@
                                                         <img src="images/uploads/userava1.jpg" alt="">
                                                         <div>
                                                             <h3>Comentario de <%= comentario.getUsuario() %></h3>
+                                                            <!-- comment 
                                                             <div class="no-star">
                                                                 <i class="ion-android-star"></i>
                                                                 <i class="ion-android-star"></i>
                                                                 <i class="ion-android-star"></i>
                                                                 <i class="ion-android-star"></i>
                                                                 <i class="ion-android-star last"></i>
-                                                            </div>
+                                                            </div>-->
                                                             <p class="time">
                                                                 <%= comentario.getFechaComentario() %> por <a href="#"> <%= comentario.getUsuario() %></a>
                                                             </p>
@@ -175,6 +175,15 @@
                                                 <% } %>
                                                 <div class="topbar-filter">
                                                 </div>
+
+                                                <form action="comentario" method="post">
+                                                    <label for="opinion"><h3>Deja tu comentario:</h3></label>
+                                                    <textarea name="opinion" rows="8" cols="50" required></textarea><br>
+                                                    <!-- Campos ocultos para enviar detalles adicionales al servidor -->
+                                                    <input type="hidden" name="peliculaId" value="<%= pelicula.getId() %>">
+
+                                                    <input type="submit" class="redbtn" value="Enviar opinión">
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
