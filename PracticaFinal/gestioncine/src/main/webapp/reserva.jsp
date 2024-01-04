@@ -251,6 +251,7 @@
                                         // Por ejemplo, puedes usar una solicitud fetch a un servlet de reserva
                                         // Aquí solo imprimo los asientos seleccionados en la consola como ejemplo
                                         console.log('Asientos seleccionados:', asientosSeleccionados);
+                                        window.location.href = "pago.jsp";
 
                                         // Aquí puedes agregar la lógica para enviar los datos al servidor y procesar la reserva
                                         // Utiliza una solicitud fetch o AJAX para enviar los datos al backend

@@ -7,18 +7,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 10%; 
+    margin-left: 10%;
     margin-right: 10%;
     border-radius: 5px;
 }
 .banner-style {
-    width: 15%; 
-    height: 100vh; 
-    position: fixed; 
-    top: 0; 
+    width: 15%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
     background-color: white;
     background-repeat: no-repeat;
-    background-size: cover;          
+    background-size: cover;
 }
 .banner-left-style {
     left: 0;
@@ -26,14 +26,14 @@
     background-image: url('../imagenes/Banner_Izq.jpg');
 }
 .banner-right-style {
-    right: 0; 
+    right: 0;
     max-width: 12%;
     background-image: url('../imagenes/Banner_Der.jpg');
 }
 .link-style {
-    color: inherit;      
+    color: inherit;
     text-decoration: none;
-    padding: 0 5px;         
+    padding: 0 5px;
 }
 .navbar-style {
     display: flex;
@@ -41,8 +41,8 @@
     background-color: #2c2b2b;
     color: white;
     padding: 15px;
-    width: 85%; 
-    padding: 20px; 
+    width: 85%;
+    padding: 20px;
     border-radius: 10px;
 }
 .logo-style {
@@ -109,41 +109,41 @@
 
 /* Aqui va la parte de salaCine */
 .seat {
-  background-color: grey;
-  height: 35px;
-  width: 35px;
-  margin: 5px;
-  border-radius: 5px;
-  cursor: pointer;
+    background-color: grey;
+    height: 35px;
+    width: 35px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 .seat.selected {
-  background-color: #6feaf6;
+    background-color: #6feaf6;
 }
 .screen {
-  background-color: white;
-  height: 20px;
-  width: 70%;
-  margin: 15px 0;
-  text-align: center;
-  color: black;
-  border-radius: 2px;
+    background-color: white;
+    height: 20px;
+    width: 70%;
+    margin: 15px 0;
+    text-align: center;
+    color: black;
+    border-radius: 2px;
 }
 .row {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 .submit-button {
-  background-color: white;
-  border: none;
-  color: black;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 10px 2px;
-  cursor: pointer;
-  border-radius: 12px;  
+    background-color: white;
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 2px;
+    cursor: pointer;
+    border-radius: 12px;
 }
 
 
@@ -194,4 +194,85 @@
     vertical-align: center;
     max-width: 50%;
     margin: auto;
-}   
+}
+
+body {
+            background-color: #222; /* Color de fondo oscuro para el cuerpo de la página */
+            color: #fff; /* Color de texto blanco */
+            margin: 0; /* Asegurar que no haya márgenes en el cuerpo */
+        }
+
+        .page-single-2 {
+            background-color: #333; /* Color de fondo oscuro para la sección principal */
+            padding: 20px; /* Añadir un poco de espacio interno */
+            display: flex; /* Usar flexbox para centrar el contenido */
+            justify-content: center; /* Centrar el contenido horizontalmente */
+            align-items: center; /* Centrar el contenido verticalmente */
+            min-height: 100vh; /* Asegurar que la página ocupe al menos el 100% del alto de la ventana */
+        }
+
+        .middle-content {
+            overflow: hidden; /* Limpiar el flujo del contenido */
+            max-width: 1200px; /* Establecer un ancho máximo para el contenido */
+            width: 100%; /* Asegurar que el contenido no exceda el ancho máximo */
+        }
+
+        .columna {
+            width: 35%; /* Ancho de las columnas (ajustado para hacerlas más estrechas) */
+            float: left; /* Colocar la columna a la izquierda */
+            margin-right: 4%; /* Margen derecho entre columnas */
+        }
+
+        .pago-section, .detalles-section {
+            background-color: #444; /* Color de fondo oscuro para las secciones de pago y detalles */
+            padding: 20px; /* Añadir espacio interno */
+            border-radius: 10px; /* Bordes redondeados */
+            margin-bottom: 20px; /* Margen inferior entre secciones */
+        }
+
+        /* Estilos para los campos de entrada y etiquetas */
+        input, label {
+            color: #fff; /* Color de texto blanco */
+        }
+
+        /* Estilos para el botón de pago */
+        .redbtn {
+            background-color: #d9534f; /* Color de fondo rojo oscuro */
+            color: #fff; /* Color de texto blanco */
+            border: none; /* Sin borde */
+            padding: 10px 20px; /* Espaciado interno */
+            font-size: 16px; /* Tamaño de fuente */
+            cursor: pointer; /* Cursor al pasar el ratón */
+            border-radius: 5px; /* Bordes redondeados */
+        }
+
+        /* Estilos para la sección de detalles de reserva */
+        .detalles-header h2 {
+            color: #fff; /* Color de texto blanco */
+        }
+
+        .detalles-lista {
+            list-style: none; /* Quitar viñetas de la lista */
+            padding: 0;
+        }
+
+        .detalles-item {
+            margin-bottom: 10px;
+        }
+
+        .detalles-item span {
+            font-weight: bold; /* Texto en negrita */
+            margin-right: 10px;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #fechaExpiracion {
+            width: 48%; /* Ancho de la fecha */
+        }
+
+        #codigoSeguridad {
+            width: 20%; /* Ancho más estrecho para el CVV */
+        }

@@ -3,14 +3,28 @@ package es.uah.grupo2.gestioncine.app.model.dao;
 import es.uah.grupo2.gestioncine.app.model.entity.Reserva;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ReservaDAO {
     static Connection conn = DatabaseConnection.getConnection();
+    private Connection conexion;
+    private static final Logger logger = Logger.getLogger(EntradaDAO.class.getName());
+
+    public ReservaDAO(Connection conexion) {
+        this.conexion = conexion;
+    }
+
+    public ReservaDAO() {
+    }
+    
 
     public List<Reserva> all() throws SQLException {
         String SQL = "SELECT ID, ID_CLIENTE, FECHA_RESERVA, NUMERO_TARJETA, REFERENCIA_RESERVA, PRECIO FROM RESERVA";
@@ -34,5 +48,31 @@ public class ReservaDAO {
         }
 
         return reservaList;
+    }
+    
+    public boolean crearReserva(Reserva reserva) {
+        String sql = "INSERT INTO reserva (id_cliente, fecha_reserva, numero_tarjeta, referencia_reserva, precio) " +
+                     "VALUES (?, ?, ?, ?, ?)";
+        
+        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
+            statement.setInt(1, reserva.getIdCliente());
+            statement.setTimestamp(2, new Timestamp(reserva.getFechaReserva().getTime()));
+            statement.setString(3, reserva.getNumeroTarjeta());
+            statement.setString(4, reserva.getReferenciaReserva());
+            statement.setFloat(5, reserva.getPrecio());
+
+            int filasAfectadas = statement.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                logger.log(Level.INFO, "Reserva registrada: {0}", reserva.getId());
+                return true;
+            } else {
+                logger.log(Level.WARNING, "Error al añadir reserva: {0}", reserva.getId());
+                return false;
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error SQL al añadir reserva", e);
+            return false;
+        }
     }
 }
