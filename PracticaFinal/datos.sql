@@ -286,6 +286,7 @@ INSERT INTO pelicula_actor (pelicula_id, actor_id) VALUES
 
 -- Reservas
 INSERT INTO reserva (id_cliente, fecha_reserva, numero_tarjeta, referencia_reserva, precio) VALUES
+(1, CURRENT_TIMESTAMP, '0000000000000000', '000000', 0),        -- RESERVA PARA DESCARTAR ENTRADAS 
 (2, CURRENT_TIMESTAMP, '************1234', 'ABC123', 15.99),
 (3, CURRENT_TIMESTAMP, '************5678', 'DEF456', 18.50),
 (4, CURRENT_TIMESTAMP, '************4321', 'XYZ789', 19.99),
