@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ReservaDAO {
+
     static Connection conn = DatabaseConnection.getConnection();
     private Connection conexion;
     private static final Logger logger = Logger.getLogger(EntradaDAO.class.getName());
@@ -24,7 +25,6 @@ public class ReservaDAO {
 
     public ReservaDAO() {
     }
-    
 
     public List<Reserva> all() throws SQLException {
         String SQL = "SELECT ID, ID_CLIENTE, FECHA_RESERVA, NUMERO_TARJETA, REFERENCIA_RESERVA, PRECIO FROM RESERVA";
@@ -49,11 +49,11 @@ public class ReservaDAO {
 
         return reservaList;
     }
-    
-    public boolean crearReserva(Reserva reserva) {
-        String sql = "INSERT INTO reserva (id_cliente, fecha_reserva, numero_tarjeta, referencia_reserva, precio) " +
-                     "VALUES (?, ?, ?, ?, ?)";
-        
+
+    public int crearReserva(Reserva reserva) {
+        String sql = "INSERT INTO reserva (id_cliente, fecha_reserva, numero_tarjeta, referencia_reserva, precio) "
+                + "VALUES (?, ?, ?, ?, ?)";
+
         try (PreparedStatement statement = conexion.prepareStatement(sql)) {
             statement.setInt(1, reserva.getIdCliente());
             statement.setTimestamp(2, new Timestamp(reserva.getFechaReserva().getTime()));
@@ -64,15 +64,23 @@ public class ReservaDAO {
             int filasAfectadas = statement.executeUpdate();
 
             if (filasAfectadas > 0) {
-                logger.log(Level.INFO, "Reserva registrada: {0}", reserva.getId());
-                return true;
+                // Recupera el ID generado para la reserva
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int idReserva = generatedKeys.getInt(1);
+                    logger.log(Level.INFO, "Se creó una nueva reserva con ID: {0}", idReserva);
+                    return idReserva;
+                } else {
+                    logger.log(Level.SEVERE, "Error al obtener el ID de la reserva creada.");
+                    return -1;
+                }
             } else {
                 logger.log(Level.WARNING, "Error al añadir reserva: {0}", reserva.getId());
-                return false;
+                return -1;
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error SQL al añadir reserva", e);
-            return false;
+            return -1;
         }
     }
 }

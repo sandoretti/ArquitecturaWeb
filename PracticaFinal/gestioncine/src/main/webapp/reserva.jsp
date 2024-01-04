@@ -152,6 +152,8 @@
 
 
                             <script>
+                                var proyeccionIdParam; // Variable global para almacenar proyeccionId
+
                                 function verAsientos(salaId, proyeccionId) {
                                     // Limpia el contenido del contenedor de asientos
                                     var contenedor = document.getElementById("sala");
@@ -161,6 +163,8 @@
                                     fetch("sala?id=" + salaId)
                                             .then(response => response.json())
                                             .then(data => {
+                                                // Almacena proyeccionId en la variable global
+                                                proyeccionIdParam = proyeccionId;
                                                 // Utiliza los datos para cargar los asientos
                                                 cargarAsientos(data.salaFilas, data.salaColumnas, proyeccionId);
                                             })
@@ -247,14 +251,10 @@
 
                                     // Realiza la lógica de reserva con los asientos seleccionados
                                     if (asientosSeleccionados.length > 0) {
-                                        // Puedes enviar la información al servidor para procesar la reserva
-                                        // Por ejemplo, puedes usar una solicitud fetch a un servlet de reserva
-                                        // Aquí solo imprimo los asientos seleccionados en la consola como ejemplo
                                         console.log('Asientos seleccionados:', asientosSeleccionados);
-                                        window.location.href = "pago.jsp";
-
-                                        // Aquí puedes agregar la lógica para enviar los datos al servidor y procesar la reserva
-                                        // Utiliza una solicitud fetch o AJAX para enviar los datos al backend
+                                        // Redirigir a la página de pago con los parámetros necesarios
+                                        var asientosQueryString = asientosSeleccionados.join(",");
+                                        window.location.href = "pago.jsp?asientos=" + asientosQueryString + "&proyeccionId=" + proyeccionIdParam;
                                     } else {
                                         alert('Debes seleccionar al menos un asiento para realizar la reserva.');
                                     }

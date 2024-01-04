@@ -4,6 +4,7 @@
     Author     : Jorge
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.Random"%>
 <!DOCTYPE html>
 <html lang="es" class="no-js">
     <%@include file="components/head.jsp"%>
@@ -41,8 +42,10 @@
                                         </div>
 
                                         <!-- Campos ocultos para enviar detalles adicionales al servidor -->
-                                        <input type="hidden" name="idReserva" value="123"> <!-- Adaptar según tu lógica de reserva -->
-                                        <input type="hidden" name="montoTotal" value="45.00"> <!-- Adaptar según tu lógica de precios -->
+                                        <input type="hidden" name="proyeccionId" value="<%= request.getParameter("proyeccionId") %>">
+                                        <input type="hidden" name="asientos" value="<%= request.getParameter("asientos") %>">
+                                        <%-- Obtener la cantidad de asientos seleccionados --%>
+                                        <% String[] asientosSeleccionados = request.getParameter("asientos").split(","); %>
                                     </section>
                                 </div>
                                 <div class="columna">
@@ -50,10 +53,14 @@
                                         <div class="detalles-header">
                                             <h2>Detalles de la Reserva</h2><br><br>
                                         </div>
+                                        <% Random random = new Random(); %>
+                                        <% int precioUnitario = random.nextInt(8) + 3; // Rango entre 3 y 10 %>
+                                        <% int cantidadAsientos = asientosSeleccionados.length; %>
+                                        <% int precioTotal = precioUnitario * cantidadAsientos; %>
                                         <ul class="detalles-lista">
-                                            <li class="detalles-item"><span>Número de Entradas:</span> 3</li>
-                                            <li class="detalles-item"><span>Precio por Entrada:</span> $15.00</li>
-                                            <li class="detalles-item"><span>Precio Total:</span> $45.00</li>
+                                            <li class="detalles-item"><span>Número de Entradas:</span> <%= cantidadAsientos %></li>
+                                            <li class="detalles-item"><span>Precio por Entrada:</span> <%= precioUnitario %>.00 €</li>
+                                            <li class="detalles-item"><span>Precio Total:</span> <%= precioTotal %>.00 €</li>
                                         </ul>
                                     </section>
                                     <!-- Botón de pago centrado -->

@@ -56,6 +56,24 @@ public class EntradaDAO {
         return entradas;
     }
 
+    // Método para actualizar el atributo reserva_id de una entrada
+    public void actualizarReservaId(int proyeccionId, int fila, int columna, int idReserva) {
+        String sql = "UPDATE entrada SET reserva_id = ? WHERE id_proyeccion = ? AND fila = ? AND columna = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, idReserva);
+            preparedStatement.setInt(2, proyeccionId);
+            preparedStatement.setInt(3, fila);
+            preparedStatement.setInt(4, columna);
+
+            preparedStatement.executeUpdate();
+            logger.log(Level.INFO, "Se actualizó el atributo reserva_id para la entrada ({0}, {1}, {2}) en la proyección {3}.", new Object[]{fila, columna, idReserva, proyeccionId});
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error al actualizar el atributo reserva_id para la entrada.", e);
+        }
+    }
+
     private Entrada construirEntradaDesdeResultSet(ResultSet resultSet) throws SQLException {
         Entrada entrada = new Entrada();
         entrada.setId(resultSet.getInt("id"));

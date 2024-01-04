@@ -1,6 +1,7 @@
 package es.uah.grupo2.gestioncine.app.controllers;
 
 import es.uah.grupo2.gestioncine.app.model.dao.DatabaseConnection;
+import es.uah.grupo2.gestioncine.app.model.dao.EntradaDAO;
 import es.uah.grupo2.gestioncine.app.model.dao.ReservaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
 import es.uah.grupo2.gestioncine.app.model.entity.Reserva;
@@ -38,13 +39,15 @@ public class ReservaServlet extends HttpServlet {
             // Obtiene una conexión de la clase de gestión de conexión
             conexion = DatabaseConnection.obtenerConexion();
 
-            // Recupera los parámetros del formulario de registro
+            // Obtiene los parámetros del formulario de pago
             String nombre = request.getParameter("nombre");
             String nTarjeta = request.getParameter("numeroTarjeta");
             String fecha_cad = request.getParameter("fechaExpiracion");
             String cvv = request.getParameter("codigoSeguridad");
+            int proyeccionId = Integer.parseInt(request.getParameter("proyeccionId"));
+            String[] asientosSeleccionados = request.getParameter("asientos").split(",");
 
-            // Crea un objeto de reserva con la información del formulario
+            // Crea la reserva
             Reserva nuevaReserva = new Reserva();
             HttpSession session = request.getSession(false);
             // Obtener el cliente de la sesión
@@ -56,12 +59,21 @@ public class ReservaServlet extends HttpServlet {
             nuevaReserva.setReferenciaReserva(referencia);
             nuevaReserva.setPrecio((float) 10.2);
 
-            // Accede al DAO para registrar el nuevo usuario en la base de datos
+            // Guarda la reserva en la base de datos y obtiene su ID
             ReservaDAO reservaDAO = new ReservaDAO(conexion);
-            boolean reservaRealizada = reservaDAO.crearReserva(nuevaReserva);
+            int idReserva = reservaDAO.crearReserva(nuevaReserva);
 
             // Redirige a una página de éxito o error según el resultado del registro
-            if (reservaRealizada) {
+            if (idReserva > 0) {
+                // Actualiza el atributo reserva_id de las entradas seleccionadas
+                EntradaDAO entradaDAO = new EntradaDAO(conexion);
+                for (String asiento : asientosSeleccionados) {
+                    String[] filaColumna = asiento.split("_");
+                    int fila = Integer.parseInt(filaColumna[0]);
+                    int columna = Integer.parseInt(filaColumna[1]);
+
+                    entradaDAO.actualizarReservaId(proyeccionId, fila, columna, idReserva);
+                }
                 logger.log(Level.INFO, "Nueva reserva registrado: {0}", referencia);
                 response.sendRedirect("confirmacionPago.jsp?referencia=" + referencia);
             } else {
