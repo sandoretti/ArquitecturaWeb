@@ -9,6 +9,7 @@
 <%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Pelicula" %>
 <%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Proyeccion" %>
 <%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Sala" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 
 <html lang="es" class="no-js">
     <%@include file="components/head.jsp"%>
@@ -67,13 +68,16 @@
                                                     <div class="topbar-filter">
                                                         <p>Se han encontrado <span><%= proyecciones.size() %> </span> fechas disponibles</p>
                                                     </div>
+                                                    <% SimpleDateFormat fechaSDT = new SimpleDateFormat("dd/MM/yyyy");%>
+                                                    <% SimpleDateFormat horaSDT = new SimpleDateFormat("HH:mm");%>
                                                     <% for (Proyeccion proyeccion : proyecciones) { %>
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="movie-item-style-2" style="margin-left: 50px;">
                                                                 <div class="mv-item-infor">
                                                                     <h6><a><%= proyeccion.getNombreSala() %> </a></h6>
-                                                                    <p class="run-time"> Fecha: <%= proyeccion.getFechaHora() %> </p>
+                                                                    <p class="run-time"> Fecha: <%= fechaSDT.format(proyeccion.getFechaHora())%> </p>
+                                                                    <p class="run-time"> Hora: <%= horaSDT.format(proyeccion.getFechaHora())%> </p>
                                                                 </div>
                                                             </div>
                                                         </div>

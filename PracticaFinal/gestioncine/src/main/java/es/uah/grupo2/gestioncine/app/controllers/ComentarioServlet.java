@@ -62,7 +62,7 @@ public class ComentarioServlet extends HttpServlet {
                 // Redirige a una página de éxito o error según el resultado del registro
                 if (registrado) {
                     logger.log(Level.INFO, "Nuevo comentario registrado: {0}", texto);
-                    response.sendRedirect("pelicula?id=" + cliente.getId());
+                    response.sendRedirect("pelicula?id=" + peliculaId);
                 } else {
                     logger.log(Level.WARNING, "Error al registrar nuevo comentario: {0}", texto);
                     response.sendRedirect("404.jsp");

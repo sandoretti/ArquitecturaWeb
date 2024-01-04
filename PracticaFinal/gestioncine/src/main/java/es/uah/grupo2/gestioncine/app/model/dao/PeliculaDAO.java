@@ -353,7 +353,7 @@ public class PeliculaDAO {
                     proyeccion.setId(resultSet.getInt("id"));
                     proyeccion.setIdPelicula(resultSet.getInt("id_pelicula"));
                     proyeccion.setIdSala(resultSet.getInt("id_sala"));
-                    proyeccion.setFechaHora(resultSet.getDate("fecha_hora"));
+                    proyeccion.setFechaHora(resultSet.getTimestamp("fecha_hora"));
                     proyeccion.setNombreSala(resultSet.getString("nombre_sala"));
                     proyecciones.add(proyeccion);
                 }
