@@ -4,11 +4,7 @@ import es.uah.grupo2.gestioncine.app.model.entity.Entrada;
 import es.uah.grupo2.gestioncine.app.model.entity.Proyeccion;
 import es.uah.grupo2.gestioncine.app.model.entity.Sala;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -64,7 +60,10 @@ public class EntradaDAO {
         String sql = "UPDATE entrada SET reserva_id = ? WHERE id_proyeccion = ? AND fila = ? AND columna = ?";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
-            preparedStatement.setInt(1, idReserva);
+
+            if (idReserva == 0) preparedStatement.setNull(1, Types.INTEGER);
+            else preparedStatement.setInt(1, idReserva);
+
             preparedStatement.setInt(2, proyeccionId);
             preparedStatement.setInt(3, fila);
             preparedStatement.setInt(4, columna);
@@ -75,6 +74,10 @@ public class EntradaDAO {
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error al actualizar el atributo reserva_id para la entrada.", e);
         }
+    }
+
+    public void actualizarReservaId(Entrada entrada) {
+        actualizarReservaId(entrada.getIdProyeccion(), entrada.getFila(), entrada.getColumna(), entrada.getIdReserva());
     }
 
     public void creaEntradasProyeccion(Proyeccion proyeccion, Sala sala) throws SQLException {
@@ -96,6 +99,24 @@ public class EntradaDAO {
         }
 
         ps.executeBatch();
+    }
+
+
+    public Entrada obtenerEntradaId (int idEntrada) throws SQLException {
+        String SQL = "SELECT ID, ID_PROYECCION, FILA, COLUMNA, RESERVA_ID FROM ENTRADA WHERE ID = ?";
+
+        PreparedStatement ps = conexion.prepareStatement(SQL);
+        ps.setInt(1, idEntrada);
+
+        ResultSet rs = ps.executeQuery();
+
+        Entrada entrada = null;
+
+        if (rs.next()) {
+            entrada = construirEntradaDesdeResultSet(rs);
+        }
+
+        return entrada;
     }
 
     private Entrada construirEntradaDesdeResultSet(ResultSet resultSet) throws SQLException {
