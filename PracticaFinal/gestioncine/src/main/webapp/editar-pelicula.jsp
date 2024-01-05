@@ -84,7 +84,7 @@
                         if (actores != null){
                             for(Actor actor: actores){
                     %>
-                    <input type="checkbox" name="actores" <%if (actoresPelicula.contains(actor)) out.println("checked");%>
+                    <input type="checkbox" name="actores" <%if (actoresPelicula.contains(actor)) out.print("checked");%>
                            value="<%=actor.getId()%>"><%=actor.getNombre()%> <%=actor.getApellido()%><br>
                     <%
                             }

@@ -1,13 +1,10 @@
 package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
-import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
 import es.uah.grupo2.gestioncine.app.model.dao.ProyeccionDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
-import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
 import es.uah.grupo2.gestioncine.app.model.entity.Proyeccion;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -19,47 +16,40 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @WebServlet(name = "EditarProyeccion", urlPatterns = "/editarProyeccion/*")
-public class EditarProyeccionController extends HttpServlet
+public class EditarProyeccionController extends AdminOperationServlet
 {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-
-        // Verificamos si existe session
-        if (session == null) {
+        // Si no es admin redirigimos a la pagina de inicio
+        if (!validarAdmin(request)){
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
-        Cliente cliente = (Cliente) session.getAttribute("usuario"); // Obtenemos el atributo cliente
 
-        // Si existe cliente y el cliente es administrador
-        if (cliente != null && cliente.isAdmin()) {
-            String rutaCompleta = request.getPathInfo();
-            String[] partesRuta = rutaCompleta.split("/");
-            String value = partesRuta[1]; // nos quedamos con el valor obtenido
+        HttpSession session = request.getSession(false);
 
-            int idProyeccion = Integer.parseInt(value);
+        String rutaCompleta = request.getPathInfo();
+        String[] partesRuta = rutaCompleta.split("/");
+        String value = partesRuta[1]; // nos quedamos con el valor obtenido
 
-            try {
-                if (ProyeccionDAO.validarIdProyeccion(idProyeccion)) {
-                    Proyeccion proyeccion = ProyeccionDAO.obtenerProyeccion(idProyeccion);
+        int idProyeccion = Integer.parseInt(value);
 
-                    request.setAttribute("proyeccion", proyeccion);
-                    request.getRequestDispatcher(request.getContextPath() + "/editar-proyeccion.jsp")
-                            .forward(request, response);
-                } else {
-                    session.setAttribute("error", "No se ha podido acceder a la pelicula");
-                    response.sendRedirect(request.getContextPath() + "/gestionProyecciones");
-                }
-            } catch (SQLException e) {
-                session.setAttribute("error", "Hubo un error al validar el id");
+        try {
+            if (ProyeccionDAO.validarIdProyeccion(idProyeccion)) {
+                Proyeccion proyeccion = ProyeccionDAO.obtenerProyeccion(idProyeccion);
+
+                request.setAttribute("proyeccion", proyeccion);
+                request.getRequestDispatcher(request.getContextPath() + "/editar-proyeccion.jsp")
+                        .forward(request, response);
+            } else {
+                session.setAttribute("error", "No se ha podido acceder a la pelicula");
                 response.sendRedirect(request.getContextPath() + "/gestionProyecciones");
-                e.printStackTrace();
             }
-        } else {
-            session.setAttribute("error", "No puede acceder a esta pagina");
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
+        } catch (SQLException e) {
+            session.setAttribute("error", "Hubo un error al validar el id");
+            response.sendRedirect(request.getContextPath() + "/gestionProyecciones");
+            e.printStackTrace();
         }
     }
 
@@ -68,27 +58,22 @@ public class EditarProyeccionController extends HttpServlet
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
+        // Si no es admin redirigimos a la pagina de inicio
+        if (!validarAdmin(request)){
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
+        }
+
         // Obtenemos la sesion
         HttpSession session = request.getSession(false);
 
-        if (session == null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
-            return;
-        }
-
-        Cliente cliente = (Cliente) session.getAttribute("usuario"); // Obtenemos el atributo cliente
-
-        // Validamos que el cliente no sea nulo y que sea admin
-        if (cliente == null || !cliente.isAdmin()) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
-            return;
-        }
-
+        // Obtenemos los parametros necesarios para la proyeccion
         int idPelicula = Integer.parseInt(request.getParameter("pelicula"));
         int idSala = Integer.parseInt(request.getParameter("sala"));
         String fechaHoraStr = request.getParameter("fechahora");
         int id = Integer.parseInt(request.getParameter("id"));
 
+        // Obtenemos la fecha y la casteamos a tipo Date
         Date fechaHora = null;
         try {
             fechaHora = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(fechaHoraStr);
@@ -96,9 +81,11 @@ public class EditarProyeccionController extends HttpServlet
             e.printStackTrace();
         }
 
+        // Construimos una proyeccion nueva
         Proyeccion proyeccion = new Proyeccion(id, idPelicula, idSala, fechaHora);
 
         try {
+            // Editamos la proyeccion por su id con los parametros nuevos
             ProyeccionDAO.editarProyeccion(proyeccion);
 
             // Redireccionamos a la página de gestion de peliculas con un mensaje de exito

@@ -25,7 +25,7 @@
             <a href="/gestionPeliculas" class="button-link" style="margin: 5px 5px 5px 5px;">Volver a gestion películas</a>
         </div>
     </div>
-   <form action="/crearPelicula" method="POST" enctype="multipart/form-data" class="form-container">
+   <form action="/crearPelicula" method="POST" class="form-container">
         Nombre:
         <input type="text" name="nombre"><br>
         Sinopsis:

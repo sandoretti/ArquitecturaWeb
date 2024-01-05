@@ -9,7 +9,6 @@ import es.uah.grupo2.gestioncine.app.model.entity.Proyeccion;
 import es.uah.grupo2.gestioncine.app.model.entity.Sala;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -24,28 +23,19 @@ import java.util.logging.Logger;
 
 
 @WebServlet(name = "CrearProyeccion", urlPatterns = "/crearProyeccion")
-public class CrearProyeccionController extends HttpServlet {
-    final Logger logger = Logger.getLogger(getClass().getName());
+public class CrearProyeccionController extends AdminOperationServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-
-        if (session == null) {
+        // Si no es admin redirigimos a la pagina de inicio
+        if (!validarAdmin(request)){
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 
-        Cliente cliente = (Cliente) session.getAttribute("usuario"); // Obtenemos el atributo cliente
-
-        // Validamos que el cliente no sea nulo y que sea admin
-        if (cliente != null && cliente.isAdmin()) {
-            request.getRequestDispatcher(request.getContextPath() + "/crear-proyeccion.jsp")
-                    .forward(request, response);
-        } else {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
-        }
+        request.getRequestDispatcher(request.getContextPath() + "/crear-proyeccion.jsp")
+            .forward(request, response);
     }
 
     @Override
@@ -53,21 +43,14 @@ public class CrearProyeccionController extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
+        // Si no es admin redirigimos a la pagina de inicio
+        if (!validarAdmin(request)){
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
+        }
+
         // Obtenemos la sesion
         HttpSession session = request.getSession(false);
-
-        if (session == null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
-            return;
-        }
-
-        Cliente cliente = (Cliente) session.getAttribute("usuario"); // Obtenemos el atributo cliente
-
-        // Validamos que el cliente no sea nulo y que sea admin
-        if (cliente == null || !cliente.isAdmin()) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
-            return;
-        }
 
         int idPelicula = Integer.parseInt(request.getParameter("pelicula"));
         int idSala = Integer.parseInt(request.getParameter("sala"));

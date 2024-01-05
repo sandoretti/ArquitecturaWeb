@@ -17,90 +17,33 @@ import java.sql.Connection;
  * @author serchio
  */
 @WebServlet(name = "CrearSalaController", urlPatterns = {"/crearSala"})
-public class CrearSalaController extends HttpServlet {
+public class CrearSalaController extends AdminOperationServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CrearSalaController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CrearSalaController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-
-        // Verificamos si existe session
-        if (session != null) {
-            Cliente cliente = (Cliente) session.getAttribute("usuario");    // Obtenemos el atributo cliente
-
-            // Si existe cliente y el cliente es administrador
-            if (cliente != null && cliente.isAdmin()) {
-                request.getRequestDispatcher(request.getContextPath() + "/crearSala.jsp").forward(request, response);
-            } else {
-                request.getRequestDispatcher(request.getContextPath() + "/login").forward(request, response);
-            }
-        } else {
-            request.getRequestDispatcher(request.getContextPath() + "/login").forward(request, response);
+        // Si no es admin redirigimos a la pagina de inicio
+        if (!validarAdmin(request)){
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
         }
+
+        request.getRequestDispatcher(request.getContextPath() + "/crearSala.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
+        // Si no es admin redirigimos a la pagina de inicio
+        if (!validarAdmin(request)){
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
+        }
+
         // Obtenemos la sesion
         HttpSession session = request.getSession(false);
-
-        if (session == null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
-            return;
-        }
-
-        Cliente cliente = (Cliente) session.getAttribute("usuario"); // Obtenemos el atributo cliente
-
-        // Validamos que el cliente no sea nulo y que sea admin
-        if (cliente == null || !cliente.isAdmin()) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
-            return;
-        }
 
         // Obtener los parámetros del formulario
         String nombreSala = request.getParameter("nombre_sala");
@@ -111,22 +54,13 @@ public class CrearSalaController extends HttpServlet {
         Connection conn = salita.getConnection();
 
         boolean insertado = salita.insertarSala(conn, nombreSala, filas, columnas);
+
         if (insertado) {
             session.setAttribute("success", "Se ha creado correctamente la sala");
         } else {
             session.setAttribute("error", "Se ha producido un error al insertar la sala");
         }
+
         response.sendRedirect(request.getContextPath() + "/gestionSalas");
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }
