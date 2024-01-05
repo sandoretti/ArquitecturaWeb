@@ -2,6 +2,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.uah.grupo2.gestioncine.app.model.dao.ProyeccionDAO" %>
 <%@ page import="java.sql.SQLException" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%SimpleDateFormat fechaHoraSDF = new SimpleDateFormat("dd/MM/yyyy HH:mm");%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -65,7 +67,8 @@
         <td><%=proyeccion.getId()%></td>
         <td><%=proyeccion.getNombrePelicula()%></td>
         <td><%=proyeccion.getNombreSala()%></td>
-        <td><%=proyeccion.getFechaHora()%></td>
+        <td><%=fechaHoraSDF.format(proyeccion.getFechaHora())%></td>
+        <td style="border: none;"><a class="link-style" href="/gestionEntradas/<%=proyeccion.getId()%>">Gestionar Entradas</a></td>
         <td style="border: none;"><a class="link-style" href="/editarProyeccion/<%=proyeccion.getId()%>">Editar</a></td>
         <td style="border: none;"><a class="link-style" href="/eliminarProyeccion/<%=proyeccion.getId()%>" onclick="return confirm('¿Estas seguro que quieres eliminar?')">Eliminar</a></td>
     </tr>

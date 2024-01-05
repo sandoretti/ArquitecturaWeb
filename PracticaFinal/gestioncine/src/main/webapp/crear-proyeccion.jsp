@@ -27,46 +27,57 @@
         <a href="/gestionProyecciones" class="button-link" style="margin: 5px 5px 5px 5px;">Volver a gestion proyecciones</a>
     </div>
 </div>
-<form action="/crearProyeccion" method="POST" class="form-container">
-    <label for="pelicula">Pelicula</label>
-    <select name="pelicula" id="pelicula">
-        <%
-            List<Pelicula> peliculas = null;
+<div class="form-container">
+    <form action="/crearProyeccion" method="POST" >
+        <div>
+            <label for="pelicula">Seleccionar pelicula:<br></label>
+            <select name="pelicula" id="pelicula">
+                <%
+                    List<Pelicula> peliculas = null;
 
-            try {
-                peliculas = PeliculaDAO.selectPeliculasIdNombGenAnoClas();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+                    try {
+                        peliculas = PeliculaDAO.selectPeliculasIdNombGenAnoClas();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
 
-            if(peliculas != null){
-                for(Pelicula pelicula: peliculas){
-        %>
-                    <option value="<%=pelicula.getId()%>"><%=pelicula.getNombre()%></option>
-        <%
-                }
-            }
-        %>
-    </select>
-    <label for="sala">Salas</label>
-    <select name="sala" id="sala">
-        <%
-            SalaDAO salaDAO = new SalaDAO();
-            Connection conn = salaDAO.getConnection();
-            List<Sala> salas = salaDAO.mostrarSalas(conn);
+                    if(peliculas != null){
+                        for(Pelicula pelicula: peliculas){
+                %>
+                <option value="<%=pelicula.getId()%>"><%=pelicula.getNombre()%></option>
+                <%
+                        }
+                    }
+                %>
+            </select>
+        </div>
+        <br>
+        <div>
+            <label for="sala">Seleccionar sala:<br></label>
+            <select name="sala" id="sala">
+                <%
+                    SalaDAO salaDAO = new SalaDAO();
+                    Connection conn = salaDAO.getConnection();
+                    List<Sala> salas = salaDAO.mostrarSalas(conn);
 
-            if(salas != null){
-                for(Sala sala: salas){
-        %>
+                    if(salas != null){
+                        for(Sala sala: salas){
+                %>
                 <option value="<%=sala.getId()%>"><%=sala.getNombreSala()%></option>
-        <%
-                }
-            }
-        %>
-    </select>
-    <label for="fechahora">Fecha y hora</label>
-    <input type="datetime-local" id="fechahora" name="fechahora">
-    <button>Crear proyeccion</button>
-</form>
+                <%
+                        }
+                    }
+                %>
+            </select>
+        </div>
+        <br>
+        <div>
+            <label for="fechahora">Fecha y hora:<br></label>
+            <input type="datetime-local" id="fechahora" name="fechahora">
+        </div>
+        <button class="button-style">Crear</button>
+    </form>
+</div>
+
 </body>
 </html>

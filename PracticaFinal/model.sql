@@ -75,7 +75,7 @@ CREATE TABLE pelicula_actor (
 );
 
 CREATE TABLE reserva (
-    id                 INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 0, INCREMENT BY 1),
+    id                 INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     id_cliente         INTEGER NOT NULL,
     fecha_reserva      TIMESTAMP NOT NULL,
     numero_tarjeta     CHAR(16) NOT NULL,
