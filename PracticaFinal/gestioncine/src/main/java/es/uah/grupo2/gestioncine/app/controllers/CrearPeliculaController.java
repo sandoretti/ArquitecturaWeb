@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet(name = "CrearPelicula", urlPatterns = {"/crearPelicula"})
@@ -71,6 +72,11 @@ public class CrearPeliculaController extends HttpServlet {
 
             // Si existe cliente y el cliente es administrador
             if (cliente != null && cliente.isAdmin()) {
+                List<String> generos = Arrays.asList(
+                        "Drama", "Ciencia ficción", "Acción", "Crimen", "Comedia", "Aventura", "Documental"
+                );
+
+                request.setAttribute("generos", generos);
                 request.getRequestDispatcher(request.getContextPath() + "/crear-pelicula.jsp").forward(request, response);
             } else {
                 response.sendRedirect(request.getContextPath() + "/index.jsp");
@@ -94,6 +100,7 @@ public class CrearPeliculaController extends HttpServlet {
             throws ServletException, IOException {
         // Obtenemos la sesion
         HttpSession session = request.getSession(false);
+        request.setCharacterEncoding("UTF-8");
 
         if (session != null) {
             Cliente cliente = (Cliente) session.getAttribute("usuario");
@@ -101,18 +108,18 @@ public class CrearPeliculaController extends HttpServlet {
             if (cliente != null && cliente.isAdmin()) {
 
                 // Obtenemos todos los parametros del formulario
-                String nombre = request.getParameter("nombre").trim();
-                String sinopsis = request.getParameter("sinopsis").trim();
-                String pagina = request.getParameter("pagina").trim();
-                String titulo = request.getParameter("titulo").trim();
-                String genero = request.getParameter("genero").trim();
-                String nacionalidad = request.getParameter("nacionalidad").trim();
-                int duracion = Integer.parseInt(request.getParameter("duracion").trim());
-                int ano = Integer.parseInt(request.getParameter("ano").trim());
-                String distribuidora = request.getParameter("distribuidora").trim();
-                String director = request.getParameter("director").trim();
-                String otros = request.getParameter("otros").trim();
-                String clasificacion = request.getParameter("clasificacion").trim();
+                String nombre = request.getParameter("nombre");
+                String sinopsis = request.getParameter("sinopsis");
+                String pagina = request.getParameter("pagina");
+                String titulo = request.getParameter("titulo");
+                String genero = request.getParameter("genero");
+                String nacionalidad = request.getParameter("nacionalidad");
+                int duracion = Integer.parseInt(request.getParameter("duracion"));
+                int ano = Integer.parseInt(request.getParameter("ano"));
+                String distribuidora = request.getParameter("distribuidora");
+                String director = request.getParameter("director");
+                String otros = request.getParameter("otros");
+                String clasificacion = request.getParameter("clasificacion");
                 String portada = request.getParameter("portada");
                 String[] actores = request.getParameterValues("actores");
 

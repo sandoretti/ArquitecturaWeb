@@ -3,6 +3,7 @@
 <%@ page import="es.uah.grupo2.gestioncine.app.model.dao.ProyeccionDAO" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%SimpleDateFormat fechaHoraSDF = new SimpleDateFormat("dd/MM/yyyy HH:mm");%>
 <!DOCTYPE html>
 <html>

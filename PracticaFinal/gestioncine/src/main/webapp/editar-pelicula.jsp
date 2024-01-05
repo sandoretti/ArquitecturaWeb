@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="container-style">
-            <img src="<%=pelicula.getPortad()%>" alt="<%=pelicula.getNombre()%>">
+            <img src="<%=pelicula.getPortad()%>" style="width: 140px; height: 200px;" alt="<%=pelicula.getNombre()%>">
             <form style="margin-top:10px" class="form-container" action="/editarPelicula/<%=pelicula.getId()%>" method="POST">
                 Nombre:
                 <input type="text" name="nombre" value="<%=pelicula.getNombre()%>"><br>
@@ -41,7 +41,18 @@
                 Título original:
                 <input type="text" name="titulo" value="<%=pelicula.getTitulo()%>"><br>
                 Género:
-                <input type="text" name="genero" value="<%=pelicula.getGenero()%>"><br>
+                <select name="genero">
+                    <%
+                        List<String> generos = (List<String>) request.getAttribute("generos");
+                        if (generos != null){
+                            for (String genero: generos){
+                    %>
+                    <option value="<%=genero%>" <%if (genero.equals(pelicula.getGenero())) out.print("selected");%>><%=genero%></option>
+                    <%
+                            }
+                        }
+                    %>
+                </select><br><br>
                 Nacionalidad:
                 <input type="text" name="nacionalidad" value="<%=pelicula.getNacionalidad()%>"><br>
                 Duración:

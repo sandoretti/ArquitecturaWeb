@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Pelicula" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO" %>

@@ -66,43 +66,50 @@ public class EditarProyeccionController extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+
+        // Obtenemos la sesion
         HttpSession session = request.getSession(false);
 
-        // Verificamos si existe session
         if (session == null) {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
+
         Cliente cliente = (Cliente) session.getAttribute("usuario"); // Obtenemos el atributo cliente
 
-        // Si existe cliente y el cliente es administrador
-        if (cliente != null && cliente.isAdmin()) {
-            int idPelicula = Integer.parseInt(request.getParameter("pelicula"));
-            int idSala = Integer.parseInt(request.getParameter("sala"));
-            String fechaHoraStr = request.getParameter("fechahora");
-            int id = Integer.parseInt(request.getParameter("id"));
-
-            Date fechaHora = null;
-            try {
-                fechaHora = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(fechaHoraStr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            Proyeccion proyeccion = new Proyeccion(id, idPelicula, idSala, fechaHora);
-
-            try {
-                ProyeccionDAO.editarProyeccion(proyeccion);
-
-                // Redireccionamos a la página de gestion de peliculas con un mensaje de exito
-                session.setAttribute("success", "Se ha editado correctamente la proyeccion");
-                response.sendRedirect(request.getContextPath() + "/gestionProyecciones");
-            } catch (SQLException e) {
-                session.setAttribute("error", "Se ha producido un error actualizar la proyeccion");
-                response.sendRedirect(request.getContextPath() + "/editarProyeccion/" + id);
-
-                e.printStackTrace();
-            }
+        // Validamos que el cliente no sea nulo y que sea admin
+        if (cliente == null || !cliente.isAdmin()) {
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
         }
+
+        int idPelicula = Integer.parseInt(request.getParameter("pelicula"));
+        int idSala = Integer.parseInt(request.getParameter("sala"));
+        String fechaHoraStr = request.getParameter("fechahora");
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        Date fechaHora = null;
+        try {
+            fechaHora = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(fechaHoraStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Proyeccion proyeccion = new Proyeccion(id, idPelicula, idSala, fechaHora);
+
+        try {
+            ProyeccionDAO.editarProyeccion(proyeccion);
+
+            // Redireccionamos a la página de gestion de peliculas con un mensaje de exito
+            session.setAttribute("success", "Se ha editado correctamente la proyeccion");
+            response.sendRedirect(request.getContextPath() + "/gestionProyecciones");
+        } catch (SQLException e) {
+            session.setAttribute("error", "Se ha producido un error actualizar la proyeccion");
+            response.sendRedirect(request.getContextPath() + "/editarProyeccion/" + id);
+
+            e.printStackTrace();
+        }
+
     }
 }

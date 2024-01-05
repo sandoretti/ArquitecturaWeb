@@ -35,7 +35,18 @@
         Título original:
         <input type="text" name="titulo"><br>
         Género:
-        <input type="text" name="genero"><br>
+           <select name="genero">
+               <%
+                   List<String> generos = (List<String>) request.getAttribute("generos");
+                   if (generos != null){
+                       for (String genero: generos){
+               %>
+               <option value="<%=genero%>"><%=genero%></option>
+               <%
+                        }
+                   }
+               %>
+           </select><br><br>
         Nacionalidad:
         <input type="text" name="nacionalidad"><br>
         Duración:

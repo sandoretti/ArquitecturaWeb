@@ -51,6 +51,9 @@ public class CrearProyeccionController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+
+        // Obtenemos la sesion
         HttpSession session = request.getSession(false);
 
         if (session == null) {
@@ -61,45 +64,46 @@ public class CrearProyeccionController extends HttpServlet {
         Cliente cliente = (Cliente) session.getAttribute("usuario"); // Obtenemos el atributo cliente
 
         // Validamos que el cliente no sea nulo y que sea admin
-        if (cliente != null && cliente.isAdmin()) {
-            int idPelicula = Integer.parseInt(request.getParameter("pelicula"));
-            int idSala = Integer.parseInt(request.getParameter("sala"));
-            String fechaHoraStr = request.getParameter("fechahora");
-
-            Date fechaHora = null;
-            try {
-                fechaHora = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(fechaHoraStr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            Proyeccion proyeccion = new Proyeccion(idPelicula, idSala, fechaHora);
-
-            try {
-                Connection conn = DatabaseConnection.getConnection();
-
-                SalaDAO salaDAO = new SalaDAO(conn);
-                ProyeccionDAO proyeccionDAO = new ProyeccionDAO();
-                EntradaDAO entradaDAO = new EntradaDAO(conn);
-
-                // Creamos la proyeccion en la base de datos y modificamos dicha proyeccion junto su id correspondiente
-                proyeccion = proyeccionDAO.crearProyeccion(proyeccion);
-
-                // Obtenemos la sala de la proyeccion
-                Sala sala = salaDAO.obtenerSalaPorId(idSala);
-
-                // Creamos las entradas de la proyeccion segun el numero de filas y columnas de la sala
-                entradaDAO.creaEntradasProyeccion(proyeccion, sala);
-
-                session.setAttribute("success", "Se ha creado correctamente la proyeccion");
-                response.sendRedirect(request.getContextPath() + "/gestionProyecciones");
-            } catch (SQLException e) {
-                session.setAttribute("error", "Se ha producido un error al crear la proyeccion");
-                response.sendRedirect(request.getContextPath() + "/crearProyeccion");
-                e.printStackTrace();
-            }
-        } else {
+        if (cliente == null || !cliente.isAdmin()) {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
+        }
+
+        int idPelicula = Integer.parseInt(request.getParameter("pelicula"));
+        int idSala = Integer.parseInt(request.getParameter("sala"));
+        String fechaHoraStr = request.getParameter("fechahora");
+
+        Date fechaHora = null;
+        try {
+            fechaHora = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(fechaHoraStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Proyeccion proyeccion = new Proyeccion(idPelicula, idSala, fechaHora);
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+
+            SalaDAO salaDAO = new SalaDAO(conn);
+            ProyeccionDAO proyeccionDAO = new ProyeccionDAO();
+            EntradaDAO entradaDAO = new EntradaDAO(conn);
+
+            // Creamos la proyeccion en la base de datos y modificamos dicha proyeccion junto su id correspondiente
+            proyeccion = proyeccionDAO.crearProyeccion(proyeccion);
+
+            // Obtenemos la sala de la proyeccion
+            Sala sala = salaDAO.obtenerSalaPorId(idSala);
+
+            // Creamos las entradas de la proyeccion segun el numero de filas y columnas de la sala
+            entradaDAO.creaEntradasProyeccion(proyeccion, sala);
+
+            session.setAttribute("success", "Se ha creado correctamente la proyeccion");
+            response.sendRedirect(request.getContextPath() + "/gestionProyecciones");
+        } catch (SQLException e) {
+            session.setAttribute("error", "Se ha producido un error al crear la proyeccion");
+            response.sendRedirect(request.getContextPath() + "/crearProyeccion");
+            e.printStackTrace();
         }
     }
 }

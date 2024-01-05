@@ -1,5 +1,6 @@
 <%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Reserva" %>
 <%@ page import="java.util.List" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>

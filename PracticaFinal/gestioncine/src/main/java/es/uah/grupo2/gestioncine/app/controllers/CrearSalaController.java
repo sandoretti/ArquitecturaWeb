@@ -84,13 +84,28 @@ public class CrearSalaController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+
+        // Obtenemos la sesion
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
+        }
+
+        Cliente cliente = (Cliente) session.getAttribute("usuario"); // Obtenemos el atributo cliente
+
+        // Validamos que el cliente no sea nulo y que sea admin
+        if (cliente == null || !cliente.isAdmin()) {
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return;
+        }
+
         // Obtener los parámetros del formulario
         String nombreSala = request.getParameter("nombre_sala");
         int filas = Integer.parseInt(request.getParameter("filas"));
         int columnas = Integer.parseInt(request.getParameter("columnas"));
-
-        // Obtenemos la sesion
-        HttpSession session = request.getSession(false);
 
         SalaDAO salita = new SalaDAO();
         Connection conn = salita.getConnection();

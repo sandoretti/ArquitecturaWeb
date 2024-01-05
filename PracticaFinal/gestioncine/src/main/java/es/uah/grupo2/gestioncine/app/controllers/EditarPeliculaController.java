@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet(name = "EditarPelicula", urlPatterns = {"/editarPelicula/*"})
@@ -55,6 +56,7 @@ public class EditarPeliculaController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
+        request.setCharacterEncoding("UTF-8");
 
         // Verificamos si existe session
         if (session != null) {
@@ -71,8 +73,13 @@ public class EditarPeliculaController extends HttpServlet {
                 try {
                     if (PeliculaDAO.validarId(idPelicula)) {
                         Pelicula pelicula = PeliculaDAO.obtenerPelicula(idPelicula);
-
+                        List<String> generos = Arrays.asList(
+                                "Drama", "Ciencia ficción", "Acción", "Crimen", "Comedia", "Aventura", "Documental"
+                        );
+                        
                         request.setAttribute("pelicula", pelicula);
+                        request.setAttribute("generos", generos);
+                        
                         request.getRequestDispatcher(request.getContextPath() + "/editar-pelicula.jsp").forward(request, response);
                     } else {
                         session.setAttribute("error", "No se ha podido acceder a la pelicula");
@@ -105,6 +112,7 @@ public class EditarPeliculaController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
+        request.setCharacterEncoding("UTF-8");
 
         if (session != null) {
             Cliente cliente = (Cliente) session.getAttribute("usuario");
@@ -112,19 +120,19 @@ public class EditarPeliculaController extends HttpServlet {
             if (cliente != null && cliente.isAdmin()) {
                 // Obtener los datos del formulario
                 int id = Integer.parseInt(request.getParameter("id"));
-                String nombre = request.getParameter("nombre").trim();
-                String sinopsis = request.getParameter("sinopsis").trim();
-                String pagina = request.getParameter("pagina").trim();
-                String titulo = request.getParameter("titulo").trim();
-                String genero = request.getParameter("genero").trim();
-                String nacionalidad = request.getParameter("nacionalidad").trim();
-                int duracion = Integer.parseInt(request.getParameter("duracion").trim());
-                int ano = Integer.parseInt(request.getParameter("ano").trim());
-                String distribuidora = request.getParameter("distribuidora").trim();
-                String director = request.getParameter("director").trim();
-                String otros = request.getParameter("otros").trim();
-                String clasificacion = request.getParameter("clasificacion").trim();
-                String portada = request.getParameter("portada").trim();
+                String nombre = request.getParameter("nombre");
+                String sinopsis = request.getParameter("sinopsis");
+                String pagina = request.getParameter("pagina");
+                String titulo = request.getParameter("titulo");
+                String genero = request.getParameter("genero");
+                String nacionalidad = request.getParameter("nacionalidad");
+                int duracion = Integer.parseInt(request.getParameter("duracion"));
+                int ano = Integer.parseInt(request.getParameter("ano"));
+                String distribuidora = request.getParameter("distribuidora");
+                String director = request.getParameter("director");
+                String otros = request.getParameter("otros");
+                String clasificacion = request.getParameter("clasificacion");
+                String portada = request.getParameter("portada");
                 String[] actores = request.getParameterValues("actores");
 
                 List<Actor> actoresList = new ArrayList<>();
