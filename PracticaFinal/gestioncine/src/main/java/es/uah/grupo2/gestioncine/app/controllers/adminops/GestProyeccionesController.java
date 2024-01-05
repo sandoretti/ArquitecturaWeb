@@ -1,4 +1,4 @@
-package es.uah.grupo2.gestioncine.app.controllers;
+package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
 import jakarta.servlet.ServletException;

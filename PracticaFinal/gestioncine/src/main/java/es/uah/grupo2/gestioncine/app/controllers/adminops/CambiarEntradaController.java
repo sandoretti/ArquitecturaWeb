@@ -1,4 +1,4 @@
-package es.uah.grupo2.gestioncine.app.controllers;
+package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
 import es.uah.grupo2.gestioncine.app.model.dao.DatabaseConnection;
 import es.uah.grupo2.gestioncine.app.model.dao.EntradaDAO;

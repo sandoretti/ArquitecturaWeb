@@ -1,6 +1,7 @@
-package es.uah.grupo2.gestioncine.app.controllers;
+package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
+import es.uah.grupo2.gestioncine.app.model.entity.Sala;
 import es.uah.grupo2.gestioncine.app.model.dao.SalaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,13 +12,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.Connection;
+import java.util.List;
 
 /**
  *
  * @author serchio
  */
-@WebServlet(name = "CrearSalaController", urlPatterns = {"/crearSala"})
-public class CrearSalaController extends HttpServlet {
+@WebServlet(name = "GestSalasController", urlPatterns = {"/gestionSalas"})
+public class GestSalasController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,10 +38,10 @@ public class CrearSalaController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CrearSalaController</title>");
+            out.println("<title>Servlet GestSalasController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CrearSalaController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet GestSalasController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,7 +66,12 @@ public class CrearSalaController extends HttpServlet {
 
             // Si existe cliente y el cliente es administrador
             if (cliente != null && cliente.isAdmin()) {
-                request.getRequestDispatcher(request.getContextPath() + "/crearSala.jsp").forward(request, response);
+
+                SalaDAO salita = new SalaDAO();
+                Connection conn = salita.getConnection();
+                List<Sala> salaList = salita.mostrarSalas(conn);
+                session.setAttribute("salas", salaList);
+                request.getRequestDispatcher(request.getContextPath() + "/gest-salas.jsp").forward(request, response);
             } else {
                 request.getRequestDispatcher(request.getContextPath() + "/login").forward(request, response);
             }
@@ -84,39 +91,7 @@ public class CrearSalaController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-
-        // Obtenemos la sesion
-        HttpSession session = request.getSession(false);
-
-        if (session == null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
-            return;
-        }
-
-        Cliente cliente = (Cliente) session.getAttribute("usuario"); // Obtenemos el atributo cliente
-
-        // Validamos que el cliente no sea nulo y que sea admin
-        if (cliente == null || !cliente.isAdmin()) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
-            return;
-        }
-
-        // Obtener los parámetros del formulario
-        String nombreSala = request.getParameter("nombre_sala");
-        int filas = Integer.parseInt(request.getParameter("filas"));
-        int columnas = Integer.parseInt(request.getParameter("columnas"));
-
-        SalaDAO salita = new SalaDAO();
-        Connection conn = salita.getConnection();
-
-        boolean insertado = salita.insertarSala(conn, nombreSala, filas, columnas);
-        if (insertado) {
-            session.setAttribute("success", "Se ha creado correctamente la sala");
-        } else {
-            session.setAttribute("error", "Se ha producido un error al insertar la sala");
-        }
-        response.sendRedirect(request.getContextPath() + "/gestionSalas");
+        processRequest(request, response);
     }
 
     /**

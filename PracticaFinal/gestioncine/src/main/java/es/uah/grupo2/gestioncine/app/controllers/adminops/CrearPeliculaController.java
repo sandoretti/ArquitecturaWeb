@@ -1,4 +1,4 @@
-package es.uah.grupo2.gestioncine.app.controllers;
+package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
 import java.io.*;
 

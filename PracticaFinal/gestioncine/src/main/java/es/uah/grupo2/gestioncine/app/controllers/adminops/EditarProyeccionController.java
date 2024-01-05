@@ -1,12 +1,10 @@
-package es.uah.grupo2.gestioncine.app.controllers;
+package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
-import es.uah.grupo2.gestioncine.app.model.dao.DatabaseConnection;
-import es.uah.grupo2.gestioncine.app.model.dao.EntradaDAO;
+import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
 import es.uah.grupo2.gestioncine.app.model.dao.ProyeccionDAO;
-import es.uah.grupo2.gestioncine.app.model.dao.SalaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
+import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
 import es.uah.grupo2.gestioncine.app.model.entity.Proyeccion;
-import es.uah.grupo2.gestioncine.app.model.entity.Sala;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,35 +13,52 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Logger;
 
-
-@WebServlet(name = "CrearProyeccion", urlPatterns = "/crearProyeccion")
-public class CrearProyeccionController extends HttpServlet {
-    final Logger logger = Logger.getLogger(getClass().getName());
-
+@WebServlet(name = "EditarProyeccion", urlPatterns = "/editarProyeccion/*")
+public class EditarProyeccionController extends HttpServlet
+{
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
 
+        // Verificamos si existe session
         if (session == null) {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
-
         Cliente cliente = (Cliente) session.getAttribute("usuario"); // Obtenemos el atributo cliente
 
-        // Validamos que el cliente no sea nulo y que sea admin
+        // Si existe cliente y el cliente es administrador
         if (cliente != null && cliente.isAdmin()) {
-            request.getRequestDispatcher(request.getContextPath() + "/crear-proyeccion.jsp")
-                    .forward(request, response);
+            String rutaCompleta = request.getPathInfo();
+            String[] partesRuta = rutaCompleta.split("/");
+            String value = partesRuta[1]; // nos quedamos con el valor obtenido
+
+            int idProyeccion = Integer.parseInt(value);
+
+            try {
+                if (ProyeccionDAO.validarIdProyeccion(idProyeccion)) {
+                    Proyeccion proyeccion = ProyeccionDAO.obtenerProyeccion(idProyeccion);
+
+                    request.setAttribute("proyeccion", proyeccion);
+                    request.getRequestDispatcher(request.getContextPath() + "/editar-proyeccion.jsp")
+                            .forward(request, response);
+                } else {
+                    session.setAttribute("error", "No se ha podido acceder a la pelicula");
+                    response.sendRedirect(request.getContextPath() + "/gestionProyecciones");
+                }
+            } catch (SQLException e) {
+                session.setAttribute("error", "Hubo un error al validar el id");
+                response.sendRedirect(request.getContextPath() + "/gestionProyecciones");
+                e.printStackTrace();
+            }
         } else {
+            session.setAttribute("error", "No puede acceder a esta pagina");
             response.sendRedirect(request.getContextPath() + "/index.jsp");
         }
     }
@@ -72,6 +87,7 @@ public class CrearProyeccionController extends HttpServlet {
         int idPelicula = Integer.parseInt(request.getParameter("pelicula"));
         int idSala = Integer.parseInt(request.getParameter("sala"));
         String fechaHoraStr = request.getParameter("fechahora");
+        int id = Integer.parseInt(request.getParameter("id"));
 
         Date fechaHora = null;
         try {
@@ -80,30 +96,20 @@ public class CrearProyeccionController extends HttpServlet {
             e.printStackTrace();
         }
 
-        Proyeccion proyeccion = new Proyeccion(idPelicula, idSala, fechaHora);
+        Proyeccion proyeccion = new Proyeccion(id, idPelicula, idSala, fechaHora);
 
         try {
-            Connection conn = DatabaseConnection.getConnection();
+            ProyeccionDAO.editarProyeccion(proyeccion);
 
-            SalaDAO salaDAO = new SalaDAO(conn);
-            ProyeccionDAO proyeccionDAO = new ProyeccionDAO();
-            EntradaDAO entradaDAO = new EntradaDAO(conn);
-
-            // Creamos la proyeccion en la base de datos y modificamos dicha proyeccion junto su id correspondiente
-            proyeccion = proyeccionDAO.crearProyeccion(proyeccion);
-
-            // Obtenemos la sala de la proyeccion
-            Sala sala = salaDAO.obtenerSalaPorId(idSala);
-
-            // Creamos las entradas de la proyeccion segun el numero de filas y columnas de la sala
-            entradaDAO.creaEntradasProyeccion(proyeccion, sala);
-
-            session.setAttribute("success", "Se ha creado correctamente la proyeccion");
+            // Redireccionamos a la página de gestion de peliculas con un mensaje de exito
+            session.setAttribute("success", "Se ha editado correctamente la proyeccion");
             response.sendRedirect(request.getContextPath() + "/gestionProyecciones");
         } catch (SQLException e) {
-            session.setAttribute("error", "Se ha producido un error al crear la proyeccion");
-            response.sendRedirect(request.getContextPath() + "/crearProyeccion");
+            session.setAttribute("error", "Se ha producido un error actualizar la proyeccion");
+            response.sendRedirect(request.getContextPath() + "/editarProyeccion/" + id);
+
             e.printStackTrace();
         }
+
     }
 }

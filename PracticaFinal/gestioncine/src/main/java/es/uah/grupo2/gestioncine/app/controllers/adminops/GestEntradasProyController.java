@@ -1,7 +1,10 @@
-package es.uah.grupo2.gestioncine.app.controllers;
+package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
-import es.uah.grupo2.gestioncine.app.model.dao.ProyeccionDAO;
+import es.uah.grupo2.gestioncine.app.model.dao.DatabaseConnection;
+import es.uah.grupo2.gestioncine.app.model.dao.EntradaDAO;
+import es.uah.grupo2.gestioncine.app.model.dao.SalaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
+import es.uah.grupo2.gestioncine.app.model.entity.Entrada;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,13 +13,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.sql.SQLException;
+import java.sql.Connection;
+import java.util.List;
 
-@WebServlet(name = "EliminarProyeccion", urlPatterns = "/eliminarProyeccion/*")
-public class EliminarProyeccionController extends HttpServlet {
+@WebServlet(name = "GestionEntradasProy", urlPatterns = "/gestionEntradas/*")
+public class GestEntradasProyController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         HttpSession session = request.getSession(false);
 
         if (session == null) {
@@ -34,22 +39,15 @@ public class EliminarProyeccionController extends HttpServlet {
 
             int idProyeccion = Integer.parseInt(value);
 
-            try {
-                // Si el id obtenido se encuentra en la tabla proyeccion, lo eliminamos
-                if (ProyeccionDAO.validarIdProyeccion(idProyeccion)) {
-                    ProyeccionDAO.eliminarProyeccion(idProyeccion);
+            Connection conn = DatabaseConnection.getConnection();
+            EntradaDAO entradaDAO = new EntradaDAO(conn);
+            List<Entrada> entradaList = entradaDAO.obtenerEntradasPorProyeccion(idProyeccion);
 
-                    session.setAttribute("success", "Se ha eliminado correctamente la proyeccion");
-                    response.sendRedirect(request.getContextPath() + "/gestionProyecciones");
-                } else {
-                    session.setAttribute("error", "No se encuentra la proyeccion");
-                    response.sendRedirect(request.getContextPath() + "/gestionProyecciones");
-                }
-            } catch (SQLException e) {
-                session.setAttribute("error", "Hubo un error en la base de datos");
-                response.sendRedirect(request.getContextPath() + "/gestionProyecciones");
-                e.printStackTrace();
-            }
+            request.setAttribute("proyeccion", idProyeccion);
+            request.setAttribute("entradas", entradaList);
+
+            request.getRequestDispatcher(request.getContextPath() + "/gest-entradas.jsp")
+                    .forward(request, response);
         } else {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
         }
