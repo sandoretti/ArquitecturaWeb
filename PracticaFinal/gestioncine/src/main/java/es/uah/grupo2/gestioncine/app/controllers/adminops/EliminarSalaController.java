@@ -63,12 +63,12 @@ public class EliminarSalaController extends AdminOperationServlet {
         }
 
         // Proceder con la eliminación
-        boolean eliminado = salaDAO.eliminarSala(conn, salaId);
+        boolean eliminado = salaDAO.eliminarSala(salaId);
         if (eliminado) {
             session.setAttribute("success", "Se ha eliminado correctamente la sala");
             // La sala se eliminó correctamente
         } else {
-            session.setAttribute("error", "Se ha producido un error al insertar la sala");
+            session.setAttribute("error", "Se ha producido un error al eliminar la sala");
             // Hubo un problema al eliminar la sala
         }
 

@@ -61,7 +61,7 @@ CREATE TABLE proyeccion (
     id_sala     INTEGER NOT NULL,
     fecha_hora  TIMESTAMP NOT NULL,
     FOREIGN KEY (id_pelicula) REFERENCES pelicula(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_sala) REFERENCES sala(id),
+    FOREIGN KEY (id_sala) REFERENCES sala(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 

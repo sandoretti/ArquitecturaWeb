@@ -61,7 +61,7 @@ public class SalaDAO {
         return salas;
     }
 
-    public boolean eliminarSala(Connection conn, int salaId) {
+    public boolean eliminarSala(int salaId) {
         String sql = "DELETE FROM SALA WHERE id = ?";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
