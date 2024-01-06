@@ -2,6 +2,7 @@ package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
 import java.io.*;
 
+import es.uah.grupo2.gestioncine.app.model.dao.ActorDAO;
 import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Actor;
 import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
@@ -17,12 +18,14 @@ import java.util.List;
 @WebServlet(name = "CrearPelicula", urlPatterns = {"/crearPelicula"})
 public class CrearPeliculaController extends AdminOperationServlet {
     private PeliculaDAO peliculaDAO;
+    private ActorDAO actorDAO;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
         peliculaDAO = new PeliculaDAO(conn);
+        actorDAO = new ActorDAO(conn);
 
     }
 
@@ -39,6 +42,15 @@ public class CrearPeliculaController extends AdminOperationServlet {
                 "Drama", "Ciencia ficción", "Acción", "Crimen", "Comedia", "Aventura", "Documental"
         );
 
+        List<Actor> actores = null;
+
+        try {
+            actores = actorDAO.obtenerActores();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        request.setAttribute("actores", actores);
         request.setAttribute("generos", generos);
         request.getRequestDispatcher(request.getContextPath() + "/crear-pelicula.jsp").forward(request, response);
     }

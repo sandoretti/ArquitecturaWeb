@@ -1,9 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="es.uah.grupo2.gestioncine.app.model.dao.ActorDAO" %>
 <%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Actor" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Pelicula" %>
-<%@ page import="java.sql.SQLException" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -73,13 +71,7 @@
                 <div>
                     <%
                         List<Actor> actoresPelicula = pelicula.getActores();
-                        List<Actor> actores = null;
-
-                        try {
-                            actores = ActorDAO.obtenerActores();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+                        List<Actor> actores = (List<Actor>) request.getAttribute("actores");
 
                         if (actores != null){
                             for(Actor actor: actores){

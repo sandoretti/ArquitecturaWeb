@@ -14,9 +14,11 @@ import java.util.logging.Logger;
 public class PeliculaDAO {
     private final Connection conn;
     private static final Logger logger = Logger.getLogger(PeliculaDAO.class.getName());
+    private final ActorDAO actorDAO;
 
     public PeliculaDAO(Connection conexion) {
         this.conn = conexion;
+        actorDAO = new ActorDAO(conexion);
     }
 
     /**
@@ -53,7 +55,7 @@ public class PeliculaDAO {
                 pelicula.setId(idPelicula);
 
                 // Metemos los nuevos actores asociados a la pelicula
-                ActorDAO.annadirActoresPelicula(pelicula.getActores(), pelicula.getId());
+                actorDAO.annadirActoresPelicula(pelicula.getActores(), pelicula.getId());
             }
 
         }
@@ -126,7 +128,7 @@ public class PeliculaDAO {
                 + "PORTADA FROM PELICULA WHERE ID = ?";
 
         // Obtenemos los actores de la pelicula
-        List<Actor> actores = ActorDAO.obtenerActoresPelicula(id);
+        List<Actor> actores = actorDAO.obtenerActoresPelicula(id);
 
         PreparedStatement ps = conn.prepareStatement(SQL_Pelicula);
         ps.setInt(1, id);
@@ -184,11 +186,12 @@ public class PeliculaDAO {
         ps.executeUpdate();
 
         // Quitamos los actores de la pelicula
-        ActorDAO.eliminarActoresPelicula(pelicula.getId());
+        actorDAO.eliminarActoresPelicula(pelicula.getId());
 
         if (pelicula.getActores() != null) {
+
             // Metemos los nuevos actores asociados a la pelicula
-            ActorDAO.annadirActoresPelicula(pelicula.getActores(), pelicula.getId());
+            actorDAO.annadirActoresPelicula(pelicula.getActores(), pelicula.getId());
         }
 
     }
