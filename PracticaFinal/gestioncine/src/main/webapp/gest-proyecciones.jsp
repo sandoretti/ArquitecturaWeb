@@ -1,7 +1,5 @@
 <%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Proyeccion" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.uah.grupo2.gestioncine.app.model.dao.ProyeccionDAO" %>
-<%@ page import="java.sql.SQLException" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%SimpleDateFormat fechaHoraSDF = new SimpleDateFormat("dd/MM/yyyy HH:mm");%>
@@ -49,17 +47,13 @@
         <th>Pelicula</th>
         <th>Sala</th>
         <th>Fecha y hora</th>
+        <th>Entradas totales</th>
+        <th>Entradas vendidas</th>
     </tr>
     </thead>
     <tbody>
     <%
-        List<Proyeccion> proyecciones = null;
-
-        try {
-            proyecciones = ProyeccionDAO.obtenerProyecciones();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        List<Proyeccion> proyecciones = (List<Proyeccion>)  request.getAttribute("proyecciones");
 
         if (proyecciones != null) {
             for (Proyeccion proyeccion: proyecciones){
@@ -69,6 +63,8 @@
         <td><%=proyeccion.getNombrePelicula()%></td>
         <td><%=proyeccion.getNombreSala()%></td>
         <td><%=fechaHoraSDF.format(proyeccion.getFechaHora())%></td>
+        <td><%=proyeccion.getEntradasTotales()%></td>
+        <td><%=proyeccion.getEntradasVendidas()%></td>
         <td style="border: none;"><a class="link-style" href="/gestionEntradas/<%=proyeccion.getId()%>">Gestionar Entradas</a></td>
         <td style="border: none;"><a class="link-style" href="/editarProyeccion/<%=proyeccion.getId()%>">Editar</a></td>
         <td style="border: none;"><a class="link-style" href="/eliminarProyeccion/<%=proyeccion.getId()%>" onclick="return confirm('¿Estas seguro que quieres eliminar?')">Eliminar</a></td>

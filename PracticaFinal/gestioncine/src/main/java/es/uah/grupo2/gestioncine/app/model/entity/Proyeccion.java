@@ -13,6 +13,8 @@ public class Proyeccion {
     private String nombrePelicula;
     private String nombreSala;
     private Date fechaHora;
+    private int entradasTotales;
+    private int entradasVendidas;
 
     public Proyeccion() {
     }
@@ -85,5 +87,21 @@ public class Proyeccion {
 
     public void setFechaHora(Date fechaHora) {
         this.fechaHora = fechaHora;
+    }
+
+    public int getEntradasTotales() {
+        return entradasTotales;
+    }
+
+    public void setEntradasTotales(int entradasTotales) {
+        this.entradasTotales = entradasTotales;
+    }
+
+    public int getEntradasVendidas() {
+        return entradasVendidas;
+    }
+
+    public void setEntradasVendidas(int entradasVendidas) {
+        this.entradasVendidas = entradasVendidas;
     }
 }

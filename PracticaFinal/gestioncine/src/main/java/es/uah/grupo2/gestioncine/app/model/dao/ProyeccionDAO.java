@@ -9,6 +9,12 @@ import java.util.List;
 public class ProyeccionDAO {
     static Connection conn = DatabaseConnection.getConnection();
 
+    private Connection connection;
+
+    public ProyeccionDAO(Connection conn) {
+        connection = conn;
+    }
+
     public static List<Proyeccion> obtenerProyecciones() throws SQLException {
         String sql = "select PROYECCION.ID, NOMBRE_PELICULA, NOMBRE_SALA, FECHA_HORA from " +
                 "(PROYECCION INNER JOIN PELICULA on PELICULA.ID = PROYECCION.ID_PELICULA) INNER JOIN " +
@@ -123,5 +129,44 @@ public class ProyeccionDAO {
         ps.setInt(4, proyeccion.getId());
 
         ps.executeUpdate();
+    }
+
+    public List<Proyeccion> obtenerProyeccionesEntradas() throws SQLException {
+        String sql = "  SELECT ID, ID_PELICULA, ID_SALA, FECHA_HORA, COALESCE(totales.NUM, 0) AS totales, " +
+                "           COALESCE(vendidas.NUM, 0) AS vendidas " +
+                "       FROM PROYECCION LEFT JOIN " +
+                "       ( " +
+                "           SELECT ID_PROYECCION, COUNT(ID) AS NUM " +
+                "           FROM ENTRADA " +
+                "           WHERE RESERVA_ID > 1 " +
+                "           GROUP BY ID_PROYECCION " +
+                "       ) AS vendidas ON vendidas.ID_PROYECCION = PROYECCION.ID " +
+                "       LEFT JOIN " +
+                "       ( " +
+                "           SELECT ID_PROYECCION, COUNT(ID) AS NUM " +
+                "           FROM ENTRADA " +
+                "           GROUP BY ID_PROYECCION " +
+                "       ) AS totales ON totales.ID_PROYECCION = PROYECCION.ID";
+
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        List<Proyeccion> proyecciones = new ArrayList<>();
+
+        while (rs.next()) {
+            Proyeccion proyeccion = new Proyeccion(
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getTimestamp(4)
+            );
+
+            proyeccion.setEntradasTotales(rs.getInt(5));
+            proyeccion.setEntradasVendidas(rs.getInt(6));
+
+            proyecciones.add(proyeccion);
+        }
+
+        return proyecciones;
     }
 }
