@@ -69,7 +69,7 @@ public class CrearProyeccionController extends AdminOperationServlet {
             Connection conn = DatabaseConnection.getConnection();
 
             SalaDAO salaDAO = new SalaDAO(conn);
-            ProyeccionDAO proyeccionDAO = new ProyeccionDAO();
+            ProyeccionDAO proyeccionDAO = new ProyeccionDAO(conn);
             EntradaDAO entradaDAO = new EntradaDAO(conn);
 
             // Creamos la proyeccion en la base de datos y modificamos dicha proyeccion junto su id correspondiente
