@@ -53,20 +53,47 @@
                 </tr>
             </thead>
             <tbody>
-    <%
+<%
                 for(Pelicula pelicula: peliculas) {
-    %>
+%>
                 <tr><td><%=pelicula.getNombre()%></td></tr>
-    <%
+<%
                 }
-    %>
+%>
             </tbody>
         </table>
     </div>
-    <%
+<%
             }
         }
-    %>
+%>
+    <div>
+        <h1 style="text-align: center">Otros informes</h1>
+        <table class="table-style">
+            <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Número total</th>
+            </tr>
+            </thead>
+            <tbody>
+<%
+    HashMap<String, Integer> otrosInformes = (HashMap<String, Integer>) request.getAttribute("otrosInformes");
+
+    if (otrosInformes != null) {
+        for (String titulo: otrosInformes.keySet()) {
+%>
+                <tr>
+                    <td><%=titulo%></td>
+                    <td><%=otrosInformes.get(titulo)%></td>
+                </tr>
+<%
+        }
+    }
+%>
+            </tbody>
+        </table>
+    </div>
 </div>
 <!-- div donde se muestra el mensaje de error o exito -->
 <div id="message" class="message-style"></div>
