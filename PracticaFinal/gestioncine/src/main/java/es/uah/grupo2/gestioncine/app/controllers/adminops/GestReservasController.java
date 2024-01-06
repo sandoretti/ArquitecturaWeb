@@ -2,6 +2,7 @@ package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
 import es.uah.grupo2.gestioncine.app.model.dao.ReservaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Reserva;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,15 @@ import java.util.List;
 
 @WebServlet(name = "GestReservas", urlPatterns = "/gestionReservas")
 public class GestReservasController extends AdminOperationServlet {
+    private ReservaDAO reservaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        reservaDAO = new ReservaDAO(conn);
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -23,8 +33,6 @@ public class GestReservasController extends AdminOperationServlet {
             return;
         }
 
-        // Obtenemos todas las reservas
-        ReservaDAO reservaDAO = new ReservaDAO();
         List<Reserva> reservaList;
 
         try {

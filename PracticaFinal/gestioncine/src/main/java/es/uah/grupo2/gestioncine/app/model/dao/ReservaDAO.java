@@ -16,15 +16,11 @@ import java.util.logging.Logger;
 
 public class ReservaDAO {
 
-    static Connection conn = DatabaseConnection.getConnection();
-    private Connection conexion;
+    private Connection conn;
     private static final Logger logger = Logger.getLogger(EntradaDAO.class.getName());
 
     public ReservaDAO(Connection conexion) {
-        this.conexion = conexion;
-    }
-
-    public ReservaDAO() {
+        this.conn = conexion;
     }
 
     public List<Reserva> all() throws SQLException {
@@ -57,7 +53,7 @@ public class ReservaDAO {
         String sql = "INSERT INTO reserva (id_cliente, fecha_reserva, numero_tarjeta, referencia_reserva, precio) "
                 + "VALUES (?, ?, ?, ?, ?)";
 
-        try (PreparedStatement statement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, reserva.getIdCliente());
             statement.setTimestamp(2, new Timestamp(reserva.getFechaReserva().getTime()));
             statement.setString(3, reserva.getNumeroTarjeta());
