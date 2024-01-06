@@ -63,7 +63,11 @@
                                     </div>
                                     <ul class="tab-links tabs-mv">
                                         <li class="active"><a href="#overview">Visión general</a></li>
+                                            <%
+                                            if (session.getAttribute("usuario") != null) {
+                                            %>
                                         <li><a href="#reviews"> Comentarios</a></li>
+                                            <% } %>
                                     </ul>
                                     <div class="tab-content">
                                         <div id="overview" class="tab active">
@@ -89,6 +93,11 @@
                                                         <% } %>
 
                                                     </div>
+
+                                                    <%
+                                                        if (session.getAttribute("usuario") != null) {
+                                                    %>
+
                                                     <div class="title-hd-sm">
                                                         <h4>Comentarios</h4>
                                                     </div>
@@ -103,6 +112,9 @@
                                                         <p><%= comentario.getTexto() %></p>
                                                         <% } %>
                                                     </div>
+
+                                                    <% } %>
+
                                                 </div>
                                                 <div class="col-md-4 col-xs-12 col-sm-12">
                                                     <div class="sb-it">
@@ -139,6 +151,10 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <%
+                                        if (session.getAttribute("usuario") != null) {
+                                        %>           
+
                                         <div id="reviews" class="tab review">
                                             <div class="row">
                                                 <div class="rv-hd">
@@ -186,6 +202,8 @@
                                                 </form>
                                             </div>
                                         </div>
+                                        <% } %>
+
                                     </div>
                                 </div>
                             </div>
