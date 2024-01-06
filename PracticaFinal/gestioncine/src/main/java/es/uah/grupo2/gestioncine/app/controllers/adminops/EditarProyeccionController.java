@@ -23,12 +23,14 @@ import java.util.List;
 public class EditarProyeccionController extends AdminOperationServlet
 {
     private PeliculaDAO peliculaDAO;
+    private ProyeccionDAO proyeccionDAO;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
         peliculaDAO = new PeliculaDAO(conn);
+        proyeccionDAO = new ProyeccionDAO(conn);
     }
 
     @Override
@@ -49,8 +51,8 @@ public class EditarProyeccionController extends AdminOperationServlet
         int idProyeccion = Integer.parseInt(value);
 
         try {
-            if (ProyeccionDAO.validarIdProyeccion(idProyeccion)) {
-                Proyeccion proyeccion = ProyeccionDAO.obtenerProyeccion(idProyeccion);
+            if (proyeccionDAO.validarIdProyeccion(idProyeccion)) {
+                Proyeccion proyeccion = proyeccionDAO.obtenerProyeccion(idProyeccion);
 
                 List<Pelicula> peliculas = peliculaDAO.selectPeliculasIdNombGenAnoClas();
 
@@ -102,7 +104,7 @@ public class EditarProyeccionController extends AdminOperationServlet
 
         try {
             // Editamos la proyeccion por su id con los parametros nuevos
-            ProyeccionDAO.editarProyeccion(proyeccion);
+            proyeccionDAO.editarProyeccion(proyeccion);
 
             // Redireccionamos a la página de gestion de peliculas con un mensaje de exito
             session.setAttribute("success", "Se ha editado correctamente la proyeccion");
