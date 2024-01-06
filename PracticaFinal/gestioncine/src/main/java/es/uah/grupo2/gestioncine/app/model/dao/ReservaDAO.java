@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 public class ReservaDAO {
 
-    private Connection conn;
+    private final Connection conn;
     private static final Logger logger = Logger.getLogger(EntradaDAO.class.getName());
 
     public ReservaDAO(Connection conexion) {

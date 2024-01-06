@@ -53,9 +53,7 @@
         <label for="sala">Salas</label>
         <select name="sala" id="sala">
             <%
-                SalaDAO salaDAO = new SalaDAO();
-                Connection conn = salaDAO.getConnection();
-                List<Sala> salas = salaDAO.mostrarSalas(conn);
+                List<Sala> salas = (List<Sala>) request.getAttribute("salas");
 
                 int idSala = proyeccion.getIdSala();
 

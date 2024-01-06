@@ -4,6 +4,7 @@ import es.uah.grupo2.gestioncine.app.model.dao.DatabaseConnection;
 import es.uah.grupo2.gestioncine.app.model.dao.EntradaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
 import es.uah.grupo2.gestioncine.app.model.entity.Entrada;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,8 +17,17 @@ import java.sql.SQLException;
 
 @WebServlet(name = "CambiarEntrada", urlPatterns = "/cambiarEntrada/*")
 public class CambiarEntradaController extends AdminOperationServlet {
+    private EntradaDAO entradaDAO;
+
     private final int SIN_RESERVA = 0;
     private final int DESCARTADO = 1;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        entradaDAO = new EntradaDAO(conn);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,9 +47,6 @@ public class CambiarEntradaController extends AdminOperationServlet {
         int idEntrada = Integer.parseInt(value);
 
         try {
-            Connection conn = DatabaseConnection.getConnection();
-            EntradaDAO entradaDAO = new EntradaDAO(conn);
-
             Entrada entrada = entradaDAO.obtenerEntradaId(idEntrada);
 
             if (entrada != null) {

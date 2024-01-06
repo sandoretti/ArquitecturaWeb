@@ -25,12 +25,18 @@ import java.util.logging.Logger;
 @WebServlet(name = "CrearProyeccion", urlPatterns = "/crearProyeccion")
 public class CrearProyeccionController extends AdminOperationServlet {
     private PeliculaDAO peliculaDAO;
+    private SalaDAO salaDAO;
+    private ProyeccionDAO proyeccionDAO;
+    private EntradaDAO entradaDAO;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
         peliculaDAO = new PeliculaDAO(conn);
+        salaDAO = new SalaDAO(conn);
+        proyeccionDAO = new ProyeccionDAO(conn);
+        entradaDAO = new EntradaDAO(conn);
     }
 
     @Override
@@ -43,13 +49,16 @@ public class CrearProyeccionController extends AdminOperationServlet {
         }
 
         List<Pelicula> peliculas = null;
+        List<Sala> salas = null;
 
         try {
             peliculas = peliculaDAO.selectPeliculasIdNombGenAnoClas();
+            salas = salaDAO.mostrarSalas();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        request.setAttribute("salas", salas);
         request.setAttribute("peliculas", peliculas);
         request.getRequestDispatcher(request.getContextPath() + "/crear-proyeccion.jsp")
             .forward(request, response);
@@ -83,12 +92,6 @@ public class CrearProyeccionController extends AdminOperationServlet {
         Proyeccion proyeccion = new Proyeccion(idPelicula, idSala, fechaHora);
 
         try {
-            Connection conn = DatabaseConnection.getConnection();
-
-            SalaDAO salaDAO = new SalaDAO(conn);
-            ProyeccionDAO proyeccionDAO = new ProyeccionDAO(conn);
-            EntradaDAO entradaDAO = new EntradaDAO(conn);
-
             // Creamos la proyeccion en la base de datos y modificamos dicha proyeccion junto su id correspondiente
             proyeccion = proyeccionDAO.crearProyeccion(proyeccion);
 

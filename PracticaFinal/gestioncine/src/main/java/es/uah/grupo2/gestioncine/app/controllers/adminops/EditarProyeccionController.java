@@ -2,9 +2,11 @@ package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
 import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
 import es.uah.grupo2.gestioncine.app.model.dao.ProyeccionDAO;
+import es.uah.grupo2.gestioncine.app.model.dao.SalaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
 import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
 import es.uah.grupo2.gestioncine.app.model.entity.Proyeccion;
+import es.uah.grupo2.gestioncine.app.model.entity.Sala;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,6 +26,7 @@ public class EditarProyeccionController extends AdminOperationServlet
 {
     private PeliculaDAO peliculaDAO;
     private ProyeccionDAO proyeccionDAO;
+    private SalaDAO salaDAO;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -31,6 +34,7 @@ public class EditarProyeccionController extends AdminOperationServlet
 
         peliculaDAO = new PeliculaDAO(conn);
         proyeccionDAO = new ProyeccionDAO(conn);
+        salaDAO = new SalaDAO(conn);
     }
 
     @Override
@@ -55,9 +59,11 @@ public class EditarProyeccionController extends AdminOperationServlet
                 Proyeccion proyeccion = proyeccionDAO.obtenerProyeccion(idProyeccion);
 
                 List<Pelicula> peliculas = peliculaDAO.selectPeliculasIdNombGenAnoClas();
+                List<Sala> salas = salaDAO.mostrarSalas();
 
                 request.setAttribute("peliculas", peliculas);
                 request.setAttribute("proyeccion", proyeccion);
+                request.setAttribute("salas", salas);
                 request.getRequestDispatcher(request.getContextPath() + "/editar-proyeccion.jsp")
                         .forward(request, response);
             } else {

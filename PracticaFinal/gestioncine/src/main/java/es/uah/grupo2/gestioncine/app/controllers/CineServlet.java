@@ -18,7 +18,9 @@ public abstract class CineServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        conn = DatabaseConnection.getConnection();
+        DatabaseConnection dbconn = new DatabaseConnection();
+
+        conn = dbconn.getConnection();
         logger = Logger.getLogger(getClass().getName());
     }
 

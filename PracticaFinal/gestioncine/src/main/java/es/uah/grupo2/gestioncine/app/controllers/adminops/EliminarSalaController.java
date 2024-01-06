@@ -4,6 +4,8 @@ import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
 import es.uah.grupo2.gestioncine.app.model.dao.SalaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,6 +20,15 @@ import java.sql.Connection;
  */
 @WebServlet(name = "EliminarSalaController", urlPatterns = {"/eliminarSala/*"})
 public class EliminarSalaController extends AdminOperationServlet {
+    private SalaDAO salaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        salaDAO = new SalaDAO(conn);
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -52,9 +63,7 @@ public class EliminarSalaController extends AdminOperationServlet {
         }
 
         // Proceder con la eliminación
-        SalaDAO salita = new SalaDAO();
-        Connection conn = salita.getConnection();
-        boolean eliminado = salita.eliminarSala(conn, salaId);
+        boolean eliminado = salaDAO.eliminarSala(conn, salaId);
         if (eliminado) {
             session.setAttribute("success", "Se ha eliminado correctamente la sala");
             // La sala se eliminó correctamente
