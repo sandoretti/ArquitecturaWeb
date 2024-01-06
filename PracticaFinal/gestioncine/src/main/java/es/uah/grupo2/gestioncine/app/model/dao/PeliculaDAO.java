@@ -100,7 +100,7 @@ public class PeliculaDAO {
         return peliculasList;
     }
 
-    public static boolean validarId(int id) throws SQLException {
+    public boolean validarId(int id) throws SQLException {
         String sql = "SELECT ID FROM PELICULA WHERE ID = ?";
 
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -111,7 +111,7 @@ public class PeliculaDAO {
         return rs.next();
     }
 
-    public static void eliminarPeliculaId(int id) throws SQLException {
+    public void eliminarPeliculaId(int id) throws SQLException {
         String SQL = "DELETE FROM PELICULA WHERE ID = ?";
 
         PreparedStatement ps = conn.prepareStatement(SQL);
@@ -120,7 +120,7 @@ public class PeliculaDAO {
         ps.executeUpdate();
     }
 
-    public static Pelicula obtenerPelicula(int id) throws SQLException {
+    public Pelicula obtenerPelicula(int id) throws SQLException {
         String SQL_Pelicula = "SELECT ID, NOMBRE_PELICULA, SINOPSIS, PAGINA_OFICIAL, TITULO_OFICIAL, GENERO,"
                 + "NACIONALIDAD, DURACION, ANO, DISTRIBUIDORA, DIRECTOR, OTROS_DATOS, CLASS_EDAD, "
                 + "PORTADA FROM PELICULA WHERE ID = ?";
@@ -158,7 +158,7 @@ public class PeliculaDAO {
         return pelicula;
     }
 
-    public static void update(Pelicula pelicula) throws SQLException {
+    public void update(Pelicula pelicula) throws SQLException {
         String SQL = "UPDATE PELICULA SET NOMBRE_PELICULA = ?, SINOPSIS = ?, PAGINA_OFICIAL = ?,"
                 + " TITULO_OFICIAL = ?, GENERO = ?, NACIONALIDAD = ?, DURACION = ?, ANO = ?, "
                 + "DISTRIBUIDORA = ?, DIRECTOR = ?, OTROS_DATOS = ?, CLASS_EDAD = ?, PORTADA = ? " +
@@ -193,7 +193,7 @@ public class PeliculaDAO {
 
     }
 
-    public static List<Pelicula> selectPeliculasIdNombrePortada() throws SQLException {
+    public List<Pelicula> selectPeliculasIdNombrePortada() throws SQLException {
         String SQL = "SELECT ID, NOMBRE_PELICULA, PORTADA FROM PELICULA";
 
         PreparedStatement ps = conn.prepareStatement(SQL);

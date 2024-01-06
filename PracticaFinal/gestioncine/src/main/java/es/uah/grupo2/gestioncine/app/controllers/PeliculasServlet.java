@@ -4,6 +4,8 @@ import es.uah.grupo2.gestioncine.app.model.dao.DatabaseConnection;
 import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
 import java.io.IOException;
+
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,19 +21,19 @@ import java.util.logging.Logger;
 public class PeliculasServlet extends CineServlet{
 
     private static final long serialVersionUID = 1L;
+    private PeliculaDAO peliculaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        peliculaDAO = new PeliculaDAO(conn);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        Connection conexion = null;
-
         try {
-            // Obtiene una conexión de la clase de gestión de conexión
-            conexion = DatabaseConnection.getConnection();
-
-            // Accede al DAO para obtener todas las películas
-            PeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
             List<Pelicula> peliculas = peliculaDAO.obtenerTodasLasPeliculas();
 
             // Coloca la lista de películas en el ámbito de solicitud para que la JSP pueda accederla
@@ -53,16 +55,6 @@ public class PeliculasServlet extends CineServlet{
 
             // Manejo de errores de base de datos
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error en la base de datos");
-        } finally {
-            // Cierra la conexión en el bloque finally para garantizar que se cierre
-            if (conexion != null) {
-                try {
-                    conexion.close();
-                } catch (SQLException e) {
-                    // Registro: Error al cerrar la conexión
-                    logger.log(Level.SEVERE, "Error al cerrar la conexión a la base de datos", e);
-                }
-            }
         }
     }
 

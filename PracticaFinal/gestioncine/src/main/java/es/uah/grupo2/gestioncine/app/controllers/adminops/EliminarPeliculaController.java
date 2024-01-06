@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
 import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,6 +16,15 @@ import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "EliminarPelicula", urlPatterns = {"/eliminarPelicula/*"})
 public class EliminarPeliculaController extends AdminOperationServlet {
+    private PeliculaDAO peliculaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        peliculaDAO = new PeliculaDAO(conn);
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -34,9 +44,9 @@ public class EliminarPeliculaController extends AdminOperationServlet {
 
         try {
             // Validamos el id de la pelicula
-            if (PeliculaDAO.validarId(idPelicula)) {
+            if (peliculaDAO.validarId(idPelicula)) {
                 // Eliminamos la pelicula del id dado
-                PeliculaDAO.eliminarPeliculaId(idPelicula);
+                peliculaDAO.eliminarPeliculaId(idPelicula);
 
                 // Mensaje de exito
                 session.setAttribute("success", "Se ha eliminado correctamente la pelicula");
