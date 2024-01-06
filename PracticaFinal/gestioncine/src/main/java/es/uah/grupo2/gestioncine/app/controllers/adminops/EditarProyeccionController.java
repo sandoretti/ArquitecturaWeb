@@ -1,8 +1,11 @@
 package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
+import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
 import es.uah.grupo2.gestioncine.app.model.dao.ProyeccionDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
+import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
 import es.uah.grupo2.gestioncine.app.model.entity.Proyeccion;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,10 +17,20 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @WebServlet(name = "EditarProyeccion", urlPatterns = "/editarProyeccion/*")
 public class EditarProyeccionController extends AdminOperationServlet
 {
+    private PeliculaDAO peliculaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        peliculaDAO = new PeliculaDAO(conn);
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -39,6 +52,9 @@ public class EditarProyeccionController extends AdminOperationServlet
             if (ProyeccionDAO.validarIdProyeccion(idProyeccion)) {
                 Proyeccion proyeccion = ProyeccionDAO.obtenerProyeccion(idProyeccion);
 
+                List<Pelicula> peliculas = peliculaDAO.selectPeliculasIdNombGenAnoClas();
+
+                request.setAttribute("peliculas", peliculas);
                 request.setAttribute("proyeccion", proyeccion);
                 request.getRequestDispatcher(request.getContextPath() + "/editar-proyeccion.jsp")
                         .forward(request, response);

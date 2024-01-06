@@ -5,6 +5,7 @@ import java.io.*;
 import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Actor;
 import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -15,6 +16,15 @@ import java.util.List;
 
 @WebServlet(name = "CrearPelicula", urlPatterns = {"/crearPelicula"})
 public class CrearPeliculaController extends AdminOperationServlet {
+    private PeliculaDAO peliculaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        peliculaDAO = new PeliculaDAO(conn);
+
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -76,7 +86,7 @@ public class CrearPeliculaController extends AdminOperationServlet {
 
         try {
             // insertamos la pelicula y obtenemos si se ha hecho correctamente
-            PeliculaDAO.insertarPelicula(pelicula);
+            peliculaDAO.insertarPelicula(pelicula);
             session.setAttribute("success", "Se ha creado correctamente la pelicula");
 
             // Redireccionar de vuelta a la lista de salas

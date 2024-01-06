@@ -16,10 +16,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @WebServlet(name = "PeliculasServlet", urlPatterns = {"/peliculas"})
-public class PeliculasServlet extends HttpServlet {
+public class PeliculasServlet extends CineServlet{
 
     private static final long serialVersionUID = 1L;
-    private static final Logger logger = Logger.getLogger(PeliculasServlet.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -29,7 +28,7 @@ public class PeliculasServlet extends HttpServlet {
 
         try {
             // Obtiene una conexión de la clase de gestión de conexión
-            conexion = DatabaseConnection.obtenerConexion();
+            conexion = DatabaseConnection.getConnection();
 
             // Accede al DAO para obtener todas las películas
             PeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
@@ -48,7 +47,7 @@ public class PeliculasServlet extends HttpServlet {
                 request.getRequestDispatcher("peliculas.jsp").forward(request, response);
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             // Registro: Error en la base de datos
             logger.log(Level.SEVERE, "Error al obtener películas de la base de datos", e);
 

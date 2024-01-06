@@ -38,14 +38,8 @@
         Pelicula
         <select name="pelicula" id="pelicula">
             <%
-                List<Pelicula> peliculas = null;
+                List<Pelicula> peliculas = (List<Pelicula>) request.getAttribute("peliculas");
                 int idPelicula = proyeccion.getIdPelicula();
-
-                try {
-                    peliculas = PeliculaDAO.selectPeliculasIdNombGenAnoClas();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
 
                 if(peliculas != null){
                     for(Pelicula pelicula: peliculas){
