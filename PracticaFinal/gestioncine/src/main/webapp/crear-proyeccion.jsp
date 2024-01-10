@@ -1,11 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Pelicula" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO" %>
-<%@ page import="java.sql.SQLException" %>
-<%@ page import="es.uah.grupo2.gestioncine.app.model.dao.SalaDAO" %>
 <%@ page import="es.uah.grupo2.gestioncine.app.model.entity.Sala" %>
-<%@ page import="java.sql.Connection" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,13 +30,7 @@
             <label for="pelicula">Seleccionar pelicula:<br></label>
             <select name="pelicula" id="pelicula">
                 <%
-                    List<Pelicula> peliculas = null;
-
-                    try {
-                        peliculas = PeliculaDAO.selectPeliculasIdNombGenAnoClas();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    List<Pelicula> peliculas = (List<Pelicula>) request.getAttribute("peliculas");
 
                     if(peliculas != null){
                         for(Pelicula pelicula: peliculas){
@@ -57,9 +47,7 @@
             <label for="sala">Seleccionar sala:<br></label>
             <select name="sala" id="sala">
                 <%
-                    SalaDAO salaDAO = new SalaDAO();
-                    Connection conn = salaDAO.getConnection();
-                    List<Sala> salas = salaDAO.mostrarSalas(conn);
+                    List<Sala> salas = (List<Sala>) request.getAttribute("salas");
 
                     if(salas != null){
                         for(Sala sala: salas){

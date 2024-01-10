@@ -2,9 +2,11 @@ package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
 import java.io.*;
 
+import es.uah.grupo2.gestioncine.app.model.dao.ActorDAO;
 import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Actor;
 import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -15,6 +17,17 @@ import java.util.List;
 
 @WebServlet(name = "CrearPelicula", urlPatterns = {"/crearPelicula"})
 public class CrearPeliculaController extends AdminOperationServlet {
+    private PeliculaDAO peliculaDAO;
+    private ActorDAO actorDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        peliculaDAO = new PeliculaDAO(conn);
+        actorDAO = new ActorDAO(conn);
+
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -29,6 +42,15 @@ public class CrearPeliculaController extends AdminOperationServlet {
                 "Drama", "Ciencia ficción", "Acción", "Crimen", "Comedia", "Aventura", "Documental"
         );
 
+        List<Actor> actores = null;
+
+        try {
+            actores = actorDAO.obtenerActores();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        request.setAttribute("actores", actores);
         request.setAttribute("generos", generos);
         request.getRequestDispatcher(request.getContextPath() + "/crear-pelicula.jsp").forward(request, response);
     }
@@ -76,7 +98,7 @@ public class CrearPeliculaController extends AdminOperationServlet {
 
         try {
             // insertamos la pelicula y obtenemos si se ha hecho correctamente
-            PeliculaDAO.insertarPelicula(pelicula);
+            peliculaDAO.insertarPelicula(pelicula);
             session.setAttribute("success", "Se ha creado correctamente la pelicula");
 
             // Redireccionar de vuelta a la lista de salas

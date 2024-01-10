@@ -2,6 +2,7 @@ package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
 import es.uah.grupo2.gestioncine.app.model.dao.ProyeccionDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,6 +15,15 @@ import java.sql.SQLException;
 
 @WebServlet(name = "EliminarProyeccion", urlPatterns = "/eliminarProyeccion/*")
 public class EliminarProyeccionController extends AdminOperationServlet {
+    private ProyeccionDAO proyeccionDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        proyeccionDAO = new ProyeccionDAO(conn);
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -33,8 +43,8 @@ public class EliminarProyeccionController extends AdminOperationServlet {
 
         try {
             // Si el id obtenido se encuentra en la tabla proyeccion, lo eliminamos
-            if (ProyeccionDAO.validarIdProyeccion(idProyeccion)) {
-                ProyeccionDAO.eliminarProyeccion(idProyeccion);
+            if (proyeccionDAO.validarIdProyeccion(idProyeccion)) {
+                proyeccionDAO.eliminarProyeccion(idProyeccion);
 
                 // Mensaje de exito
                 session.setAttribute("success", "Se ha eliminado correctamente la proyeccion");

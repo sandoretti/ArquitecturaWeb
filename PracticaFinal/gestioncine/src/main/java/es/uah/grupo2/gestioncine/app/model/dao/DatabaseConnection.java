@@ -10,30 +10,19 @@ public class DatabaseConnection {
     private static Connection conn = null;
     private static final String URL = "jdbc:derby://localhost:1527/shopmedb";
     private static final Logger logger = Logger.getLogger(DatabaseConnection.class.getName());
-    
-    static {
+
+    public DatabaseConnection() {
         try {
             // Registra el controlador JDBC de Derby
             Class.forName("org.apache.derby.jdbc.ClientDriver");
-        } catch (ClassNotFoundException e) {
+
+            conn = DriverManager.getConnection(URL);
+        } catch (ClassNotFoundException | SQLException e) {
             logger.log(Level.SEVERE, "Error al cargar el controlador JDBC de Derby", e);
         }
     }
-    
-    public static Connection obtenerConexion() throws SQLException {
-        return DriverManager.getConnection(URL);
-    }
 
-    static {
-        try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            conn = DriverManager.getConnection("jdbc:derby://localhost:1527/shopmedb");
-        } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static Connection getConnection()
+    public Connection getConnection()
     {
         return conn;
     }

@@ -5,6 +5,8 @@ import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
 import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
 import java.io.IOException;
+
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,20 +19,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @WebServlet(name = "PeliculaServlet", urlPatterns = {"/pelicula"})
-public class PeliculaServlet extends HttpServlet {
+public class PeliculaServlet extends CineServlet {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger logger = Logger.getLogger(PeliculaServlet.class.getName());
+
+    private PeliculaDAO peliculaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        peliculaDAO = new PeliculaDAO(conn);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Connection conexion = null;
-
         try {
-            // Obtiene una conexión de la clase de gestión de conexión
-            conexion = DatabaseConnection.obtenerConexion();
-
             // Recupera el parámetro de la solicitud que representa el ID de la película
             String peliculaIdParam = request.getParameter("id");
 
@@ -39,7 +44,6 @@ public class PeliculaServlet extends HttpServlet {
                 int peliculaId = Integer.parseInt(peliculaIdParam);
 
                 // Accede al DAO para obtener la información de la película por ID
-                PeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
                 Pelicula pelicula = peliculaDAO.obtenerPeliculaPorId(peliculaId);
 
                 if (pelicula != null) {
@@ -77,20 +81,6 @@ public class PeliculaServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             // Error al convertir el ID de la película a un entero
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de película no válido");
-        } catch (SQLException e) {
-            // Error al obtener conexión o al acceder a la base de datos
-            logger.log(Level.SEVERE, "Error al obtener conexión a la base de datos", e);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error en la base de datos");
-        } finally {
-            // Cierra la conexión en el bloque finally para garantizar que se cierre
-            if (conexion != null) {
-                try {
-                    conexion.close();
-                } catch (SQLException e) {
-                    // Error al cerrar la conexión
-                    logger.log(Level.SEVERE, "Error al cerrar la conexión a la base de datos", e);
-                }
-            }
         }
     }
 

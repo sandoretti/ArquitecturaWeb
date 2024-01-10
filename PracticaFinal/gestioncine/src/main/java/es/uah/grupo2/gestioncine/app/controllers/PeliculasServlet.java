@@ -4,6 +4,8 @@ import es.uah.grupo2.gestioncine.app.model.dao.DatabaseConnection;
 import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
 import java.io.IOException;
+
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,23 +18,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @WebServlet(name = "PeliculasServlet", urlPatterns = {"/peliculas"})
-public class PeliculasServlet extends HttpServlet {
+public class PeliculasServlet extends CineServlet{
 
     private static final long serialVersionUID = 1L;
-    private static final Logger logger = Logger.getLogger(PeliculasServlet.class.getName());
+    private PeliculaDAO peliculaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        peliculaDAO = new PeliculaDAO(conn);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        Connection conexion = null;
-
         try {
-            // Obtiene una conexión de la clase de gestión de conexión
-            conexion = DatabaseConnection.obtenerConexion();
-
-            // Accede al DAO para obtener todas las películas
-            PeliculaDAO peliculaDAO = new PeliculaDAO(conexion);
             List<Pelicula> peliculas = peliculaDAO.obtenerTodasLasPeliculas();
 
             // Coloca la lista de películas en el ámbito de solicitud para que la JSP pueda accederla
@@ -48,22 +49,12 @@ public class PeliculasServlet extends HttpServlet {
                 request.getRequestDispatcher("peliculas.jsp").forward(request, response);
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             // Registro: Error en la base de datos
             logger.log(Level.SEVERE, "Error al obtener películas de la base de datos", e);
 
             // Manejo de errores de base de datos
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error en la base de datos");
-        } finally {
-            // Cierra la conexión en el bloque finally para garantizar que se cierre
-            if (conexion != null) {
-                try {
-                    conexion.close();
-                } catch (SQLException e) {
-                    // Registro: Error al cerrar la conexión
-                    logger.log(Level.SEVERE, "Error al cerrar la conexión a la base de datos", e);
-                }
-            }
         }
     }
 

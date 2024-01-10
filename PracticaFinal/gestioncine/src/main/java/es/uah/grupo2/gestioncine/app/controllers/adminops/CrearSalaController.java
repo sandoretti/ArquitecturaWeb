@@ -4,6 +4,8 @@ import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
 import es.uah.grupo2.gestioncine.app.model.dao.SalaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,6 +20,14 @@ import java.sql.Connection;
  */
 @WebServlet(name = "CrearSalaController", urlPatterns = {"/crearSala"})
 public class CrearSalaController extends AdminOperationServlet {
+    private SalaDAO salaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        salaDAO = new SalaDAO(conn);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -50,10 +60,7 @@ public class CrearSalaController extends AdminOperationServlet {
         int filas = Integer.parseInt(request.getParameter("filas"));
         int columnas = Integer.parseInt(request.getParameter("columnas"));
 
-        SalaDAO salita = new SalaDAO();
-        Connection conn = salita.getConnection();
-
-        boolean insertado = salita.insertarSala(conn, nombreSala, filas, columnas);
+        boolean insertado = salaDAO.insertarSala(nombreSala, filas, columnas);
 
         if (insertado) {
             session.setAttribute("success", "Se ha creado correctamente la sala");

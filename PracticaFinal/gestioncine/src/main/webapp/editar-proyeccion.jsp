@@ -38,14 +38,8 @@
         Pelicula
         <select name="pelicula" id="pelicula">
             <%
-                List<Pelicula> peliculas = null;
+                List<Pelicula> peliculas = (List<Pelicula>) request.getAttribute("peliculas");
                 int idPelicula = proyeccion.getIdPelicula();
-
-                try {
-                    peliculas = PeliculaDAO.selectPeliculasIdNombGenAnoClas();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
 
                 if(peliculas != null){
                     for(Pelicula pelicula: peliculas){
@@ -59,9 +53,7 @@
         <label for="sala">Salas</label>
         <select name="sala" id="sala">
             <%
-                SalaDAO salaDAO = new SalaDAO();
-                Connection conn = salaDAO.getConnection();
-                List<Sala> salas = salaDAO.mostrarSalas(conn);
+                List<Sala> salas = (List<Sala>) request.getAttribute("salas");
 
                 int idSala = proyeccion.getIdSala();
 

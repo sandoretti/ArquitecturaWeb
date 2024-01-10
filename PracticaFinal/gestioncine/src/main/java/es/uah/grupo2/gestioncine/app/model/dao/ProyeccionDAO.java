@@ -7,15 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProyeccionDAO {
-    static Connection conn = DatabaseConnection.getConnection();
-
-    private Connection connection;
+    private final Connection conn;
 
     public ProyeccionDAO(Connection conn) {
-        connection = conn;
+        this.conn = conn;
     }
 
-    public static List<Proyeccion> obtenerProyecciones() throws SQLException {
+    public List<Proyeccion> obtenerProyecciones() throws SQLException {
         String sql = "select PROYECCION.ID, NOMBRE_PELICULA, NOMBRE_SALA, FECHA_HORA from " +
                 "(PROYECCION INNER JOIN PELICULA on PELICULA.ID = PROYECCION.ID_PELICULA) INNER JOIN " +
                 "SALA on PROYECCION.ID_SALA = SALA.ID ORDER BY PROYECCION.ID";
@@ -75,7 +73,7 @@ public class ProyeccionDAO {
         return id;
     }
 
-    public static void eliminarProyeccion(int id) throws SQLException {
+    public void eliminarProyeccion(int id) throws SQLException {
         String SQL = "DELETE FROM PROYECCION WHERE ID = ?";
 
         PreparedStatement ps = conn.prepareStatement(SQL);
@@ -85,7 +83,7 @@ public class ProyeccionDAO {
         ps.executeUpdate();
     }
 
-    public static boolean validarIdProyeccion(int id) throws SQLException {
+    public boolean validarIdProyeccion(int id) throws SQLException {
         String SQL = "SELECT ID FROM PROYECCION WHERE ID = ?";
 
         PreparedStatement ps = conn.prepareStatement(SQL);
@@ -97,7 +95,7 @@ public class ProyeccionDAO {
         return rs.next();
     }
 
-    public static Proyeccion obtenerProyeccion(int id) throws SQLException {
+    public Proyeccion obtenerProyeccion(int id) throws SQLException {
         String SQL = "SELECT ID, ID_PELICULA, ID_SALA, FECHA_HORA FROM PROYECCION WHERE ID = ?";
 
         PreparedStatement ps = conn.prepareStatement(SQL);
@@ -119,7 +117,7 @@ public class ProyeccionDAO {
         return proyeccion;
     }
 
-    public static void editarProyeccion(Proyeccion proyeccion) throws SQLException {
+    public void editarProyeccion(Proyeccion proyeccion) throws SQLException {
         String SQL = "UPDATE PROYECCION SET ID_PELICULA = ?, ID_SALA = ?, FECHA_HORA = ? WHERE ID = ?";
 
         PreparedStatement ps = conn.prepareStatement(SQL);
@@ -148,7 +146,7 @@ public class ProyeccionDAO {
                 "           GROUP BY ID_PROYECCION " +
                 "       ) AS totales ON totales.ID_PROYECCION = PROYECCION.ID";
 
-        PreparedStatement ps = connection.prepareStatement(sql);
+        PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
         List<Proyeccion> proyecciones = new ArrayList<>();

@@ -4,6 +4,8 @@ import es.uah.grupo2.gestioncine.app.model.dao.DatabaseConnection;
 import es.uah.grupo2.gestioncine.app.model.dao.EntradaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Entrada;
 import java.io.IOException;
+
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,19 +20,23 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 @WebServlet(name = "EntradasServlet", urlPatterns = {"/entradas"})
-public class EntradasServlet extends HttpServlet {
+public class EntradasServlet extends CineServlet {
 
     private static final long serialVersionUID = 1L;
-    private static final Logger logger = Logger.getLogger(EntradasServlet.class.getName());
+
+    private EntradaDAO entradaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        entradaDAO = new EntradaDAO(conn);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Connection conexion = null;
-
         try {
-            // Obtiene una conexión de la clase de gestión de conexión
-            conexion = DatabaseConnection.obtenerConexion();
 
             // Recupera el parámetro de la solicitud que representa el ID de la proyección
             String proyeccionIdParam = request.getParameter("proyeccionId");
@@ -40,7 +46,6 @@ public class EntradasServlet extends HttpServlet {
                 int proyeccionId = Integer.parseInt(proyeccionIdParam);
 
                 // Accede al DAO para obtener la información de las entradas por ID de proyección
-                EntradaDAO entradaDAO = new EntradaDAO(conexion);
                 List<Entrada> entradas = entradaDAO.obtenerEntradasPorProyeccion(proyeccionId);
 
                 // Crea un objeto JSON para enviar información al cliente
@@ -65,20 +70,6 @@ public class EntradasServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             // Error al convertir el ID de la proyección a un entero
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de proyección no válido");
-        } catch (SQLException e) {
-            // Error al obtener conexión o al acceder a la base de datos
-            logger.log(Level.SEVERE, "Error al obtener conexión a la base de datos", e);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error en la base de datos");
-        } finally {
-            // Cierra la conexión en el bloque finally para garantizar que se cierre
-            if (conexion != null) {
-                try {
-                    conexion.close();
-                } catch (SQLException e) {
-                    // Error al cerrar la conexión
-                    logger.log(Level.SEVERE, "Error al cerrar la conexión a la base de datos", e);
-                }
-            }
         }
     }
 }

@@ -4,14 +4,13 @@ import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
 import es.uah.grupo2.gestioncine.app.model.entity.Sala;
 import es.uah.grupo2.gestioncine.app.model.dao.SalaDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
+
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -20,6 +19,15 @@ import java.sql.SQLException;
  */
 @WebServlet(name = "EditarSalaController", urlPatterns = {"/editarSala/*"})
 public class EditarSalaController extends AdminOperationServlet {
+
+    private SalaDAO salaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        salaDAO = new SalaDAO(conn);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -52,35 +60,18 @@ public class EditarSalaController extends AdminOperationServlet {
             return;
         }
 
-        // Obtener detalles de la sala para editar
-        SalaDAO salaDAO = new SalaDAO();
-        Connection conn = salaDAO.getConnection();
-        try {
-            Sala sala = salaDAO.obtenerSalaPorId(conn, salaId);
-            if (sala != null) {
-                request.setAttribute("sala", sala);
-                request.getRequestDispatcher(request.getContextPath() + "/editarSala.jsp").forward(request, response);
-            } else {
-                session.setAttribute("error", "Sala no encontrada");
-                response.sendRedirect(request.getContextPath() + "/gestionSalas");
-            }
-        } finally {
-            try {
-                conn.close(); // Asegúrese de cerrar la conexión
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+
+        Sala sala = salaDAO.obtenerSalaPorId(salaId);
+        if (sala != null) {
+            request.setAttribute("sala", sala);
+            request.getRequestDispatcher(request.getContextPath() + "/editarSala.jsp").forward(request, response);
+        } else {
+            session.setAttribute("error", "Sala no encontrada");
+            response.sendRedirect(request.getContextPath() + "/gestionSalas");
         }
+
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -100,9 +91,8 @@ public class EditarSalaController extends AdminOperationServlet {
                 Sala sala = new Sala(id, nombreSala, filas, columnas);
 
                 // Actualizar la sala en la base de datos
-                SalaDAO salaDAO = new SalaDAO();
-                try (Connection conn = salaDAO.getConnection()) {
-                    boolean actualizado = salaDAO.actualizarSala(conn, sala);
+                try {
+                    boolean actualizado = salaDAO.actualizarSala(sala);
                     if (actualizado) {
                         session.setAttribute("success", "Sala actualizada correctamente.");
                     } else {
@@ -123,15 +113,5 @@ public class EditarSalaController extends AdminOperationServlet {
         }
 
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

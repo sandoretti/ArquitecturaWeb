@@ -53,13 +53,7 @@
             </thead>
             <tbody>
         <%
-            List<Pelicula> peliculasList = null;
-
-            try {
-                peliculasList = PeliculaDAO.selectPeliculasIdNombGenAnoClas();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            List<Pelicula> peliculasList = (List<Pelicula>) request.getAttribute("peliculas");
 
             if (peliculasList != null && !peliculasList.isEmpty()) {
                 for (Pelicula pelicula: peliculasList){

@@ -1,12 +1,11 @@
 package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
-import es.uah.grupo2.gestioncine.app.model.dao.DatabaseConnection;
-import es.uah.grupo2.gestioncine.app.model.dao.EntradaDAO;
-import es.uah.grupo2.gestioncine.app.model.dao.ProyeccionDAO;
-import es.uah.grupo2.gestioncine.app.model.dao.SalaDAO;
+import es.uah.grupo2.gestioncine.app.model.dao.*;
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
+import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
 import es.uah.grupo2.gestioncine.app.model.entity.Proyeccion;
 import es.uah.grupo2.gestioncine.app.model.entity.Sala;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,11 +18,26 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 
 @WebServlet(name = "CrearProyeccion", urlPatterns = "/crearProyeccion")
 public class CrearProyeccionController extends AdminOperationServlet {
+    private PeliculaDAO peliculaDAO;
+    private SalaDAO salaDAO;
+    private ProyeccionDAO proyeccionDAO;
+    private EntradaDAO entradaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        peliculaDAO = new PeliculaDAO(conn);
+        salaDAO = new SalaDAO(conn);
+        proyeccionDAO = new ProyeccionDAO(conn);
+        entradaDAO = new EntradaDAO(conn);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,6 +48,18 @@ public class CrearProyeccionController extends AdminOperationServlet {
             return;
         }
 
+        List<Pelicula> peliculas = null;
+        List<Sala> salas = null;
+
+        try {
+            peliculas = peliculaDAO.selectPeliculasIdNombGenAnoClas();
+            salas = salaDAO.mostrarSalas();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        request.setAttribute("salas", salas);
+        request.setAttribute("peliculas", peliculas);
         request.getRequestDispatcher(request.getContextPath() + "/crear-proyeccion.jsp")
             .forward(request, response);
     }
@@ -66,12 +92,6 @@ public class CrearProyeccionController extends AdminOperationServlet {
         Proyeccion proyeccion = new Proyeccion(idPelicula, idSala, fechaHora);
 
         try {
-            Connection conn = DatabaseConnection.getConnection();
-
-            SalaDAO salaDAO = new SalaDAO(conn);
-            ProyeccionDAO proyeccionDAO = new ProyeccionDAO(conn);
-            EntradaDAO entradaDAO = new EntradaDAO(conn);
-
             // Creamos la proyeccion en la base de datos y modificamos dicha proyeccion junto su id correspondiente
             proyeccion = proyeccionDAO.crearProyeccion(proyeccion);
 

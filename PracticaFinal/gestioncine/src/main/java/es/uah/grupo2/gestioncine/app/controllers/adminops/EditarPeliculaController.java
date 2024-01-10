@@ -1,9 +1,11 @@
 package es.uah.grupo2.gestioncine.app.controllers.adminops;
 
+import es.uah.grupo2.gestioncine.app.model.dao.ActorDAO;
 import es.uah.grupo2.gestioncine.app.model.dao.PeliculaDAO;
 import es.uah.grupo2.gestioncine.app.model.entity.Actor;
 import es.uah.grupo2.gestioncine.app.model.entity.Cliente;
 import es.uah.grupo2.gestioncine.app.model.entity.Pelicula;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -16,6 +18,16 @@ import java.util.List;
 
 @WebServlet(name = "EditarPelicula", urlPatterns = {"/editarPelicula/*"})
 public class EditarPeliculaController extends AdminOperationServlet {
+    private PeliculaDAO peliculaDAO;
+    private ActorDAO actorDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        peliculaDAO = new PeliculaDAO(conn);
+        actorDAO = new ActorDAO(conn);
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,17 +49,20 @@ public class EditarPeliculaController extends AdminOperationServlet {
 
         try {
             // Validamos la pelicula
-            if (PeliculaDAO.validarId(idPelicula)) {
+            if (peliculaDAO.validarId(idPelicula)) {
                 // Obtenemos la pelicula de la base de datos
-                Pelicula pelicula = PeliculaDAO.obtenerPelicula(idPelicula);
+                Pelicula pelicula = peliculaDAO.obtenerPelicula(idPelicula);
 
                 // Listado de los generos posibles de la pelicula
                 List<String> generos = Arrays.asList(
                         "Drama", "Ciencia ficción", "Acción", "Crimen", "Comedia", "Aventura", "Documental"
                 );
 
+                List<Actor> actores = actorDAO.obtenerActores();
+
                 request.setAttribute("pelicula", pelicula);
                 request.setAttribute("generos", generos);
+                request.setAttribute("actores", actores);
 
                 request.getRequestDispatcher(request.getContextPath() + "/editar-pelicula.jsp").forward(request, response);
             } else {
@@ -103,7 +118,7 @@ public class EditarPeliculaController extends AdminOperationServlet {
 
         try {
             // Actualizamos la pelicula
-            PeliculaDAO.update(pelicula);
+            peliculaDAO.update(pelicula);
 
             // Redireccionamos a la pagina de gestion de peliculas con un mensaje de exito
             session.setAttribute("success", "Se ha editado correctamente la pelicula");

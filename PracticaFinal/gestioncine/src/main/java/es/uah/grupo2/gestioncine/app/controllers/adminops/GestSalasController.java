@@ -3,6 +3,8 @@ package es.uah.grupo2.gestioncine.app.controllers.adminops;
 import es.uah.grupo2.gestioncine.app.model.entity.Sala;
 import es.uah.grupo2.gestioncine.app.model.dao.SalaDAO;
 import java.io.IOException;
+
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +19,15 @@ import java.util.List;
  */
 @WebServlet(name = "GestSalasController", urlPatterns = {"/gestionSalas"})
 public class GestSalasController extends AdminOperationServlet {
+    private SalaDAO salaDAO;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        salaDAO = new SalaDAO(conn);
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -28,10 +39,7 @@ public class GestSalasController extends AdminOperationServlet {
 
         HttpSession session = request.getSession(false);
 
-        // Obtenemos todas las salas
-        SalaDAO salita = new SalaDAO();
-        Connection conn = salita.getConnection();
-        List<Sala> salaList = salita.mostrarSalas(conn);
+        List<Sala> salaList = salaDAO.mostrarSalas();
 
         // Las devolvemos en la vista de gestion de salas
         session.setAttribute("salas", salaList);

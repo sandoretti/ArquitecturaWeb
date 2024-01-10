@@ -7,9 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActorDAO {
-    static Connection conn = DatabaseConnection.getConnection();
+    private final Connection conn;
 
-    public static List<Actor> obtenerActores() throws SQLException{
+    public ActorDAO(Connection conn) {
+        this.conn = conn;
+    }
+
+    public List<Actor> obtenerActores() throws SQLException{
         String sql = "SELECT id, nombre, apellido FROM APP.ACTOR";
 
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -31,7 +35,7 @@ public class ActorDAO {
         return actores;
     }
 
-    public static void annadirActoresPelicula(List<Actor> actores, int idPelicula)
+    public void annadirActoresPelicula(List<Actor> actores, int idPelicula)
         throws SQLException
     {
         String sql = "INSERT INTO PELICULA_ACTOR(PELICULA_ID, ACTOR_ID) VALUES (?, ?)";
@@ -50,7 +54,7 @@ public class ActorDAO {
         ps.executeBatch();
     }
 
-    public static List<Actor> obtenerActoresPelicula(int id_pelicula) throws SQLException{
+    public List<Actor> obtenerActoresPelicula(int id_pelicula) throws SQLException{
         String sql = "SELECT ACTOR_ID FROM PELICULA_ACTOR WHERE PELICULA_ID = ?";
 
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -70,7 +74,7 @@ public class ActorDAO {
         return actores;
     }
 
-    public static void eliminarActoresPelicula(int idPelicula) throws SQLException{
+    public void eliminarActoresPelicula(int idPelicula) throws SQLException{
         String SQL = "DELETE FROM PELICULA_ACTOR WHERE PELICULA_ID = ?";
 
         PreparedStatement ps = conn.prepareStatement(SQL);

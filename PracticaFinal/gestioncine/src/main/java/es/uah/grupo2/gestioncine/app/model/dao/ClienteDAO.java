@@ -6,17 +6,10 @@ import java.sql.*;
 
 public class ClienteDAO {
 
-    public Connection getConnection() {
-        Connection c = null;
-        try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            c = DriverManager.getConnection("jdbc:derby://localhost:1527/shopmedb;create=true");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        return c;
+    private final Connection conn;
+
+    public ClienteDAO(Connection conn) {
+        this.conn = conn;
     }
 
     /**
@@ -24,7 +17,7 @@ public class ClienteDAO {
      * existe el usuario pero no es administrador. 2 si existe el usuario y es
      * administrador.
      */
-    public Cliente validarUsuario(Connection conn, String email, String passwd) {
+    public Cliente validarUsuario(String email, String passwd) {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
@@ -49,37 +42,13 @@ public class ClienteDAO {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
+
         return null;
     }
 
-    /**
-     * Inserta un cliente en la base de datos dada por la conexion.
-     *
-     * @param conn
-     * @param nombre
-     * @param apellido
-     * @param email
-     * @param passwd
-     * @return Si se ha insertado correctamente, este devuelve true, pero sino ,
-     * devolvemos false
-     */
+
     public boolean insertarCliente(
-            Connection conn,
             String nombre,
             String apellido,
             String email,
@@ -104,31 +73,13 @@ public class ClienteDAO {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
 
         return false;
 
     }
 
-    /**
-     * Verifica si el email dado se encuentra dentro de la base de datos
-     *
-     * @param conn
-     * @param email
-     * @return
-     */
-    public boolean verificarEmail(Connection conn, String email) {
+    public boolean verificarEmail(String email) {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -146,20 +97,6 @@ public class ClienteDAO {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
 
         return false;

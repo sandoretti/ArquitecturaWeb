@@ -54,7 +54,7 @@ public class GestInformesController extends AdminOperationServlet{
         try {
             peliculaList = peliculaDAO.obtenerTodasLasPeliculas();
             proyeccionList = proyeccionDAO.obtenerProyeccionesEntradas();
-            salaList = salaDAO.mostrarSalas(conn);
+            salaList = salaDAO.mostrarSalas();
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error al acceder a la base de datos", e);
         }
