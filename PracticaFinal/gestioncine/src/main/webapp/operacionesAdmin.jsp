@@ -14,7 +14,8 @@
     <body class="body-style">
         <div class="container-style">
             <div class="navbar-style">
-                <h1 style="margin:auto;">Menu de administrador</h1>
+                <h1 style="margin:auto 15px auto;">Menu de administrador</h1>
+                <a class="button-link" style="margin: 5px 5px 5px 5px;" href="/logout">Cerrar Sesión</a>
             </div>
             <div class="button-container" style="margin-top: 5px">
                 <a class="button-link" href="/gestionPeliculas">Gestionar peliculas</a>
@@ -22,7 +23,6 @@
                 <a class="button-link" href="/gestionProyecciones">Gestionar proyecciones</a>
                 <a class="button-link" href="/gestionReservas">Gestionar reservas</a>
                 <a class="button-link" href="/gestionInformes">Gestionar informes</a>
-                <a class="button-link" href="/logout">Cerrar Sesión</a>
             </div>
         </div>
     </body>
