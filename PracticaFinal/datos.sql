@@ -91,41 +91,7 @@ VALUES
 -- Proyecciones para la película con id 3
 (3, 9, '2023-01-01 19:00:00'),
 (3, 10, '2023-01-03 14:00:00'),
-(3, 1, '2023-01-03 14:00:00'),
-(3, 2, '2023-01-04 19:00:00'),
-
--- Proyecciones para la película con id 4
-(4, 3, '2023-01-01 14:00:00'),
-(4, 4, '2023-01-02 16:00:00'),
-(4, 5, '2023-01-03 16:00:00'),
-(4, 6, '2023-01-03 18:00:00'),
-
--- Proyecciones para la película con id 5
-(5, 1, '2023-01-01 20:00:00'),
-(5, 2, '2023-01-02 20:00:00'),
-(5, 3, '2023-01-04 18:00:00'),
-(5, 4, '2023-01-04 20:00:00'),
-
--- Proyecciones para la película con id 6
-(6, 5, '2023-01-01 21:30:00'),
-(6, 6, '2023-01-03 21:30:00'),
-(6, 7, '2023-01-04 21:30:00'),
-(6, 8, '2023-01-05 21:30:00'),
-
--- Proyecciones para la película con id 7
-(7, 9, '2023-01-01 15:30:00'),
-(7, 10, '2023-01-02 15:30:00'),
-(7, 1, '2023-01-02 19:30:00'),
-(7, 2, '2023-01-04 15:30:00'),
-
--- Proyecciones para la película con id 8
-(8, 3, '2023-01-01 17:30:00'),
-(8, 4, '2023-01-02 19:30:00'),
-(8, 6, '2023-01-04 17:30:00'),
-
--- Proyecciones para la película con id 9
-(9, 7, '2023-01-01 18:00:00'),
-(9, 10, '2023-01-01 18:00:00');
+(3, 1, '2023-01-03 14:00:00');
 
 
 INSERT INTO entrada (id_proyeccion, fila, columna) VALUES
@@ -287,14 +253,19 @@ INSERT INTO pelicula_actor (pelicula_id, actor_id) VALUES
 -- Reservas
 INSERT INTO reserva (id_cliente, fecha_reserva, numero_tarjeta, referencia_reserva, precio) VALUES
 (1, CURRENT_TIMESTAMP, '0000000000000000', '000000', 0),        -- RESERVA PARA DESCARTAR ENTRADAS 
-(2, CURRENT_TIMESTAMP, '************1234', 'ABC123', 15.99),
-(3, CURRENT_TIMESTAMP, '************5678', 'DEF456', 18.50),
-(4, CURRENT_TIMESTAMP, '************4321', 'XYZ789', 19.99),
-(5, CURRENT_TIMESTAMP, '************8765', 'GHI123', 22.50),
-(8, CURRENT_TIMESTAMP, '************1111', 'RES123', 14.99),
-(3, CURRENT_TIMESTAMP, '************2222', 'RES456', 17.50),
-(4, CURRENT_TIMESTAMP, '************3333', 'RES789', 21.99),
-(5, CURRENT_TIMESTAMP, '************4444', 'RESABC', 24.50),
-(6, CURRENT_TIMESTAMP, '************5555', 'RESDEF', 18.99),
-(2, CURRENT_TIMESTAMP, '************6666', 'RESGHI', 25.99),
-(7, CURRENT_TIMESTAMP, '************7777', 'RESJKL', 19.50);
+(2, CURRENT_TIMESTAMP, '1234123412341234', 'ABC123', 15.99),
+(3, CURRENT_TIMESTAMP, '1234123412345678', 'DEF456', 18.50),
+(4, CURRENT_TIMESTAMP, '1234123412344321', 'XYZ789', 19.99),
+(5, CURRENT_TIMESTAMP, '1234123412348765', 'GHI123', 22.50),
+(8, CURRENT_TIMESTAMP, '1234123412341111', 'RES123', 14.99);
+
+-- Entradas reservadas
+UPDATE entrada SET RESERVA_ID = 2 WHERE id_proyeccion = 1 AND fila = 1 AND columna = 1;
+UPDATE entrada SET RESERVA_ID = 2 WHERE id_proyeccion = 1 AND fila = 1 AND columna = 2;
+UPDATE entrada SET RESERVA_ID = 3 WHERE id_proyeccion = 3 AND fila = 1 AND columna = 3;
+UPDATE entrada SET RESERVA_ID = 4 WHERE id_proyeccion = 4 AND fila = 1 AND columna = 4;
+UPDATE entrada SET RESERVA_ID = 4 WHERE id_proyeccion = 4 AND fila = 1 AND columna = 5;
+UPDATE entrada SET RESERVA_ID = 5 WHERE id_proyeccion = 5 AND fila = 1 AND columna = 6;
+UPDATE entrada SET RESERVA_ID = 5 WHERE id_proyeccion = 5 AND fila = 1 AND columna = 7;
+UPDATE entrada SET RESERVA_ID = 6 WHERE id_proyeccion = 6 AND fila = 2 AND columna = 1;
+UPDATE entrada SET RESERVA_ID = 6 WHERE id_proyeccion = 6 AND fila = 2 AND columna = 2;
